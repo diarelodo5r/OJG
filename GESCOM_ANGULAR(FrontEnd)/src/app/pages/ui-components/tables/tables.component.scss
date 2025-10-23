@@ -1,0 +1,103 @@
+:host {
+  display: block;
+}
+
+/* Always show an outline around the checkboxes */
+/* Using ::ng-deep to scope to this component only */
+:host ::ng-deep .outlined-checkbox .mdc-checkbox__background {
+  border: 2px solid rgba(0, 0, 0, 0.38);
+  border-radius: 3px;
+}
+.btn-sm {
+  font-size: 13px;
+  padding: 4px 12px;
+  height: 32px;
+  width: 250px;
+}
+
+/* Slightly stronger outline when focused or hovered */
+:host ::ng-deep .outlined-checkbox.mdc-checkbox--selected .mdc-checkbox__background,
+:host ::ng-deep .outlined-checkbox .mdc-checkbox:hover .mdc-checkbox__background,
+:host ::ng-deep .outlined-checkbox.mat-mdc-focus-indicator .mdc-checkbox__background {
+  border-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Space tweaks for action buttons */
+.actions button + button {
+  margin-left: 4px;
+}
+
+/* Clamp long descriptions to a single line to keep row height compact */
+.description-ellipsis {
+  display: -webkit-box;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 1.6em; /* ~1 line */
+  white-space: nowrap; /* ensure single line in non-webkit */
+}
+
+/* Small gap utility used in combined image+name */
+.gap-12 {
+  gap: 12px;
+}
+
+/* Header controls: search + add button responsive layout */
+.header-controls {
+  display: flex;
+  flex-direction: column; /* stack elements: search on first line, button below */
+  align-items: stretch;
+  gap: 12px;
+}
+
+.header-controls .search-box {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+}
+
+.header-controls .add-btn {
+  align-self: flex-start; /* keep natural button width */
+  white-space: nowrap;
+}
+
+/* Center icon + text inside buttons nicely */
+.btn-inline-center {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.2;
+}
+
+/* No responsive override: keep stacked layout on all sizes as requested */
+
+/* Reduce product thumbnail size and compact rows */
+.product-thumbnail-container {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+.product-thumbnail {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+/* Compact table paddings in this component only */
+:host ::ng-deep table.mat-mdc-table .mat-mdc-cell,
+:host ::ng-deep table.mat-mdc-table .mat-mdc-header-cell {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+@media (max-width: 599px) {
+  .product-thumbnail-container,
+  .product-thumbnail {
+    width: 32px;
+    height: 32px;
+  }
+}

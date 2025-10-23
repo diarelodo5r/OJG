@@ -1,0 +1,132 @@
+<div class="company-settings-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon class="me-2">business</mat-icon>
+    Paramètres de l'entreprise
+  </h2>
+
+  <mat-dialog-content>
+    <form [formGroup]="settingsForm">
+      <!-- Logo Section -->
+      <div class="logo-section mb-4">
+        <h4 class="f-s-14 f-w-600 mb-2">Logo de l'entreprise</h4>
+        <div class="d-flex align-items-center gap-3">
+          <div class="logo-preview-container">
+            <img 
+              *ngIf="logoPreview" 
+              [src]="logoPreview" 
+              alt="Logo" 
+              class="logo-preview"
+            />
+            <div *ngIf="!logoPreview" class="logo-placeholder">
+              <mat-icon>add_photo_alternate</mat-icon>
+              <span class="f-s-12">Aucun logo</span>
+            </div>
+          </div>
+          <div class="flex-grow-1">
+            <input 
+              #logoInput
+              type="file" 
+              accept="image/*" 
+              (change)="onFileSelected($event)"
+              style="display: none;"
+            />
+            <button 
+              mat-stroked-button 
+              type="button"
+              (click)="logoInput.click()"
+              class="me-2"
+            >
+              <mat-icon>upload</mat-icon>
+              Choisir un logo
+            </button>
+            <button 
+              mat-stroked-button 
+              type="button"
+              color="warn"
+              *ngIf="logoPreview"
+              (click)="removeLogo()"
+            >
+              <mat-icon>delete</mat-icon>
+              Supprimer
+            </button>
+            <p class="f-s-12 text-muted mt-2 mb-0">
+              Formats acceptés: PNG, JPG, GIF (max 2MB)
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Company Information -->
+      <div class="company-info-section">
+        <h4 class="f-s-14 f-w-600 mb-3">Informations de l'entreprise</h4>
+        
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Nom de l'entreprise *</mat-label>
+          <input matInput formControlName="name" placeholder="Ex: GESCOM SARL">
+          <mat-icon matPrefix>business</mat-icon>
+          <mat-error *ngIf="settingsForm.get('name')?.hasError('required')">
+            Le nom est requis
+          </mat-error>
+          <mat-error *ngIf="settingsForm.get('name')?.hasError('minlength')">
+            Minimum 2 caractères
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Description</mat-label>
+          <textarea 
+            matInput 
+            formControlName="description" 
+            rows="2"
+            placeholder="Ex: Gestion commerciale et facturation"
+          ></textarea>
+          <mat-icon matPrefix>description</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Adresse</mat-label>
+          <textarea 
+            matInput 
+            formControlName="address" 
+            rows="2"
+            placeholder="Ex: 123 Avenue Principale, Ville"
+          ></textarea>
+          <mat-icon matPrefix>location_on</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Téléphone</mat-label>
+          <input matInput formControlName="phone" placeholder="Ex: +225 XX XX XX XX XX">
+          <mat-icon matPrefix>phone</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="contact@entreprise.com">
+          <mat-icon matPrefix>email</mat-icon>
+          <mat-error *ngIf="settingsForm.get('email')?.hasError('email')">
+            Email invalide
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Site web</mat-label>
+          <input matInput formControlName="website" placeholder="https://www.entreprise.com">
+          <mat-icon matPrefix>language</mat-icon>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onReset()" color="warn" class="me-2">
+      <mat-icon>restore</mat-icon>
+      Réinitialiser
+    </button>
+    <button mat-button (click)="onCancel()">Annuler</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="settingsForm.invalid">
+      <mat-icon>save</mat-icon>
+      Enregistrer
+    </button>
+  </mat-dialog-actions>
+</div>

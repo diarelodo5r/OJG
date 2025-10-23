@@ -1,0 +1,87 @@
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h4 class="f-s-30 f-w-600 text-center lh-lg m-b-16">
+      Flexible Plans Tailored to Fit Your Community's Unique Needs!
+    </h4>
+    <div class="d-flex align-items-center justify-content-center">
+      <span class="f-s-14 m-r-8">Monthly</span>
+      <mat-slide-toggle color="primary" (change)="onToggle($event)">Yearly</mat-slide-toggle>
+    </div>
+  </div>
+  
+</div>
+
+<div class="row m-t-32 p-t-32">
+  <!-- Silver -->
+  <div class="col-sm-6 col-lg-4">
+    <mat-card class="cardWithShadow">
+      <mat-card-content class="p-y-24">
+        <span class="d-block text-uppercase f-s-12 m-b-16">Silver</span>
+        <img alt="badge" width="90" src="assets/images/backgrounds/silver.png" />
+        <h2 class="plan-title m-b-24">
+          {{ isFree('silver') ? 'Free' : (getPriceValue('silver')) }}
+          <span *ngIf="!isFree('silver')" class="per-month">/{{ isYearly ? 'yr' : 'mo' }}</span>
+        </h2>
+
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 text-primary">check</mat-icon><span class="f-s-14 f-w-500">3 Members</span></div>
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 text-primary">check</mat-icon><span class="f-s-14 f-w-500">Single Device</span></div>
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 op-5">close</mat-icon><span class="op-5 f-w-500 f-s-14">50GB Storage</span></div>
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 op-5">close</mat-icon><span class="op-5 f-w-500 f-s-14">Monthly Backups</span></div>
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 op-5">close</mat-icon><span class="op-5 f-w-500 f-s-14">Permissions & workflows</span></div>
+
+        <button mat-flat-button color="primary" class="w-100 m-t-24">Choose Silver</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Bronze -->
+  <div class="col-sm-6 col-lg-4">
+    <mat-card class="cardWithShadow">
+      <mat-card-content class="p-y-24">
+        <span class="popular-badge text-uppercase bg-light-warning text-warning p-x-8 p-y-4 f-s-12 f-w-500 rounded">Popular</span>
+        <span class="d-block text-uppercase f-s-12 m-b-16">Bronze</span>
+        <img alt="badge" width="90" src="assets/images/backgrounds/bronze.png" />
+        <div>
+          <div class="d-flex align-items-baseline">
+            <span class="f-s-16 dollar-sign" *ngIf="!isFree('bronze')">$</span>
+            {{ isFree('bronze') ? 'Free' : (getPriceValue('bronze')) }}
+            <span class="f-s-16 per-month">/{{ isYearly ? 'yr' : 'mo' }}</span>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 text-primary">check</mat-icon><span class="f-s-14 f-w-500">5 Members</span></div>
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 text-primary">check</mat-icon><span class="f-s-14 f-w-500">Multiple Device</span></div>
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 op-5">close</mat-icon><span class="op-5 f-w-500 f-s-14">80GB Storage</span></div>
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 op-5">close</mat-icon><span class="op-5 f-w-500 f-s-14">Monthly Backups</span></div>
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 op-5">close</mat-icon><span class="op-5 f-w-500 f-s-14">Permissions & workflows</span></div>
+
+        <button mat-flat-button color="primary" class="w-100 m-t-24">Choose Bronze</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Gold -->
+  <div class="col-sm-6 col-lg-4">
+    <mat-card class="cardWithShadow">
+      <mat-card-content class="p-y-24">
+        <span class="d-block text-uppercase f-s-12 m-b-16">Gold</span>
+        <img alt="badge" width="90" src="assets/images/backgrounds/gold.png" />
+        <div>
+          <div class="d-flex align-items-baseline">
+            <span class="f-s-16 dollar-sign" *ngIf="!isFree('gold')">$</span>
+            {{ isFree('gold') ? 'Free' : (getPriceValue('gold')) }}
+            <span class="f-s-16 per-month">/{{ isYearly ? 'yr' : 'mo' }}</span>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 text-primary">check</mat-icon><span class="f-s-14 f-w-500">Unlimited Members</span></div>
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 text-primary">check</mat-icon><span class="f-s-14 f-w-500">Multiple Device</span></div>
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 text-primary">check</mat-icon><span class="f-s-14 f-w-500">150GB Storage</span></div>
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 text-primary">check</mat-icon><span class="f-s-14 f-w-500">Monthly Backups</span></div>
+        <div class="d-flex align-items-center p-y-12"><mat-icon class="m-r-12 text-primary">check</mat-icon><span class="f-s-14 f-w-500">Permissions & workflows</span></div>
+
+        <button mat-flat-button color="primary" class="w-100 m-t-24">Choose Gold</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

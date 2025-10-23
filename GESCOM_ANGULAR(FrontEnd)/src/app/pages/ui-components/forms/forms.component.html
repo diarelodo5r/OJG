@@ -1,0 +1,387 @@
+<div class="row mt-4">
+  <div class="col-12">
+    <mat-card class="cardWithShadow theme-card">
+      <mat-card-header>
+        <mat-card-title class="m-b-0" style="margin: 2%;">Formulaire d'Ajout de Produit</mat-card-title>
+        <div class="m-t-4">
+          <button mat-button type="button" color="primary" (click)="toggleConverter()" class="p-0">
+            <mat-icon fontIcon="sync_alt" class="m-r-4"/> 
+            @if (!showConverter) { Convertir depuis une autre devise }
+            @if (showConverter) { Masquer le convertisseur }
+          </button>
+          <span class="m-l-12"></span>
+          <mat-slide-toggle [checked]="bulkMode" (change)="toggleBulkMode()">
+            Saisie multiple
+          </mat-slide-toggle>
+        </div>
+      </mat-card-header>
+  <mat-card-content class="b-t-1">
+      @if (showConverter) {
+      <div class="p-12 bg-light rounded-2 m-t-8">
+        <div class="row g-2 align-items-end">
+          <div class="col-12 col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Depuis</mat-label>
+              <mat-select [(ngModel)]="fxFrom" [ngModelOptions]="{standalone: true}">
+                @for (c of currencies; track c) {
+                  <mat-option [value]="c">{{ c }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-12 col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Montant</mat-label>
+              <input matInput type="number" step="0.01" [(ngModel)]="fxAmount" [ngModelOptions]="{standalone: true}" placeholder="0.00" />
+            </mat-form-field>
+          </div>
+          <div class="col-12 col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Vers</mat-label>
+              <mat-select [(ngModel)]="fxTo" [ngModelOptions]="{standalone: true}">
+                @for (c of currencies; track c) {
+                  <mat-option [value]="c">{{ c }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-8 m-t-4">
+          <button mat-stroked-button color="primary" type="button" (click)="convertCurrency()" [disabled]="fxLoading">
+            @if (fxLoading) { <mat-icon matButtonIcon>refresh</mat-icon> }
+            @if (!fxLoading) { <span>Convertir</span> }
+            @if (fxLoading) { <span>Conversion...</span> }
+          </button>
+          @if (fxError) {
+            <span class="text-danger">{{ fxError }}</span>
+          }
+        </div>
+
+        @if (fxConverted != null) {
+          <div class="m-t-8 d-flex align-items-center justify-content-between">
+            <div>
+              <div class="f-w-600">Résultat: {{ fxConverted | number:'1.2-2' }} {{ fxTo }}</div>
+              @if (fxRate != null) {
+                <div class="text-muted">Taux: 1 {{ fxFrom }} = {{ fxRate | number:'1.4-6' }} {{ fxTo }}</div>
+              }
+            </div>
+            <button mat-flat-button color="primary" type="button" (click)="applyConvertedToPrice()">
+              Appliquer au prix (€)
+            </button>
+          </div>
+        }
+      </div>
+    }
+    @if (!bulkMode) {
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <!-- Nom du produit -->
+        <div class="col-lg-6">
+          <mat-label class="f-w-600 m-b-8 d-block">Nom du produit *</mat-label>
+          <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput formControlName="name" placeholder="Nom du produit" />
+            @if (name?.invalid && (name?.dirty || name?.touched)) {
+              <mat-error>
+                @if (name?.errors?.['required']) {
+                  Le nom est requis
+                }
+                @if (name?.errors?.['minlength']) {
+                  Le nom doit contenir au moins 3 caractères
+                }
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- Prix -->
+        <div class="col-lg-6">
+          <mat-label class="f-w-600 m-b-8 d-block">Prix (€) *</mat-label>
+          <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput type="number" step="0.01" formControlName="price" placeholder="0.00" />
+            @if (price?.invalid && (price?.dirty || price?.touched)) {
+              <mat-error>
+                @if (price?.errors?.['required']) {
+                  Le prix est requis
+                }
+                @if (price?.errors?.['min']) {
+                  Le prix doit être supérieur à 0
+                }
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- Quantité -->
+        <div class="col-lg-6">
+          <mat-label class="f-w-600 m-b-8 d-block">Quantité *</mat-label>
+          <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput type="number" formControlName="quantity" placeholder="0" />
+            @if (quantity?.invalid && (quantity?.dirty || quantity?.touched)) {
+              <mat-error>
+                @if (quantity?.errors?.['required']) {
+                  La quantité est requise
+                }
+                @if (quantity?.errors?.['min']) {
+                  La quantité ne peut pas être négative
+                }
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- Catégorie -->
+        <div class="col-lg-6">
+          <div class="d-flex align-items-center justify-content-between">
+            <mat-label class="f-w-600 m-b-8 d-block">Catégorie *</mat-label>
+            <button mat-stroked-button color="primary" type="button" class="btn-center" (click)="toggleCreateCategory()">
+              <mat-icon>add</mat-icon>
+              @if (!creatingCategory) { Ajouter une catégorie }
+              @if (creatingCategory) { Annuler }
+            </button>
+          </div>
+          @if (!creatingCategory) {
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-select formControlName="category_id" placeholder="Sélectionner une catégorie">
+                @for(category of categories; track category.id) {
+                <mat-option [value]="category.id">{{ category.name }}</mat-option>
+                }
+              </mat-select>
+              @if (category_id?.invalid && (category_id?.dirty || category_id?.touched)) {
+                <mat-error>
+                  @if (category_id?.errors?.['required']) { La catégorie est requise }
+                </mat-error>
+              }
+            </mat-form-field>
+          }
+          @if (creatingCategory) {
+            <div class="d-flex gap-8">
+              <mat-form-field appearance="outline" class="flex-1 w-100">
+                <mat-label>Nom de la nouvelle catégorie</mat-label>
+                <input matInput [formControl]="newCategoryName" placeholder="Ex: Informatique" />
+                @if (newCategoryName.invalid && (newCategoryName.dirty || newCategoryName.touched)) {
+                  <mat-error>Nom requis (min 3 caractères)</mat-error>
+                }
+              </mat-form-field>
+              <button mat-flat-button color="primary" type="button" class="btn-center" (click)="createCategory()" [disabled]="newCategoryName.invalid">
+                <mat-icon>check</mat-icon>
+                Créer
+              </button>
+              <button mat-stroked-button type="button" class="btn-center" (click)="toggleCreateCategory()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- Vendeur: auto (utilisateur connecté) -->
+        <div class="col-lg-6">
+          <mat-label class="f-w-600 m-b-8 d-block">Vendeur</mat-label>
+          <div class="p-12 bg-light rounded-2">Le vendeur sera défini automatiquement comme l'utilisateur connecté.</div>
+        </div>
+
+        <!-- Fournisseur -->
+        <div class="col-lg-6">
+          <div class="d-flex align-items-center justify-content-between">
+            <mat-label class="f-w-600 m-b-8 d-block">Fournisseur *</mat-label>
+            <button mat-stroked-button color="primary" type="button" class="btn-center" (click)="toggleCreateSupplier()">
+              <mat-icon>add_business</mat-icon>
+              @if (!creatingSupplier) { Ajouter un fournisseur }
+              @if (creatingSupplier) { Annuler }
+            </button>
+          </div>
+
+          @if (!creatingSupplier) {
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-select formControlName="supplier_id" placeholder="Sélectionner un fournisseur">
+                @for(supplier of suppliers; track supplier.id) {
+                <mat-option [value]="supplier.id">{{ supplier.name }}</mat-option>
+                }
+              </mat-select>
+              @if (supplier_id?.invalid && (supplier_id?.dirty || supplier_id?.touched)) {
+                <mat-error>
+                  @if (supplier_id?.errors?.['required']) { Le fournisseur est requis }
+                </mat-error>
+              }
+            </mat-form-field>
+          }
+
+          @if (creatingSupplier) {
+            <div class="row g-2" [formGroup]="newSupplierForm">
+              <div class="col-12">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Nom du fournisseur</mat-label>
+                  <input matInput formControlName="name" placeholder="Ex: ACME SARL" />
+                  @if (newSupplierForm.get('name')?.invalid && (newSupplierForm.get('name')?.dirty || newSupplierForm.get('name')?.touched)) {
+                    <mat-error>Nom requis (min 2 caractères)</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Email de contact</mat-label>
+                  <input matInput type="email" formControlName="contact_email" placeholder="email@exemple.com" />
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Téléphone</mat-label>
+                  <input matInput type="text" formControlName="contact_phone" placeholder="Ex: +33 6 12 34 56 78" />
+                </mat-form-field>
+              </div>
+              <div class="col-12">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Adresse</mat-label>
+                  <input matInput type="text" formControlName="address" placeholder="Adresse complète" />
+                </mat-form-field>
+              </div>
+              <div class="col-12 text-right">
+                <button mat-flat-button color="primary" type="button" class="btn-center" (click)="createSupplier()" [disabled]="newSupplierForm.invalid">
+                  <mat-icon>check</mat-icon>
+                  Créer le fournisseur
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Description -->
+        <div class="col-12">
+          <mat-label class="f-w-600 m-b-8 d-block">Description *</mat-label>
+          <mat-form-field appearance="outline" class="w-100" color="primary">
+            <textarea matInput formControlName="description" placeholder="Description du produit" rows="4"></textarea>
+            @if (description?.invalid && (description?.dirty || description?.touched)) {
+              <mat-error>
+                @if (description?.errors?.['required']) {
+                  La description est requise
+                }
+                @if (description?.errors?.['minlength']) {
+                  La description doit contenir au moins 10 caractères
+                }
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- Photo du produit -->
+        <div class="col-12">
+          <mat-label class="f-w-600 m-b-8 d-block">Photo du produit</mat-label>
+          <div class="upload-section">
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;" #fileInput>
+            <button mat-stroked-button color="primary" type="button" (click)="fileInput.click()" class="m-b-8 btn-center">
+              <mat-icon>cloud_upload</mat-icon>
+              Choisir une photo
+            </button>
+            
+            @if (selectedFile) {
+              <div class="file-info m-b-8">
+                <p>Fichier sélectionné: {{ selectedFile.name }}</p>
+              </div>
+            }
+            @if (previewUrl) {
+              <div class="image-preview">
+                <img [src]="previewUrl" alt="Aperçu" style="max-width: 200px; max-height: 200px; border-radius: 8px;">
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="m-t-12">
+          <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting || productForm.invalid" class="m-r-8 btn-center">
+            @if (isSubmitting) { <mat-icon matButtonIcon>refresh</mat-icon> }
+            @if (!isSubmitting) { <mat-icon matButtonIcon>save</mat-icon> }
+            @if (isSubmitting) { <span>Enregistrement...</span> }
+            @if (!isSubmitting) { <span>Enregistrer le produit</span> }
+          </button>
+          <button mat-stroked-button color="warn" type="button" class="btn-center" (click)="resetForm()" [disabled]="isSubmitting">
+            <ng-container>
+              <mat-icon>clear</mat-icon>
+              Annuler
+            </ng-container>
+          </button>
+        </div>
+      </form>
+    }
+
+    @if (bulkMode) {
+      <form [formGroup]="bulkForm" (ngSubmit)="onSubmit()">
+        <div formArrayName="products">
+          @for (ctrl of productsArray.controls; track $index; let i = $index) {
+            <div class="p-12 rounded-2 m-t-8 b-a-1">
+              <div [formGroupName]="i" class="row g-2">
+                <div class="col-lg-4">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Nom *</mat-label>
+                    <input matInput formControlName="name" placeholder="Nom du produit" />
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Prix (€) *</mat-label>
+                    <input matInput type="number" step="0.01" formControlName="price" placeholder="0.00" />
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Quantité *</mat-label>
+                    <input matInput type="number" formControlName="quantity" placeholder="0" />
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Catégorie *</mat-label>
+                    <mat-select formControlName="category_id" placeholder="Catégorie">
+                      @for(category of categories; track category.id) {
+                        <mat-option [value]="category.id">{{ category.name }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Fournisseur *</mat-label>
+                    <mat-select formControlName="supplier_id" placeholder="Fournisseur">
+                      @for(supplier of suppliers; track supplier.id) {
+                        <mat-option [value]="supplier.id">{{ supplier.name }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-12">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Description *</mat-label>
+                    <textarea matInput formControlName="description" placeholder="Description" rows="2"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="text-right m-t-4">
+                <button mat-stroked-button color="primary" type="button" (click)="duplicateBulkRowRef(ctrl)" class="m-r-8" [disabled]="isSubmitting">
+                  <mat-icon>content_copy</mat-icon>
+                  Dupliquer
+                </button>
+                <button mat-stroked-button color="warn" type="button" (click)="removeBulkRowRef(ctrl)" [disabled]="isSubmitting || productsArray.length <= 1">
+                  <mat-icon>remove_circle</mat-icon>
+                  Retirer
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="m-t-12 d-flex align-items-center gap-8">
+          <button mat-stroked-button color="primary" type="button" (click)="addBulkRow()" [disabled]="isSubmitting">
+            <mat-icon>add</mat-icon>
+            Ajouter une ligne
+          </button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting || bulkForm.invalid">
+            @if (isSubmitting) { <mat-icon matButtonIcon>refresh</mat-icon> }
+            @if (!isSubmitting) { <mat-icon matButtonIcon>save</mat-icon> }
+            @if (isSubmitting) { <span>Enregistrement...</span> }
+            @if (!isSubmitting) { <span>Enregistrer tous les produits</span> }
+          </button>
+        </div>
+      </form>
+    }
+  </mat-card-content>
+</mat-card>

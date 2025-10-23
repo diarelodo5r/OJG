@@ -1,0 +1,57 @@
+<app-generic-table
+  #articlesTable
+  [title]="'Liste des Articles'"
+  [columns]="articleColumns"
+  [defaultSort]="{ active: 'created_at', direction: 'desc' }"
+  [columnToggleEnabled]="true"
+  [filters]="articleFilters"
+  [selectionEnabled]="true"
+  [displayedActions]="true"
+  [enableView]="true"
+  [enableEdit]="true"
+  [enableDelete]="true"
+  [enableArchive]="true"
+  [pageSize]="10"
+  [pageSizeOptions]="[5,10,25,50]"
+  [searchPlaceholder]="'Rechercher par nom, famille...'"
+  [dataLoader]="dataLoader"
+  [exportFilename]="'GESCOM_Articles'"
+  (view)="openView($event)"
+  (edit)="openEdit($event)"
+  (del)="onDelete($event)"
+  (archive)="archive($event)"
+  (rowsLoaded)="onRowsLoaded($event)"
+  (loadError)="onRowsLoadError($event)"
+>
+  <!-- Template personnalisé pour la colonne Article (Image + Nom + Famille) -->
+  <ng-template columnTemplate="article" let-row>
+    <div class="d-flex align-items-center">
+      <div class="product-thumbnail-container me-3" 
+           style="cursor: pointer;"
+           (click)="onViewImage(row)">
+        <img 
+          [src]="getArticleImageUrl(row)" 
+          [alt]="row.nom_article || 'Article'"
+          class="product-thumbnail"
+          (error)="onImgError($event)"
+          style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"
+        />
+      </div>
+      <div>
+        <div class="f-s-14 f-w-600">
+          {{ row.nom_article || 'N/A' }}
+        </div>
+        <span class="f-s-12 text-muted" *ngIf="row.famille">
+          {{ row.famille.nom_famille }}
+        </span>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template columnTemplate="prixVente" let-row>
+    <span class="fw-semibold"
+          [matTooltip]="formatPrice(row.prixVente)"
+          matTooltipPosition="above">
+      {{ formatPriceShort(row.prixVente) }}
+    </span>
+  </ng-template>
+</app-generic-table>

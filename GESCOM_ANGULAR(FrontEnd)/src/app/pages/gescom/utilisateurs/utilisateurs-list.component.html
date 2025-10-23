@@ -1,0 +1,48 @@
+<app-generic-table
+  [title]="'Liste des Utilisateurs'"
+  [data]="dataSource.data"
+  [columns]="utilisateurColumns"
+  [defaultSort]="{ active: 'created_at', direction: 'desc' }"
+  [columnToggleEnabled]="true"
+  [filters]="utilisateurFilters"
+  [selectionEnabled]="true"
+  [displayedActions]="true"
+  [enableView]="true"
+  [enableEdit]="true"
+  [enableDelete]="true"
+  [enableArchive]="true"
+  [exportFilename]="'GESCOM_Utilisateurs'"
+  [pageSize]="10"
+  [pageSizeOptions]="[5,10,25,50]"
+  [searchPlaceholder]="'Rechercher par nom, email, rôle...'"
+  (view)="openView($event)"
+  (edit)="openEdit($event)"
+  (del)="onDelete($event)"
+  (archive)="archive($event)"
+  (selectionChange)="onSelectionChange($event)"
+>
+  <!-- Template personnalisé pour la colonne Utilisateur (Photo + Nom) -->
+  <ng-template columnTemplate="utilisateur" let-row>
+    <div class="d-flex align-items-center">
+      <div class="user-avatar-container me-3" 
+           style="cursor: pointer;"
+           (click)="onViewImage(row)">
+        <img 
+          [src]="getUtilisateurPhotoUrl(row)" 
+          [alt]="row.nom || 'Utilisateur'"
+          class="user-avatar rounded-circle"
+          (error)="onImgError($event)"
+          style="width: 50px; height: 50px; object-fit: cover;"
+        />
+      </div>
+      <div>
+        <div class="f-s-14 f-w-600">
+          {{ row.nom || 'N/A' }}
+        </div>
+        <span class="f-s-12 text-muted" *ngIf="row.email">
+          {{ row.email }}
+        </span>
+      </div>
+    </div>
+  </ng-template>
+</app-generic-table>

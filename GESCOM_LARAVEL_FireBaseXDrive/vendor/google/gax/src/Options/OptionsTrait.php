@@ -83,9 +83,7 @@ trait OptionsTrait
     {
         $arr = [];
         foreach (get_object_vars($this) as $key => $value) {
-            $arr[$key] = $value instanceof OptionsInterface
-                 ? $value->toArray()
-                 : $value;
+            $arr[$key] = $value;
         }
         return $arr;
     }

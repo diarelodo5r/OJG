@@ -1,0 +1,1673 @@
+/* You can add global styles to this file, and also import other style files */
+@use './assets/scss/variables' as *;
+/* Base reset: ensure consistent box-sizing */
+*, *::before, *::after { box-sizing: border-box; }
+/* =======================
+   Right Customizer Sidenav
+   ======================= */
+.customizerNav.mat-drawer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: var(--mat-sidenav-container-width, 360px);
+  background-color: var(--mat-sidenav-container-background-color, var(--mat-sys-surface));
+  color: var(--mat-sidenav-container-text-color, var(--mat-sys-on-surface-variant));
+  border-top-left-radius: var(--mat-sidenav-container-shape, var(--mat-sys-corner-large));
+  border-bottom-left-radius: var(--mat-sidenav-container-shape, var(--mat-sys-corner-large));
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  overflow-y: auto;
+  transform: translate3d(100%, 0, 0);
+  z-index: 4;
+}
+
+/* =======================
+   Per-theme explicit color application (no CSS var resolution needed)
+   These ensure components react with the concrete color of the chosen theme
+   ======================= */
+.blue_theme {
+  /* Toolbar */
+  .mat-toolbar.bg-primary { background: #00a1ff !important; color: #fff !important; }
+  /* Sidebar active & hover */
+  .sidebar-list.mdc-list .menu-list-item.activeMenu { background-color: rgba(0,161,255,0.15) !important; }
+  .sidebar-list.mdc-list .menu-list-item.activeMenu .mdc-list-item__primary-text,
+  .sidebar-list.mdc-list .menu-list-item.activeMenu .routeIcon { color: #00a1ff !important; }
+  .sidebar-list.mdc-list .menu-list-item:hover { background-color: rgba(0,161,255,0.15); }
+  .sidebar-list.mdc-list .menu-list-item:hover .mdc-list-item__primary-text,
+  .sidebar-list.mdc-list .menu-list-item:hover .routeIcon { color: #00a1ff; }
+  /* Router active */
+  a.router-link-active, .router-link-active { color: #00a1ff !important; }
+  .router-link-active .mdc-list-item__primary-text, .router-link-active .routeIcon { color: #00a1ff !important; }
+  .router-link-active .mat-focus-indicator { box-shadow: 0 0 0 3px #00a1ff inset; }
+  /* Toolbar icons hover */
+  .mat-toolbar .mat-mdc-icon-button:hover,
+  .mat-toolbar .mat-mdc-icon-button:active { color: #00a1ff !important; }
+  /* Ripple */
+  .mat-mdc-button-base, .mat-mdc-icon-button, .mdc-list-item { --mdc-ripple-color: #00a1ff; }
+  .mat-mdc-button-ripple, .mat-mdc-button-persistent-ripple, .mdc-icon-button__ripple, .mdc-list-item__ripple { --mdc-ripple-color: #00a1ff; }
+  /* Detail labels and values */
+  .detail-label { color: #00a1ff !important; }
+  .detail-value { color: #00a1ff !important; }
+}
+
+.aqua_theme {
+  .mat-toolbar.bg-primary { background: #00c2b8 !important; color: #fff !important; }
+  .sidebar-list.mdc-list .menu-list-item.activeMenu { background-color: rgba(0,194,184,0.15) !important; }
+  .sidebar-list.mdc-list .menu-list-item.activeMenu .mdc-list-item__primary-text,
+  .sidebar-list.mdc-list .menu-list-item.activeMenu .routeIcon { color: #00c2b8 !important; }
+  .sidebar-list.mdc-list .menu-list-item:hover { background-color: rgba(0,194,184,0.15); }
+  .sidebar-list.mdc-list .menu-list-item:hover .mdc-list-item__primary-text,
+  .sidebar-list.mdc-list .menu-list-item:hover .routeIcon { color: #00c2b8; }
+  a.router-link-active, .router-link-active { color: #00c2b8 !important; }
+  .router-link-active .mdc-list-item__primary-text, .router-link-active .routeIcon { color: #00c2b8 !important; }
+  .router-link-active .mat-focus-indicator { box-shadow: 0 0 0 3px #00c2b8 inset; }
+  .mat-toolbar .mat-mdc-icon-button:hover,
+  .mat-toolbar .mat-mdc-icon-button:active { color: #00c2b8 !important; }
+  .mat-mdc-button-base, .mat-mdc-icon-button, .mdc-list-item { --mdc-ripple-color: #00c2b8; }
+  .mat-mdc-button-ripple, .mat-mdc-button-persistent-ripple, .mdc-icon-button__ripple, .mdc-list-item__ripple { --mdc-ripple-color: #00c2b8; }
+}
+
+.purple_theme {
+  .mat-toolbar.bg-primary { background: #8965e5 !important; color: #fff !important; }
+  .sidebar-list.mdc-list .menu-list-item.activeMenu { background-color: rgba(137,101,229,0.15) !important; }
+  .sidebar-list.mdc-list .menu-list-item.activeMenu .mdc-list-item__primary-text,
+  .sidebar-list.mdc-list .menu-list-item.activeMenu .routeIcon { color: #8965e5 !important; }
+  .sidebar-list.mdc-list .menu-list-item:hover { background-color: rgba(137,101,229,0.15); }
+  .sidebar-list.mdc-list .menu-list-item:hover .mdc-list-item__primary-text,
+  .sidebar-list.mdc-list .menu-list-item:hover .routeIcon { color: #8965e5; }
+  a.router-link-active, .router-link-active { color: #8965e5 !important; }
+  .router-link-active .mdc-list-item__primary-text, .router-link-active .routeIcon { color: #8965e5 !important; }
+  .router-link-active .mat-focus-indicator { box-shadow: 0 0 0 3px #8965e5 inset; }
+  .mat-toolbar .mat-mdc-icon-button:hover,
+  .mat-toolbar .mat-mdc-icon-button:active { color: #8965e5 !important; }
+  .mat-mdc-button-base, .mat-mdc-icon-button, .mdc-list-item { --mdc-ripple-color: #8965e5; }
+  .mat-mdc-button-ripple, .mat-mdc-button-persistent-ripple, .mdc-icon-button__ripple, .mdc-list-item__ripple { --mdc-ripple-color: #8965e5; }
+}
+
+.green_theme {
+  .mat-toolbar.bg-primary { background: #27ae60 !important; color: #fff !important; }
+  .sidebar-list.mdc-list .menu-list-item.activeMenu { background-color: rgba(39,174,96,0.15) !important; }
+  .sidebar-list.mdc-list .menu-list-item.activeMenu .mdc-list-item__primary-text,
+  .sidebar-list.mdc-list .menu-list-item.activeMenu .routeIcon { color: #27ae60 !important; }
+  .sidebar-list.mdc-list .menu-list-item:hover { background-color: rgba(39,174,96,0.15); }
+  .sidebar-list.mdc-list .menu-list-item:hover .mdc-list-item__primary-text,
+  .sidebar-list.mdc-list .menu-list-item:hover .routeIcon { color: #27ae60; }
+  a.router-link-active, .router-link-active { color: #27ae60 !important; }
+  .router-link-active .mdc-list-item__primary-text, .router-link-active .routeIcon { color: #27ae60 !important; }
+  .router-link-active .mat-focus-indicator { box-shadow: 0 0 0 3px #27ae60 inset; }
+  .mat-toolbar .mat-mdc-icon-button:hover,
+  .mat-toolbar .mat-mdc-icon-button:active { color: #27ae60 !important; }
+  .mat-mdc-button-base, .mat-mdc-icon-button, .mdc-list-item { --mdc-ripple-color: #27ae60; }
+  .mat-mdc-button-ripple, .mat-mdc-button-persistent-ripple, .mdc-icon-button__ripple, .mdc-list-item__ripple { --mdc-ripple-color: #27ae60; }
+}
+
+.orange_theme {
+  .mat-toolbar.bg-primary { background: #f39c12 !important; color: #fff !important; }
+  .sidebar-list.mdc-list .menu-list-item.activeMenu { background-color: rgba(243,156,18,0.15) !important; }
+  .sidebar-list.mdc-list .menu-list-item.activeMenu .mdc-list-item__primary-text,
+  .sidebar-list.mdc-list .menu-list-item.activeMenu .routeIcon { color: #f39c12 !important; }
+  .sidebar-list.mdc-list .menu-list-item:hover { background-color: rgba(243,156,18,0.15); }
+  .sidebar-list.mdc-list .menu-list-item:hover .mdc-list-item__primary-text,
+  .sidebar-list.mdc-list .menu-list-item:hover .routeIcon { color: #f39c12; }
+  a.router-link-active, .router-link-active { color: #f39c12 !important; }
+  .router-link-active .mdc-list-item__primary-text, .router-link-active .routeIcon { color: #f39c12 !important; }
+  .router-link-active .mat-focus-indicator { box-shadow: 0 0 0 3px #f39c12 inset; }
+  .mat-toolbar .mat-mdc-icon-button:hover,
+  .mat-toolbar .mat-mdc-icon-button:active { color: #f39c12 !important; }
+  .mat-mdc-button-base, .mat-mdc-icon-button, .mdc-list-item { --mdc-ripple-color: #f39c12; }
+  .mat-mdc-button-ripple, .mat-mdc-button-persistent-ripple, .mdc-icon-button__ripple, .mdc-list-item__ripple { --mdc-ripple-color: #f39c12; }
+  /* Detail labels and values */
+  .detail-label { color: #f39c12 !important; }
+  .detail-value { color: #f39c12 !important; }
+}
+
+.mat-drawer-transition .customizerNav.mat-drawer {
+  transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.customizerNav.mat-drawer.mat-drawer-opened {
+  transform: none;
+}
+
+/* Ensure inner container fills and allows content stacks */
+.customizerNav .mat-drawer-inner-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Optional: make customizer content scroll below its header area */
+.customizerNav .customizer-scroll {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Card content paddings (align with provided snippet) */
+html .mat-mdc-card > .mat-mdc-card-content { padding: 24px !important; }
+.mat-mdc-card-content { display: block; padding: 0 16px; }
+.mat-mdc-card-content:last-child { padding-bottom: 16px; }
+
+/* Icon button text color baseline via variable */
+.mat-mdc-icon-button { color: var(--mat-icon-button-icon-color, var(--mat-sys-on-background)); }
+
+/* Layout constants */
+:root {
+  /* Global error (warn) color for delete/trash semantics */
+  --mat-sys-error: #d32f2f; /* fallback if theme not provided */
+  /* Global header height used by pages to compute remaining height */
+  --header-height: 64px;
+}
+
+/* Global delete/trash color helpers */
+.delete-color {
+  color: var(--mat-sys-error);
+}
+
+.text-warn {
+  color: var(--mat-sys-error);
+}
+
+.delete {
+  color: var(--mat-sys-error);
+}
+
+/* Floating settings button (Customizer) */
+.customizerBtn {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 2000; /* keep above content and sidenav-content */
+
+  button[mat-fab] {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@media (max-width: 599px) {
+  .customizerBtn {
+    right: 16px;
+    bottom: 16px;
+  }
+}
+/* ----------------------------------------
+   Global Theme Variables and Surfaces (Material aligned)
+   The ThemeService toggles 'light-theme' / 'dark-theme' on <html>
+----------------------------------------- */
+
+html.light-theme {
+  color-scheme: light;
+  --mat-sys-background: #f8fafd;
+  --mat-sys-surface-bright: #f2f6fa;
+  --mat-sys-surface: #ffffff;
+  --mat-sys-surface-container: #ffffff;
+  --mat-sys-surface-container-low: #ffffff;
+  --mat-sys-surface-container-lowest: #111c2d99;
+  --mat-sys-on-background: #111c2d;
+  --mat-sys-outline: #e4ebf0;
+  --mat-sys-outline-variant: #e4ebf0;
+  --mat-card-elevated-container-color: #ffffff;
+  --mat-card-outlined-container-color: #ffffff;
+  /* Global surface vars for custom components */
+  --app-surface: var(--mat-sys-surface);
+  --app-surface-2: #fafafa;
+  --app-border: rgba(0,0,0,0.08);
+  --app-header-grad-1: color-mix(in srgb, var(--mat-sys-primary, #3f51b5) 10%, transparent);
+  --app-header-grad-2: color-mix(in srgb, #03a9f4 8%, transparent);
+  --app-icon: var(--mat-sys-primary, #3f51b5);
+  --app-text-muted: color-mix(in srgb, var(--mat-sys-on-background) 70%, transparent);
+}
+
+html.dark-theme {
+  color-scheme: dark;
+  --mat-sys-background: #121316;
+  --mat-sys-surface-bright: #38393c;
+  --mat-sys-surface: #171b20;
+  --mat-sys-surface-container: #1f2022;
+  --mat-sys-surface-container-low: #1a1b1f;
+  --mat-sys-surface-container-lowest: #0d0e11;
+  --mat-sys-on-background: #e3e2e6;
+  --mat-sys-outline: #8e9099;
+  --mat-sys-outline-variant: #44474e;
+  --mat-card-elevated-container-color: #1b1f24;
+  --mat-card-outlined-container-color: #1b1f24;
+  /* Global surface vars for custom components */
+  --app-surface: var(--mat-sys-surface);
+  --app-surface-2: rgba(255,255,255,0.03);
+  --app-border: rgba(255,255,255,0.08);
+  --app-header-grad-1: color-mix(in srgb, var(--mat-sys-primary, #90caf9) 15%, transparent);
+  --app-header-grad-2: color-mix(in srgb, #03a9f4 12%, transparent);
+  --app-icon: color-mix(in srgb, var(--mat-sys-primary, #90caf9) 90%, white 0%);
+  --app-text-muted: color-mix(in srgb, var(--mat-sys-on-background) 70%, transparent);
+}
+
+/* Theme-aware logos (white for light theme backgrounds and black for dark) */
+.logo-light,
+.logo-dark {
+  /* Preferred size across the app */
+  width: 260px;
+  height: 69.34px;
+  max-width: 100%; /* avoid overflow in constrained containers */
+  display: inline-block;
+  object-fit: contain; /* default gentle fit */
+  image-rendering: auto;
+  transition: width 180ms ease, height 180ms ease, opacity 180ms ease;
+}
+
+html.light-theme .logo-dark { display: none; }
+html.light-theme .logo-light { display: inline-block; }
+html.dark-theme .logo-light { display: none; }
+html.dark-theme .logo-dark { display: inline-block; }
+
+/* Sidebar branding should center the logo and use the preferred size,
+   while respecting mini sidebar overrides defined later in this file */
+.mat-drawer.sidebarNav .branding {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0; /* gentle vertical breathing room */
+}
+
+/* In normal (non-mini) sidebar, enforce preferred logo size */
+body:not(.sidebar-mini) .mat-drawer.sidebarNav .branding .logo-light,
+body:not(.sidebar-mini) .mat-drawer.sidebarNav .branding .logo-dark {
+  width: 260px;
+  height: 69.34px;
+  transform: scale(1.06);
+  transform-origin: center center;
+}
+
+/* Zoom effect in SIDEBAR: make image visually larger within its box */
+body:not(.sidebar-mini) .mat-drawer.sidebarNav .branding a {
+  display: flex;
+  width: 260px;
+  height: 69.34px;
+  overflow: hidden; /* crop inner padding of source image */
+  align-items: center;
+  justify-content: center;
+}
+body:not(.sidebar-mini) .mat-drawer.sidebarNav .branding .logo-light,
+body:not(.sidebar-mini) .mat-drawer.sidebarNav .branding .logo-dark {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* zoom to fill */
+  transform: scale(1.04); /* subtle extra zoom */
+  transform-origin: center center;
+}
+
+/* Zoom effect on AUTH pages: same treatment for login/register top logo */
+.boxed-auth .text-center a {
+  display: inline-flex;
+  width: 260px;
+  height: 69.34px;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+.boxed-auth .text-center a .logo-light,
+.boxed-auth .text-center a .logo-dark,
+.boxed-auth .text-center a .auth-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* zoom to fill */
+  transform: scale(1.04);
+  transform-origin: center center;
+}
+
+
+/* Apply variables to common surfaces */
+body {
+  font-family: Inter, sans-serif;
+  line-height: 1.334rem;
+  overflow-x: hidden;
+  background: var(--mat-sys-background);
+  color: var(--mat-sys-on-background);
+  transition: background 180ms ease, color 180ms ease;
+}
+
+/* Global utility: center icon + text inside buttons */
+.btn-inline-center {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  line-height: 1.2 !important;
+}
+
+/* Global utility: consistent top spacing before a section */
+.section-gap {
+  margin-top: 12px; /* keep in sync with m-b-12 used across pages */
+}
+
+/* ==================================
+   App Dialog/Modal Utilities (reusable)
+   ================================== */
+.app-dialog {
+  border-radius: 16px;
+  background: var(--app-surface, var(--mat-sys-surface));
+  color: var(--mat-sys-on-background);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.app-dialog-body {
+  padding: 16px 20px 20px;
+}
+
+.app-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--app-header-grad-1), var(--app-header-grad-2));
+  margin-bottom: 12px;
+}
+
+.app-dialog-header .title { display: flex; align-items: center; gap: 12px; }
+.app-dialog-header .title mat-icon { color: var(--app-icon); }
+.app-dialog-header .title .text h3 { font-weight: 600; font-size: 18px; margin: 0; }
+.app-dialog-header .title .text .muted { color: var(--app-text-muted); }
+
+.app-detail-layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.app-detail-left { flex: 1 1 45%; }
+.app-detail-right { flex: 1 1 55%; }
+
+.app-surface-card {
+  background: var(--app-surface-2, rgba(0,0,0,0.03));
+  border: 1px solid var(--app-border, rgba(0,0,0,0.08));
+  border-radius: 12px;
+}
+.app-surface-card .content { padding: 12px; }
+
+.app-image-holder {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--app-border, rgba(0,0,0,0.08));
+  background: var(--app-surface-2, rgba(0,0,0,0.03));
+}
+.app-image-holder img {
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .app-detail-layout { flex-direction: column; }
+  .app-detail-left, .app-detail-right { flex: 1 1 100%; }
+  .app-image-holder img { max-height: 260px; }
+}
+
+
+/* Ensure label itself also aligns if used without button flex */
+.mat-mdc-button-base .mdc-button__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Normalize icon alignment for mat-icon and iconify inside buttons */
+.mat-mdc-button-base .mat-icon,
+.mat-mdc-button-base .iconify {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  min-height: fit-content;
+  flex-shrink: 0;
+}
+
+.mat-mdc-fab .mat-icon,
+.mat-mdc-mini-fab .mat-icon,
+.mat-mdc-fab .iconify,
+.mat-mdc-mini-fab .iconify {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  width: 1em;
+  height: 1em; /* keep vector icon square and centered */
+}
+
+/* Baseline element/text colors (inspired by provided snippet) */
+html .mdc-list-item__primary-text,
+html .mat-drawer-container,
+html .mat-drawer,
+html .text-body {
+  color: var(--mat-sys-on-background);
+}
+
+/* Sidenav container baseline (inspired) */
+.mat-drawer-container {
+  position: relative;
+  z-index: 1;
+  color: var(--mat-sidenav-content-text-color, var(--mat-sys-on-background));
+  background-color: var(--mat-sidenav-content-background-color, var(--mat-sys-background));
+  box-sizing: border-box;
+  display: block;
+  overflow: hidden;
+}
+
+/* Toolbar */
+.mat-toolbar.topbar {
+  background: var(--mat-sys-surface) !important;
+  color: var(--mat-sys-on-background) !important;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100; /* above content & sidenav-content */
+}
+
+/* Ensure toolbar content never overflows and logo fits within header height */
+.mat-toolbar.topbar .container { overflow: hidden; }
+.mat-toolbar.topbar .logo-light {
+  max-height: calc(var(--header-height, #{$header-height}) - 12px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transform: scale(3.54);
+  transform-origin: center center;
+  display: block;
+}
+
+/* Make hero/banner sections span the remaining viewport height globally */
+.landingpage-wrapper .banner-section {
+  min-height: calc(100vh - var(--header-height, #{$header-height}));
+  display: flex;
+  align-items: stretch;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Auth pages: make inner container full-width inside banner */
+.landingpage-wrapper .banner-section .blank-layout-container {
+  width: 100%;
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Themed primary toolbar variant */
+.mat-toolbar.bg-primary {
+  /* Dynamic by theme */
+  background: var(--mat-sys-primary) !important;
+  color: var(--mat-sys-on-primary, #fff) !important;
+}
+
+/* Ensure avatar image sits perfectly centered inside the icon button */
+.mat-toolbar.topbar .mat-mdc-icon-button img.profile-img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block; /* remove baseline extra space */
+}
+
+/* Make the icon button itself perfectly center its content */
+.mat-toolbar.topbar .mat-mdc-icon-button.mdc-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1; /* avoid baseline shift */
+}
+
+/* Profile block inside the topbar dropdown: keep avatar perfectly round and centered */
+.topbar-dd .rounded-circle {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Sidenav surface */
+.mat-drawer.sidebarNav, .mat-sidenav.customizerNav {
+  background: var(--mat-sys-surface) !important;
+  color: var(--mat-sys-on-background) !important;
+  border-right: 1px solid var(--mat-sys-outline-variant);
+}
+
+/* Content wrapper common background */
+.contentWrapper, .pageWrapper, .body-wrapper {
+  background: var(--mat-sys-background);
+  color: var(--mat-sys-on-background);
+}
+
+/* Ensure content starts below fixed header */
+.mat-sidenav-content, .contentWrapper, .body-wrapper {
+  top: calc(var(--header-height, #{$header-height}) + 5px);
+}
+
+/* =======================
+   Customizer-applied layout classes
+   ======================= */
+/* Container mode */
+body.container-boxed .contentWrapper {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+body.container-full .contentWrapper {
+  max-width: none;
+}
+/* Ensure inner page wrappers follow the container mode as well */
+body.container-boxed .pageWrapper,
+body.container-boxed .maxWidth {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  width: 100%;
+}
+body.container-full .pageWrapper,
+body.container-full .maxWidth {
+  max-width: none;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Cards appearance */
+body.cards-border .mat-mdc-card,
+body.cards-border .mat-card {
+  box-shadow: none !important;
+  border: 1px solid var(--mat-sys-outline-variant);
+  height: max-content;
+  width: 100%;
+}
+body.cards-shadow .mat-mdc-card,
+body.cards-shadow .mat-card {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  border: none;
+}
+
+/* Sidebar type: width tweaks */
+body.sidebar-mini .mat-drawer.sidebarNav {
+  width: 80px !important;
+}
+body.sidebar-full .mat-drawer.sidebarNav {
+  width: var(--mat-sidenav-container-width, 260px) !important;
+}
+
+/* Mini sidebar visuals: center icons, hide labels, adjust paddings */
+body.sidebar-mini .mat-drawer.sidebarNav .menu-list-item {
+  justify-content: center;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+body.sidebar-mini .mat-drawer.sidebarNav .menu-list-item .hide-menu,
+body.sidebar-mini .mat-drawer.sidebarNav .nav-caption,
+body.sidebar-mini .mat-drawer.sidebarNav .arrow-icon,
+body.sidebar-mini .mat-drawer.sidebarNav .item-chip {
+  display: none !important;
+}
+body.sidebar-mini .mat-drawer.sidebarNav .menu-list-item .routeIcon {
+  margin: 0 !important;
+}
+body.sidebar-mini .mat-drawer.sidebarNav .branding {
+  text-align: center;
+}
+/* Retract branding image and harmonize spacing in mini mode */
+body.sidebar-mini .mat-drawer.sidebarNav .branding img {
+  width: 80px;
+  height: 104px;
+  margin: 8px auto !important;
+  display: block;
+  object-fit: cover;
+}
+/* Show appropriate logo variant by theme */
+html.light-theme .mat-drawer.sidebarNav .branding .logodark { display: none; }
+html.light-theme .mat-drawer.sidebarNav .branding .logolight { display: inline-block; }
+html.dark-theme .mat-drawer.sidebarNav .branding .logolight { display: none; }
+html.dark-theme .mat-drawer.sidebarNav .branding .logodark { display: inline-block; }
+body.sidebar-mini .mat-drawer.sidebarNav .sidebar-list {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+body.sidebar-mini .mat-drawer.sidebarNav .menu-list-item {
+  min-height: 40px;
+  height: 40px;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .15s ease, color .15s ease;
+}
+/* Remove default list paddings so icon can center truly */
+body.sidebar-mini .mat-drawer.sidebarNav .mdc-list-item {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+body.sidebar-mini .mat-drawer.sidebarNav .menu-list-item .routeIcon {
+  font-size: 24px;
+  line-height: 1;
+  transition: transform .12s ease, color .12s ease;
+}
+body.sidebar-mini .mat-drawer.sidebarNav .menu-list-item .mdc-list-item__start {
+  margin: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+body.sidebar-mini .mat-drawer.sidebarNav .menu-list-item .mdc-list-item__primary-text {
+  display: none; /* labels are hidden in mini mode */
+}
+/* Enhance hover readability: stronger color + slight icon scale */
+body.sidebar-mini .mat-drawer.sidebarNav .menu-list-item:hover .routeIcon {
+  color: var(--mat-sys-primary);
+  transform: scale(1.08);
+}
+
+/* Mini sidebar: use dedicated logo variants and theme toggles */
+body.sidebar-mini .mat-drawer.sidebarNav .branding .logo-light,
+body.sidebar-mini .mat-drawer.sidebarNav .branding .logo-dark { display: none !important; }
+body:not(.sidebar-mini) .mat-drawer.sidebarNav .branding .logo-mini-light,
+body:not(.sidebar-mini) .mat-drawer.sidebarNav .branding .logo-mini-dark { display: none !important; }
+
+/* Mini anchor frame to crop neatly */
+body.sidebar-mini .mat-drawer.sidebarNav .branding a {
+  width: 80px !important;
+  height: 104px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+body.sidebar-mini .mat-drawer.sidebarNav .branding .logo-mini-light,
+body.sidebar-mini .mat-drawer.sidebarNav .branding .logo-mini-dark {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  transform: scale(2.2); 
+  transform-origin: center center;
+}
+
+/* Theme show/hide for mini logos */
+html.light-theme body.sidebar-mini .mat-drawer.sidebarNav .branding .logo-mini-dark { display: none !important; }
+html.light-theme body.sidebar-mini .mat-drawer.sidebarNav .branding .logo-mini-light { display: inline-block !important; }
+html.dark-theme body.sidebar-mini .mat-drawer.sidebarNav .branding .logo-mini-light { display: none !important; }
+html.dark-theme body.sidebar-mini .mat-drawer.sidebarNav .branding .logo-mini-dark { display: inline-block !important; }
+
+/* Ensure hover background spans full width in mini */
+body.sidebar-mini .mat-drawer.sidebarNav .menu-list-item:hover {
+  background-color: var(--mat-sys-primary-fixed-dim);
+}
+
+/* =======================
+   Angular Calendar (mwl-calendar) Theming
+   ======================= */
+/* Week header: use theme colors */
+.cal-week-view .cal-day-headers .cal-header {
+  background: color-mix(in srgb, var(--mat-sys-primary) 8%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--mat-sys-primary) 35%, transparent);
+}
+.cal-week-view .cal-day-headers .cal-header b,
+.cal-week-view .cal-day-headers .cal-header span {
+  color: var(--mat-sys-on-surface, currentColor);
+}
+.cal-week-view .cal-day-headers .cal-header:hover {
+  background: color-mix(in srgb, var(--mat-sys-primary) 14%, transparent);
+}
+
+/* Today highlight */
+.cal-week-view .cal-day-headers .cal-header.cal-today,
+.cal-week-view .cal-day-columns .cal-day-column.cal-today {
+  background: color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
+}
+.cal-week-view .cal-day-headers .cal-header.cal-today b {
+  color: var(--mat-sys-primary);
+}
+
+/* Hour segments and hover */
+.cal-week-view .cal-hour-segment {
+  border-bottom: 1px dashed color-mix(in srgb, var(--mat-sys-primary) 22%, transparent);
+}
+.cal-week-view .cal-hour-segment:hover {
+  background: color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
+}
+
+/* Current time marker */
+.cal-week-view mwl-calendar-week-view-current-time-marker .cal-current-time-marker,
+.cal-week-view .cal-current-time-marker {
+  background: var(--mat-sys-primary) !important;
+}
+
+/* Events */
+.cal-week-view .cal-event,
+.cal-week-view .cal-event-container .cal-event {
+  background: var(--mat-sys-primary) !important;
+  color: var(--mat-sys-on-primary, #fff) !important;
+  border: 1px solid color-mix(in srgb, var(--mat-sys-primary) 65%, transparent) !important;
+}
+.cal-week-view .cal-event:hover {
+  filter: brightness(0.96);
+}
+/* Hide caption rows and dividers in mini for a cleaner, compact look */
+body.sidebar-mini .mat-drawer.sidebarNav .nav-caption,
+body.sidebar-mini .mat-drawer.sidebarNav .sidebar-divider {
+  display: none !important;
+}
+
+/* Map primary color variable to MDC component CSS vars for instant visual changes */
+:root, html {
+  /* Buttons */
+  --mdc-filled-button-container-color: var(--mat-sys-primary);
+  --mdc-filled-button-label-text-color: var(--mat-sys-on-primary, #fff);
+  --mdc-outlined-button-label-text-color: var(--mat-sys-primary);
+  --mdc-outlined-button-outline-color: var(--mat-sys-primary);
+
+  /* Chips */
+  --mdc-assist-chip-label-text-color: var(--mat-sys-on-background);
+  --mdc-assist-chip-container-color: var(--mat-sys-primary-fixed-dim, rgba(0,0,0,.06));
+
+  /* Toggles (approximate) */
+  --mdc-switch-selected-track-color: color-mix(in srgb, var(--mat-sys-primary) 30%, transparent);
+  --mdc-switch-selected-handle-color: var(--mat-sys-primary);
+  --mdc-switch-selected-icon-color: #fff;
+}
+
+/* Layout type hooks can be added here when needed */
+
+/* Sidebar active menu theming */
+.sidebar-list.mdc-list .menu-list-item.activeMenu {
+  background-color: var(--mat-sys-primary-fixed-dim) !important;
+}
+.sidebar-list.mdc-list .menu-list-item.activeMenu .mdc-list-item__primary-text,
+.sidebar-list.mdc-list .menu-list-item.activeMenu .routeIcon {
+  /* Dynamic by theme */
+  color: var(--mat-sys-primary) !important;
+}
+
+/* Sidebar hover/press states themed */
+.sidebar-list.mdc-list .menu-list-item:hover {
+  background-color: var(--mat-sys-primary-fixed-dim);
+}
+.sidebar-list.mdc-list .menu-list-item:hover .mdc-list-item__primary-text,
+.sidebar-list.mdc-list .menu-list-item:hover .routeIcon {
+  color: var(--mat-sys-primary);
+}
+.sidebar-list.mdc-list .menu-list-item:active {
+  background-color: color-mix(in srgb, var(--mat-sys-primary-fixed-dim) 70%, transparent);
+}
+
+/* Router active states */
+a.router-link-active,
+.router-link-active {
+  color: var(--mat-sys-primary) !important;
+}
+.router-link-active .mdc-list-item__primary-text,
+.router-link-active .routeIcon {
+  color: var(--mat-sys-primary) !important;
+}
+.router-link-active .mat-focus-indicator {
+  /* Apply focus ring on active router links */
+  box-shadow: 0 0 0 3px var(--mat-sys-primary) inset;
+}
+.mat-mdc-stroked-button.router-link-active {
+  border-color: var(--mat-sys-primary) !important;
+  color: var(--mat-sys-primary) !important;
+}
+
+/* Toolbar icon hover/active */
+.mat-toolbar .mat-mdc-icon-button:hover,
+.mat-toolbar .mat-mdc-icon-button:active {
+  color: var(--mat-sys-primary) !important;
+}
+
+/* Themed ripple (click effect) using current theme primary */
+.mat-mdc-button-base,
+.mat-mdc-icon-button,
+.mdc-list-item {
+  --mdc-ripple-color: var(--mat-sys-primary);
+  --mdc-ripple-press-opacity: 0.18;
+}
+/* Ensure ripple nodes inherit our color var */
+.mat-mdc-button-ripple,
+.mat-mdc-button-persistent-ripple,
+.mdc-icon-button__ripple,
+.mdc-list-item__ripple {
+  --mdc-ripple-color: var(--mat-sys-primary);
+}
+
+/* =======================
+   Global Delete/Trash Coloring Utilities
+   Use classes to consistently color delete actions in red across the app.
+   ======================= */
+.delete-color,
+.text-warn,
+.text-error,
+.text-delete {
+  color: var(--mat-sys-error) !important;
+}
+
+/* Buttons and icon buttons marked as delete */
+button.delete,
+.mat-mdc-button.delete,
+.mat-mdc-stroked-button.delete,
+.mat-mdc-unelevated-button.delete,
+.mat-mdc-raised-button.delete,
+.mat-mdc-icon-button.delete {
+  color: var(--mat-sys-error) !important;
+}
+
+/* Mat icons marked as delete */
+mat-icon.delete-icon,
+.mat-icon.delete-icon {
+  color: var(--mat-sys-error) !important;
+}
+
+/* =======================
+   Extended Component Theming
+   ======================= */
+/* Tabs */
+.mat-mdc-tab.mdc-tab--active .mdc-tab__text-label { color: var(--mat-sys-primary) !important; }
+.mdc-tab-indicator__content--underline { background-color: var(--mat-sys-primary) !important; }
+
+/* Radio */
+.mdc-radio .mdc-radio__native-control:checked + .mdc-radio__background .mdc-radio__outer-circle { border-color: var(--mat-sys-primary) !important; }
+.mdc-radio .mdc-radio__native-control:checked + .mdc-radio__background .mdc-radio__inner-circle { border-color: var(--mat-sys-primary) !important; }
+.mdc-radio .mdc-radio__ripple { --mdc-ripple-color: var(--mat-sys-primary); }
+
+/* Slider */
+.mdc-slider .mdc-slider__track--active_fill { background-color: var(--mat-sys-primary) !important; }
+.mdc-slider .mdc-slider__thumb { border-color: var(--mat-sys-primary) !important; background-color: var(--mat-sys-primary) !important; }
+
+/* Progress (linear & circular) */
+.mdc-linear-progress__bar-inner { background-color: var(--mat-sys-primary) !important; }
+
+/* =======================
+   Global Modal Image Styles
+   Ensure all modal images fit within their containers
+   ======================= */
+.image-preview-dialog-content img,
+.modal-dark-theme img,
+.dialog-dark-theme img,
+.product-detail-dialog img {
+  max-width: 100%;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  object-fit: contain !important;
+  display: block;
+  margin: 0 auto;
+}
+.mdc-circular-progress__indeterminate-circle-graphic { stroke: var(--mat-sys-primary) !important; }
+
+/* Chips selected */
+.mdc-evolution-chip--selected .mdc-evolution-chip__action--primary { --mdc-chip-elevated-container-color: var(--mat-sys-primary-fixed-dim); }
+.mdc-evolution-chip--selected .mdc-evolution-chip__text-label { color: var(--mat-sys-primary); }
+
+/* Outlined inputs focus */
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing { border-color: var(--mat-sys-primary) !important; }
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-icon-prefix,
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-icon-suffix { color: var(--mat-sys-primary) !important; }
+
+/* Generic link hover */
+a:hover { color: var(--mat-sys-primary); }
+
+/* Global Search Dialog appearance */
+.global-search-dialog .mat-mdc-dialog-container {
+  --mdc-dialog-container-shape: 16px;
+}
+.global-search-dialog .mat-mdc-dialog-surface {
+  border-radius: 16px !important;
+  background: var(--app-surface, var(--mat-sys-surface));
+  box-shadow: 0 12px 32px rgba(0,0,0,0.28);
+}
+.global-search-dialog .mat-nav-list a.mat-mdc-list-item:hover {
+  background: var(--mat-sys-primary-fixed-dim);
+}
+.global-search-dialog .mat-nav-list .mdc-list-item__primary-text {
+  font-weight: 500;
+}
+.global-search-dialog .text-muted { color: var(--app-text-muted); }
+
+/* =======================
+   Button label contrast by theme (white/black)
+   Applies mainly to inherit/outlined/stroked to ensure readable labels.
+   Avoids overriding filled/raised/fab which already use on-primary.
+   ======================= */
+html.light-theme .mat-mdc-button.mat-inherit .mdc-button__label,
+html.light-theme .mat-mdc-outlined-button .mdc-button__label,
+html.light-theme .mat-mdc-stroked-button .mdc-button__label,
+html.light-theme .mat-mdc-icon-button .mdc-button__label,
+html.light-theme .detail-label,
+html.light-theme .detail-value {
+  color: #111 !important;
+  color: var(--mat-sys-on-background) !important;
+}
+html.dark-theme .mat-mdc-button.mat-inherit .mdc-button__label,
+html.dark-theme .mat-mdc-outlined-button .mdc-button__label,
+html.dark-theme .mat-mdc-stroked-button .mdc-button__label,
+html.dark-theme .mat-mdc-icon-button .mdc-button__label,
+html.dark-theme .detail-label,
+html.dark-theme .detail-value {
+  color: #fff !important;
+  color: var(--mat-sys-on-background) !important;
+}
+
+/* Fallback: any loose MDC button label follows theme contrast as a last resort */
+html.light-theme .mdc-button__label { color: var(--mat-sys-on-background) !important; }
+html.dark-theme .mdc-button__label { color: var(--mat-sys-on-background) !important; }
+
+/* Generic labels contrast by theme (no !important to avoid overriding filled buttons) */
+html.light-theme label,
+html.light-theme .mdc-label,
+html.light-theme span.label,
+html.light-theme .mat-mdc-slide-toggle .mdc-label,
+html.light-theme .mat-mdc-checkbox .mdc-form-field > label,
+html.light-theme .mat-mdc-radio .mdc-label {
+  color: var(--mat-sys-on-background);
+}
+html.dark-theme label,
+html.dark-theme .mdc-label,
+html.dark-theme span.label,
+html.dark-theme .mat-mdc-slide-toggle .mdc-label,
+html.dark-theme .mat-mdc-checkbox .mdc-form-field > label,
+html.dark-theme .mat-mdc-radio .mdc-label {
+  color: var(--mat-sys-on-background);
+}
+
+/* =======================
+   More Component Theming (Badges, Menus, Selects, Stepper, Snack-bar, Paginator, Tooltips)
+   ======================= */
+/* Badges */
+.mat-badge-content,
+.mdc-badge__content {
+  background-color: var(--mat-sys-primary) !important;
+  color: var(--mat-sys-on-primary, #fff) !important;
+}
+
+/* Menus */
+.mat-mdc-menu-panel .mat-mdc-menu-item.mdc-list-item--selected .mdc-list-item__primary-text,
+.mat-mdc-menu-panel .mat-mdc-menu-item:hover .mdc-list-item__primary-text {
+  color: var(--mat-sys-primary) !important;
+}
+.mat-mdc-menu-panel .mat-mdc-menu-item:hover { background-color: var(--mat-sys-primary-fixed-dim) !important; }
+
+/* Select - options */
+.mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text,
+.mat-mdc-select-panel .mat-mdc-option:hover .mdc-list-item__primary-text {
+  color: var(--mat-sys-primary) !important;
+}
+.mat-mdc-select-panel .mat-mdc-option:hover { background-color: var(--mat-sys-primary-fixed-dim) !important; }
+
+/* Stepper */
+.mat-step-header.mat-primary .mat-step-icon-selected,
+.mat-step-header .mat-step-icon-state-edit { background-color: var(--mat-sys-primary) !important; color: var(--mat-sys-on-primary, #fff) !important; }
+.mat-stepper-horizontal, .mat-stepper-vertical { --mat-stepper-header-selected-state-icon-background-color: var(--mat-sys-primary); }
+.mat-stepper-horizontal .mat-stepper-label,
+.mat-stepper-vertical .mat-stepper-label { color: var(--mat-sys-on-background); }
+.mat-step-header.cdk-keyboard-focused .mat-step-header-ripple, .mat-step-header.cdk-program-focused .mat-step-header-ripple { --mdc-ripple-color: var(--mat-sys-primary); }
+
+/* Snack-bar */
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary, #fff);
+}
+.mat-mdc-snack-bar-container .mdc-button__label { color: var(--mat-sys-on-primary, #fff); }
+
+/* Paginator */
+.mat-mdc-paginator .mat-mdc-icon-button:hover,
+.mat-mdc-paginator .mat-mdc-icon-button:active { color: var(--mat-sys-primary); }
+.mat-mdc-paginator .mat-mdc-select.mat-mdc-select-value {
+  color: var(--mat-sys-on-background);
+}
+.mat-mdc-paginator .mat-mdc-select.mat-mdc-select-focused .mdc-notched-outline__leading,
+.mat-mdc-paginator .mat-mdc-select.mat-mdc-select-focused .mdc-notched-outline__notch,
+.mat-mdc-paginator .mat-mdc-select.mat-mdc-select-focused .mdc-notched-outline__trailing { border-color: var(--mat-sys-primary) !important; }
+
+/* Tooltips */
+.mat-mdc-tooltip .mdc-tooltip__surface,
+.mat-tooltip {
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary, #fff);
+}
+
+/* Cards and common Material containers */
+.mat-mdc-card, .mat-card, .mat-mdc-menu-panel, .mat-mdc-select-panel {
+  background: var(--mat-card-elevated-container-color, var(--mat-sys-surface)) !important;
+  color: var(--mat-sys-on-background) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+/* Ensure card subtitles have sufficient contrast in dark theme */
+html.dark-theme .mat-mdc-card-subtitle,
+html.dark-theme mat-card-subtitle {
+  color: var(--mat-sys-on-background) !important; /* readable (white/beige/grey per theme) */
+}
+
+/* =======================
+   Global Modal/Dialog Dark Theme Styling
+   ======================= */
+/* Classe principale pour tous les modals en mode sombre */
+.modal-dark-theme,
+.dialog-dark-theme,
+.calendar-dialog-content,
+.cart-dialog-content,
+.image-preview-dialog-content {
+  background: var(--bs-modal-bg, #fff) !important;
+  color: var(--bs-body-color, #212529) !important;
+  border-radius: 10px !important;
+  transition: background 180ms ease, color 180ms ease, border 180ms ease;
+}
+
+/* Erreurs en mode sombre */
+.error {
+  color: #ff5252 !important;
+}
+
+/* Styles spécifiques pour ProductModalDialog */
+.product-dialog-content .summary-content .product-details p {
+  color: #212529 !important;
+}
+
+.product-dialog-content .select {
+  color: #212529 !important;
+}
+
+.product-dialog-content .categories strong {
+  color: #212529 !important;
+}
+
+/* Ensure product details panels have proper background (light) */
+.product-dialog-content .product-details,
+.product-detail-dialog .product-details {
+  background-color: #817f7f18; 
+  padding: 15px;
+  border-radius: 8px;
+}
+
+/* Mode sombre système */
+@media (prefers-color-scheme: dark) {
+  .modal-dark-theme,
+  .dialog-dark-theme,
+  .calendar-dialog-content,
+  .cart-dialog-content,
+  .image-preview-dialog-content {
+    background: var(--bs-modal-bg, #1a1a1a) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    color: #ffffff !important;
+  }
+  /* Dark theme: product details surfaces -> noir */
+  .product-dialog-content .product-details,
+  .product-detail-dialog .product-details {
+    background: #000 !important;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #f1f1f1 !important;
+  }
+  
+  /* Textes spécifiques en mode sombre */
+  .modal-dark-theme h1,
+  .modal-dark-theme h2,
+  .modal-dark-theme h3,
+  .modal-dark-theme h4,
+  .modal-dark-theme h5,
+  .modal-dark-theme h6,
+  .dialog-dark-theme h1,
+  .dialog-dark-theme h2,
+  .dialog-dark-theme h3,
+  .dialog-dark-theme h4,
+  .dialog-dark-theme h5,
+  .dialog-dark-theme h6,
+  .calendar-dialog-content h1,
+  .calendar-dialog-content h2,
+  .calendar-dialog-content h3,
+  .calendar-dialog-content h4,
+  .calendar-dialog-content h5,
+  .calendar-dialog-content h6,
+  .cart-dialog-content h1,
+  .cart-dialog-content h2,
+  .cart-dialog-content h3,
+  .cart-dialog-content h4,
+  .cart-dialog-content h5,
+  .cart-dialog-content h6,
+  .product-dialog-content h1,
+  .product-dialog-content h2,
+  .product-dialog-content h3,
+  .product-dialog-content h4,
+  .product-dialog-content h5,
+  .product-dialog-content h6,
+  .image-preview-dialog-content h1,
+  .image-preview-dialog-content h2,
+  .image-preview-dialog-content h3,
+  .image-preview-dialog-content h4,
+  .image-preview-dialog-content h5,
+  .image-preview-dialog-content h6 {
+    color: #ffffff !important;
+  }
+  
+  /* Icônes en mode sombre */
+  .modal-dark-theme mat-icon,
+  .dialog-dark-theme mat-icon,
+  .calendar-dialog-content mat-icon,
+  .cart-dialog-content mat-icon,
+  .product-dialog-content mat-icon,
+  .image-preview-dialog-content mat-icon {
+    color: #ffffff !important;
+  }
+  
+  /* Boutons en mode sombre */
+  .modal-dark-theme .close-btn,
+  .dialog-dark-theme .close-btn,
+  .calendar-dialog-content .close-btn,
+  .cart-dialog-content .close-btn,
+  .product-dialog-content .close-btn,
+  .image-preview-dialog-content .close-btn {
+    background: rgba(0,0,0,0.6) !important;
+    color: #ffffff !important;
+  }
+  
+  .modal-dark-theme .close-btn:hover,
+  .dialog-dark-theme .close-btn:hover,
+  .calendar-dialog-content .close-btn:hover,
+  .cart-dialog-content .close-btn:hover,
+  .product-dialog-content .close-btn:hover,
+  .image-preview-dialog-content .close-btn:hover {
+    background: rgba(0,0,0,0.8) !important;
+  }
+  
+  /* Formulaires Material en mode sombre */
+  .modal-dark-theme .mat-mdc-form-field-flex,
+  .dialog-dark-theme .mat-mdc-form-field-flex,
+  .calendar-dialog-content .mat-mdc-form-field-flex,
+  .cart-dialog-content .mat-mdc-form-field-flex,
+  .product-dialog-content .mat-mdc-form-field-flex,
+  .image-preview-dialog-content .mat-mdc-form-field-flex {
+    background-color: #2d2d2d !important;
+  }
+  
+  .modal-dark-theme .mat-mdc-text-field-wrapper,
+  .dialog-dark-theme .mat-mdc-text-field-wrapper,
+  .calendar-dialog-content .mat-mdc-text-field-wrapper,
+  .cart-dialog-content .mat-mdc-text-field-wrapper,
+  .product-dialog-content .mat-mdc-text-field-wrapper,
+  .image-preview-dialog-content .mat-mdc-text-field-wrapper {
+    background-color: #2d2d2d !important;
+  }
+  
+  .modal-dark-theme .mat-mdc-form-field-underline,
+  .dialog-dark-theme .mat-mdc-form-field-underline,
+  .calendar-dialog-content .mat-mdc-form-field-underline,
+  .cart-dialog-content .mat-mdc-form-field-underline,
+  .product-dialog-content .mat-mdc-form-field-underline,
+  .image-preview-dialog-content .mat-mdc-form-field-underline {
+    background-color: rgba(255,255,255,0.2) !important;
+  }
+  
+  .modal-dark-theme .mat-mdc-form-field-label,
+  .dialog-dark-theme .mat-mdc-form-field-label,
+  .calendar-dialog-content .mat-mdc-form-field-label,
+  .cart-dialog-content .mat-mdc-form-field-label,
+  .product-dialog-content .mat-mdc-form-field-label,
+  .image-preview-dialog-content .mat-mdc-form-field-label {
+    color: rgba(255,255,255,0.7) !important;
+  }
+  
+  .modal-dark-theme .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label,
+  .dialog-dark-theme .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label,
+  .calendar-dialog-content .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label,
+  .cart-dialog-content .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label,
+  .product-dialog-content .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label,
+  .image-preview-dialog-content .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label {
+    color: var(--bs-primary, #0d6efd) !important;
+  }
+  
+  .modal-dark-theme .mat-mdc-form-field-required-marker,
+  .dialog-dark-theme .mat-mdc-form-field-required-marker,
+  .calendar-dialog-content .mat-mdc-form-field-required-marker,
+  .cart-dialog-content .mat-mdc-form-field-required-marker,
+  .product-dialog-content .mat-mdc-form-field-required-marker,
+  .image-preview-dialog-content .mat-mdc-form-field-required-marker {
+    color: var(--bs-danger, #dc3545) !important;
+  }
+  
+  /* Prix et montants en mode sombre */
+  .modal-dark-theme .price,
+  .modal-dark-theme .amount,
+  .modal-dark-theme .total,
+  .dialog-dark-theme .price,
+  .dialog-dark-theme .amount,
+  .dialog-dark-theme .total,
+  .calendar-dialog-content .price,
+  .calendar-dialog-content .amount,
+  .calendar-dialog-content .total,
+  .cart-dialog-content .price,
+  .cart-dialog-content .amount,
+  .cart-dialog-content .total,
+  .product-dialog-content .price,
+  .product-dialog-content .amount,
+  .product-dialog-content .total,
+  .image-preview-dialog-content .price,
+  .image-preview-dialog-content .amount,
+  .image-preview-dialog-content .total {
+    color: #4caf50 !important;
+  }
+  
+  /* Erreurs en mode sombre */
+  .modal-dark-theme .error,
+  .modal-dark-theme .text-error,
+  .dialog-dark-theme .error,
+  .dialog-dark-theme .text-error,
+  .calendar-dialog-content .error,
+  .calendar-dialog-content .text-error,
+  .cart-dialog-content .error,
+  .cart-dialog-content .text-error,
+  .product-dialog-content .error,
+  .product-dialog-content .text-error,
+  .image-preview-dialog-content .error,
+  .image-preview-dialog-content .text-error {
+    color: #ff6b6b !important;
+  }
+  
+  /* Styles spécifiques pour ProductModalDialog en mode sombre */
+  .product-dialog-content .summary-content .product-details p {
+    color: #e0e0e0 !important;
+  }
+  
+  .product-dialog-content .select {
+    color: #ffffff !important;
+  }
+  
+  .product-dialog-content .categories strong {
+    color: #ffffff !important;
+  }
+}
+
+/* Support pour les classes de thème Angular Material */
+html.dark-theme .modal-dark-theme,
+html.dark-theme .dialog-dark-theme,
+html.dark-theme .calendar-dialog-content,
+html.dark-theme .cart-dialog-content,
+html.dark-theme .product-dialog-content,
+html.dark-theme .image-preview-dialog-content,
+.dark-theme .modal-dark-theme,
+.dark-theme .dialog-dark-theme,
+.dark-theme .calendar-dialog-content,
+.dark-theme .cart-dialog-content,
+.dark-theme .product-dialog-content,
+.dark-theme .image-preview-dialog-content {
+  background: var(--bs-modal-bg, #1a1a1a) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: #ffffff !important;
+}
+
+/* Textes spécifiques pour thème Angular Material */
+html.dark-theme .modal-dark-theme h1,
+html.dark-theme .modal-dark-theme h2,
+html.dark-theme .modal-dark-theme h3,
+html.dark-theme .modal-dark-theme h4,
+html.dark-theme .modal-dark-theme h5,
+html.dark-theme .modal-dark-theme h6,
+html.dark-theme .dialog-dark-theme h1,
+html.dark-theme .dialog-dark-theme h2,
+html.dark-theme .dialog-dark-theme h3,
+html.dark-theme .dialog-dark-theme h4,
+html.dark-theme .dialog-dark-theme h5,
+html.dark-theme .dialog-dark-theme h6,
+html.dark-theme .calendar-dialog-content h1,
+html.dark-theme .calendar-dialog-content h2,
+html.dark-theme .calendar-dialog-content h3,
+html.dark-theme .calendar-dialog-content h4,
+html.dark-theme .calendar-dialog-content h5,
+html.dark-theme .calendar-dialog-content h6,
+html.dark-theme .cart-dialog-content h1,
+html.dark-theme .cart-dialog-content h2,
+html.dark-theme .cart-dialog-content h3,
+html.dark-theme .cart-dialog-content h4,
+html.dark-theme .cart-dialog-content h5,
+html.dark-theme .cart-dialog-content h6,
+html.dark-theme .product-dialog-content h1,
+html.dark-theme .product-dialog-content h2,
+html.dark-theme .product-dialog-content h3,
+html.dark-theme .product-dialog-content h4,
+html.dark-theme .product-dialog-content h5,
+html.dark-theme .product-dialog-content h6,
+html.dark-theme .image-preview-dialog-content h1,
+html.dark-theme .image-preview-dialog-content h2,
+html.dark-theme .image-preview-dialog-content h3,
+html.dark-theme .image-preview-dialog-content h4,
+html.dark-theme .image-preview-dialog-content h5,
+html.dark-theme .image-preview-dialog-content h6,
+.dark-theme .modal-dark-theme h1,
+.dark-theme .modal-dark-theme h2,
+.dark-theme .modal-dark-theme h3,
+.dark-theme .modal-dark-theme h4,
+.dark-theme .modal-dark-theme h5,
+.dark-theme .modal-dark-theme h6,
+.dark-theme .dialog-dark-theme h1,
+.dark-theme .dialog-dark-theme h2,
+.dark-theme .dialog-dark-theme h3,
+.dark-theme .dialog-dark-theme h4,
+.dark-theme .dialog-dark-theme h5,
+.dark-theme .dialog-dark-theme h6,
+.dark-theme .calendar-dialog-content h1,
+.dark-theme .calendar-dialog-content h2,
+.dark-theme .calendar-dialog-content h3,
+.dark-theme .calendar-dialog-content h4,
+.dark-theme .calendar-dialog-content h5,
+.dark-theme .calendar-dialog-content h6,
+.dark-theme .cart-dialog-content h1,
+.dark-theme .cart-dialog-content h2,
+.dark-theme .cart-dialog-content h3,
+.dark-theme .cart-dialog-content h4,
+.dark-theme .cart-dialog-content h5,
+.dark-theme .cart-dialog-content h6,
+.dark-theme .product-dialog-content h1,
+.dark-theme .product-dialog-content h2,
+.dark-theme .product-dialog-content h3,
+.dark-theme .product-dialog-content h4,
+.dark-theme .product-dialog-content h5,
+.dark-theme .product-dialog-content h6,
+.dark-theme .image-preview-dialog-content h1,
+.dark-theme .image-preview-dialog-content h2,
+.dark-theme .image-preview-dialog-content h3,
+.dark-theme .image-preview-dialog-content h4,
+.dark-theme .image-preview-dialog-content h5,
+.dark-theme .image-preview-dialog-content h6 {
+  color: #ffffff !important;
+}
+
+/* Icônes pour thème Angular Material */
+html.dark-theme .modal-dark-theme mat-icon,
+html.dark-theme .dialog-dark-theme mat-icon,
+html.dark-theme .calendar-dialog-content mat-icon,
+html.dark-theme .cart-dialog-content mat-icon,
+html.dark-theme .product-dialog-content mat-icon,
+html.dark-theme .image-preview-dialog-content mat-icon,
+.dark-theme .modal-dark-theme mat-icon,
+.dark-theme .dialog-dark-theme mat-icon,
+.dark-theme .calendar-dialog-content mat-icon,
+.dark-theme .cart-dialog-content mat-icon,
+.dark-theme .product-dialog-content mat-icon,
+.dark-theme .image-preview-dialog-content mat-icon {
+  color: #ffffff !important;
+}
+
+/* Boutons pour thème Angular Material */
+html.dark-theme .modal-dark-theme .close-btn,
+html.dark-theme .dialog-dark-theme .close-btn,
+html.dark-theme .calendar-dialog-content .close-btn,
+html.dark-theme .cart-dialog-content .close-btn,
+html.dark-theme .product-dialog-content .close-btn,
+html.dark-theme .image-preview-dialog-content .close-btn,
+.dark-theme .modal-dark-theme .close-btn,
+.dark-theme .dialog-dark-theme .close-btn,
+.dark-theme .calendar-dialog-content .close-btn,
+.dark-theme .cart-dialog-content .close-btn,
+.dark-theme .product-dialog-content .close-btn,
+.dark-theme .image-preview-dialog-content .close-btn {
+  background: rgba(0,0,0,0.6) !important;
+  color: #ffffff !important;
+}
+
+html.dark-theme .modal-dark-theme .close-btn:hover,
+html.dark-theme .dialog-dark-theme .close-btn:hover,
+html.dark-theme .calendar-dialog-content .close-btn:hover,
+html.dark-theme .cart-dialog-content .close-btn:hover,
+html.dark-theme .product-dialog-content .close-btn:hover,
+html.dark-theme .image-preview-dialog-content .close-btn:hover,
+.dark-theme .modal-dark-theme .close-btn:hover,
+.dark-theme .dialog-dark-theme .close-btn:hover,
+.dark-theme .calendar-dialog-content .close-btn:hover,
+.dark-theme .cart-dialog-content .close-btn:hover,
+.dark-theme .product-dialog-content .close-btn:hover,
+.dark-theme .image-preview-dialog-content .close-btn:hover {
+  background: rgba(0,0,0,0.8) !important;
+}
+
+/* Styles spécifiques pour ProductModalDialog en thème Angular Material */
+html.dark-theme .product-dialog-content .summary-content .product-details p,
+.dark-theme .product-dialog-content .summary-content .product-details p {
+  color: #e0e0e0 !important;
+}
+
+html.dark-theme .product-dialog-content .select,
+.dark-theme .product-dialog-content .select {
+  color: #ffffff !important;
+}
+
+html.dark-theme .product-dialog-content .categories strong,
+.dark-theme .product-dialog-content .categories strong {
+  color: #ffffff !important;
+}
+
+/* Lists, dividers, borders */
+.mdc-list, .mat-mdc-list, .mat-mdc-table, .mat-mdc-form-field {
+  color: var(--mat-sys-on-background);
+}
+.mat-divider, .mdc-list-divider {
+  border-color: var(--mat-sys-outline-variant) !important;
+}
+
+/* Accent theme (blue) variables - apply when container has .blue_theme or when html has it */
+html.blue_theme, .blue_theme {
+  --mat-sys-primary: rgb(0, 161, 255);
+  --mat-sys-primary-fixed-dim: rgba(0, 161, 255, 0.15);
+  --mat-sys-secondary: rgb(137, 101, 229);
+  --mat-sys-secondary-fixed-dim: rgba(137, 101, 229, 0.15);
+}
+
+html.aqua_theme, .aqua_theme {
+  --mat-sys-primary: #00c2b8;
+  --mat-sys-primary-fixed-dim: rgba(0, 194, 184, 0.15);
+  --mat-sys-secondary: #3cb371;
+  --mat-sys-secondary-fixed-dim: rgba(60, 179, 113, 0.15);
+}
+
+html.purple_theme, .purple_theme {
+  --mat-sys-primary: #8965e5;
+  --mat-sys-primary-fixed-dim: rgba(137, 101, 229, 0.15);
+  --mat-sys-secondary: #00a1ff;
+  --mat-sys-secondary-fixed-dim: rgba(0, 161, 255, 0.15);
+}
+
+html.green_theme, .green_theme {
+  --mat-sys-primary: #27ae60;
+  --mat-sys-primary-fixed-dim: rgba(39, 174, 96, 0.15);
+  --mat-sys-secondary: #00a1ff;
+  --mat-sys-secondary-fixed-dim: rgba(0, 161, 255, 0.15);
+}
+
+html.orange_theme, .orange_theme {
+  --mat-sys-primary: #f39c12;
+  --mat-sys-primary-fixed-dim: rgba(243, 156, 18, 0.15);
+  --mat-sys-secondary: #8965e5;
+  --mat-sys-secondary-fixed-dim: rgba(137, 101, 229, 0.15);
+}
+
+/* Material Table Theming */
+.mat-mdc-table,
+.mdc-data-table__table {
+  background: var(--mat-table-background-color, var(--mat-card-elevated-container-color, var(--mat-sys-surface))) !important;
+  color: var(--mat-sys-on-background);
+}
+
+.mat-mdc-header-row,
+.mdc-data-table__header-row {
+  background: var(--mat-sys-surface) !important;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.mat-mdc-header-cell,
+.mdc-data-table__header-cell {
+  color: var(--mat-sys-on-background) !important;
+}
+
+.mat-mdc-row,
+.mdc-data-table__row {
+  background: var(--mat-sys-surface-container-low) !important;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.mat-mdc-row:hover,
+.mdc-data-table__row:hover {
+  background: var(--mat-sys-surface-container-low) !important; /* same as default: no hover color change */
+}
+
+/* Data table wrapper (MDC host) */
+.mdc-data-table {
+  background: var(--mat-table-background-color, var(--mat-card-elevated-container-color, var(--mat-sys-surface))) !important;
+  color: var(--mat-sys-on-background);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-medium, 12px);
+}
+
+/* Cells inherit surface */
+.mdc-data-table__header-cell,
+.mdc-data-table__cell {
+  background: transparent;
+  color: var(--mat-sys-on-background);
+}
+
+/* Sticky elements */
+.mat-mdc-table-sticky,
+.mdc-data-table__header-row.mdc-data-table__header-row--sticky {
+  background: var(--mat-sys-surface) !important;
+}
+
+/* Error Page Styling */
+.error-page {
+  min-height: calc(100vh - var(--header-height));
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  background: var(--mat-sys-background);
+  color: var(--mat-sys-on-background);
+}
+
+.error-card {
+  text-align: center;
+  display: grid;
+  gap: 16px;
+}
+
+.error-illustration {
+  max-width: 520px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto 8px;
+}
+
+.error-card .title {
+  font-weight: 600;
+  margin: 0;
+}
+
+.error-card .subtitle {
+  margin: 8px 0 12px;
+  font-weight: 600;
+}
+
+.error-card a[mat-flat-button] {
+  align-self: center;
+}
+
+/* =====================================
+   Calendar Dialog (medium size) styling
+   ===================================== */
+.calendar-dialog-medium .mat-mdc-dialog-container {
+  width: 640px !important;
+  max-width: 96vw !important;
+  max-height: 90vh !important;
+  display: block;
+  box-sizing: border-box;
+}
+.calendar-dialog-medium .mat-mdc-dialog-surface {
+  height: auto;
+  border-radius: var(--mat-sys-corner-medium, 12px);
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-background);
+}
+.calendar-dialog-medium .mdc-dialog__content {
+  padding: 20px 24px;
+}
+/* =======================
+   Dark Footer
+   ======================= */
+   .site-footer {
+    background: #0b0d12;
+    color: rgba(255,255,255,.85);
+    padding: 56px 0 24px;
+  }
+  .site-footer .brand {
+    color: #fff;
+    font-size: 22px;
+  }
+  .site-footer .footer-title {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .site-footer .footer-text {
+    color: rgba(255,255,255,.75);
+  }
+  .site-footer .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .site-footer .footer-links li { margin: 8px 0; }
+  .site-footer .footer-links a {
+    color: rgba(255,255,255,.85);
+    text-decoration: none;
+  }
+  .site-footer .footer-links a:hover { color: #fff; text-decoration: underline; }
+  
+  .site-footer .newsletter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  .site-footer .newsletter-field { flex: 1 1 240px; }
+  .site-footer .newsletter-btn { height: 40px; }
+  
+  .site-footer .socials .social {
+    color: rgba(255,255,255,.9);
+    display: inline-flex;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,.06);
+    border-radius: 999px;
+  }
+  .site-footer .socials .social:hover { background: rgba(255,255,255,.12); }
+  
+  .site-footer .divider {
+    height: 1px;
+    background: rgba(255,255,255,.12);
+    margin: 24px 0;
+  }
+  
+  .site-footer .tiny-link {
+    color: rgba(255,255,255,.75);
+    text-decoration: none;
+  }
+  .site-footer .tiny-link:hover { color: #fff; text-decoration: underline; }
+  .site-footer .tiny-sep { color: rgba(255,255,255,.35); margin: 0 8px; }
+  
+  @media (max-width: 991px) {
+    .site-footer { padding: 40px 0 16px; }
+  }
+  

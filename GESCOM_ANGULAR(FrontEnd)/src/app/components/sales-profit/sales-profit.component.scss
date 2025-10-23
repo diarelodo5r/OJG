@@ -1,0 +1,130 @@
+.card {
+  background-color: var(--surface-bg) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--elevation-shadow);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.text-body-secondary {
+  color: var(--text-muted) !important;
+  font-size: 0.875rem;
+}
+
+.btn-outline-secondary {
+  color: var(--text-muted);
+  border-color: var(--border-color);
+  
+  &:hover, &:focus, &:active {
+    background-color: var(--brand-surface-hover);
+    color: var(--text-primary);
+    border-color: var(--brand-border-color);
+  }
+  
+  &.active {
+    background-color: var(--brand-surface-hover);
+    color: var(--text-primary);
+    border-color: var(--brand-primary-600);
+  }
+}
+
+.form-control {
+  background-color: var(--surface-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+  
+  &:focus {
+    border-color: var(--brand-primary-600);
+    box-shadow: 0 0 0 0.25rem rgba(var(--brand-primary-600-rgb), 0.25);
+  }
+}
+
+.form-label {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.card-footer {
+  background-color: var(--surface-muted);
+  border-top: 1px solid var(--border-color);
+  padding: 1rem 1.5rem;
+}
+
+.chart-wrapper {
+  margin-top: 2rem;
+  height: 380px;
+  position: relative;
+}
+
+/* Filters toolbar */
+.filters-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem 1.25rem;
+}
+
+.filters-toolbar .btn-group {
+  gap: 0.5rem;
+}
+
+mat-form-field {
+  min-width: 260px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+  .card-body {
+    padding: 1.25rem;
+  }
+  
+  .filters-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Unified theme-aware background for the entire card (body + footer) */
+:host {
+  display: block;
+  top: -4%;
+  position: relative;
+}
+
+/* Light theme: white background and dark text */
+:host-context(html.light-theme) .card {
+  background-color: #ffffff !important;
+  color: #111c2d !important;
+}
+
+/* Dark theme: black background and light text */
+:host-context(html.dark-theme) .card {
+  background-color: #1b1f24 !important;
+  color: #e3e2e6 !important;
+}
+
+/* Ensure sections share the same background (no contrasting footer) */
+:host-context(html.light-theme) .card-body,
+:host-context(html.light-theme) .card-footer,
+:host-context(html.dark-theme) .card-body,
+:host-context(html.dark-theme) .card-footer {
+  background-color: transparent !important; /* inherits from .card */
+}
+
+/* Optional: harmonize footer divider color for both themes */
+:host-context(html.light-theme) .card-footer { border-top-color: rgba(0, 0, 0, 0.08) !important; }
+:host-context(html.dark-theme) .card-footer { border-top-color: rgba(255, 255, 255, 0.12) !important; }

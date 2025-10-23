@@ -1,0 +1,108 @@
+<mat-card class="cardWithShadow">
+  <mat-tab-group>
+    <mat-tab label="Compte">
+      <mat-card-content class="p-y-24" [formGroup]="form">
+        <div class="row">
+          <div class="col-sm-6">
+            <mat-card class="cardWithShadow">
+              <mat-card-content class="p-y-24 text-center">
+                <mat-card-title>Photo de profil</mat-card-title>
+                <mat-card-subtitle class="f-s-14">Mettez à jour votre photo</mat-card-subtitle>
+                <div class="text-center m-t-24">
+                  <img [src]="previewPhotoUrl || '/assets/images/profile/user-1.jpg'" width="120" class="rounded-circle" />
+                  <div class="m-t-24">
+                    <input hidden type="file" accept="image/*" #photoInput (change)="onPhotoSelected($event)" />
+                    <button mat-flat-button color="primary" class="m-r-8" (click)="photoInput.click()">Choisir</button>
+                    <button mat-stroked-button color="warn" (click)="resetPhotoPreview()">Réinitialiser</button>
+                  </div>
+                  <div class="m-t-16">
+                    <button mat-raised-button color="accent" [disabled]="!selectedPhotoFile || uploading" (click)="uploadPhoto()">
+                      {{ uploading ? 'Téléversement...' : 'Téléverser' }}
+                    </button>
+                  </div>
+                  <span class="f-s-14 m-t-24 d-block">Formats: JPG, GIF, PNG</span>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+          <div class="col-sm-6">
+            <mat-card class="cardWithShadow">
+              <mat-card-content class="p-y-24">
+                <mat-card-title>Détails du profil</mat-card-title>
+                <mat-card-subtitle class="f-s-14">Modifiez et enregistrez vos informations</mat-card-subtitle>
+                <div class="m-t-24">
+                  <mat-label class="f-s-14 f-w-600 m-b-8 d-block">Nom d'utilisateur</mat-label>
+                  <mat-form-field appearance="outline" color="primary" class="w-100">
+                    <input matInput type="text" formControlName="username" />
+                  </mat-form-field>
+
+                  <mat-label class="f-s-14 f-w-600 m-b-8 d-block">Email</mat-label>
+                  <mat-form-field appearance="outline" color="primary" class="w-100">
+                    <input matInput type="email" formControlName="email" />
+                  </mat-form-field>
+
+                  <mat-label class="f-s-14 f-w-600 m-b-8 d-block">Solde</mat-label>
+                  <mat-form-field appearance="outline" color="primary" class="w-100">
+                    <input matInput type="text" formControlName="balance" [disabled]="true" />
+                  </mat-form-field>
+
+                  <div *ngIf="user?.roles?.length" class="m-t-8">
+                    <mat-label class="f-s-14 f-w-600 m-b-8 d-block">Rôles</mat-label>
+                    <div class="d-flex flex-wrap gap-8">
+                      <span *ngFor="let r of user?.roles" class="badge bg-primary m-r-8 m-b-8">{{ r.name }}</span>
+                    </div>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+          <div class="col-12" *ngIf="error || success">
+            <div class="p-16" [ngClass]="{'bg-error text-white': error, 'bg-success text-white': success}">
+              {{ error || success }}
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-tab>
+  </mat-tab-group>
+  <div class="text-right p-24 p-t-0">
+    <button mat-flat-button color="primary" class="m-r-8" [disabled]="form.invalid || saving || loading" (click)="onSave()">{{ saving ? 'Enregistrement...' : 'Enregistrer' }}</button>
+    <button mat-flat-button class="bg-error text-white" (click)="loadUser()">Annuler</button>
+  </div>
+</mat-card>
+
+<!-- Change Password Section -->
+<div class="row m-t-24">
+  <div class="col-sm-6">
+    <mat-card class="cardWithShadow">
+      <mat-card-content class="p-y-24">
+        <mat-card-title>Modifier le mot de passe</mat-card-title>
+        <mat-card-subtitle class="f-s-14">Pour changer votre mot de passe, confirmez ci-dessous</mat-card-subtitle>
+        <form class="m-t-24" [formGroup]="passwordForm">
+          <mat-label class="f-s-14 f-w-600 m-b-8 d-block">Mot de passe actuel</mat-label>
+          <mat-form-field appearance="outline" color="primary" class="w-100">
+            <input matInput type="password" formControlName="current_password" />
+          </mat-form-field>
+
+          <mat-label class="f-s-14 f-w-600 m-b-8 d-block">Nouveau mot de passe</mat-label>
+          <mat-form-field appearance="outline" color="primary" class="w-100">
+            <input matInput type="password" formControlName="password" />
+          </mat-form-field>
+
+          <mat-label class="f-s-14 f-w-600 m-b-8 d-block">Confirmer le mot de passe</mat-label>
+          <mat-form-field appearance="outline" color="primary" class="w-100 hide-hint">
+            <input matInput type="password" formControlName="password_confirmation" />
+          </mat-form-field>
+
+          <div class="text-right m-t-8">
+            <button mat-flat-button color="primary" (click)="onChangePassword()" [disabled]="passwordForm.invalid || saving">
+              {{ saving ? 'Mise à jour...' : 'Changer le mot de passe' }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

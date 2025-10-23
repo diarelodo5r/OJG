@@ -1,0 +1,251 @@
+<div class="row">
+  <div class="col-12">
+    <mat-card class="cardWithShadow">
+      <mat-card-content>
+        <div class="d-flex justify-content-between align-items-center m-b-8">
+          <mat-card-title>Gestion des rôles et permissions</mat-card-title>
+        </div>
+        <mat-card-subtitle class="f-s-14 m-b-16">Créez des permissions et des rôles, puis affectez les permissions aux rôles.</mat-card-subtitle>
+
+        <div class="row g-3">
+          <div class="col-12">
+            <mat-accordion multi>
+              <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>Nouvelle permission</mat-panel-title>
+                  <mat-panel-description>Créer et gérer les permissions</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="p-2">
+                  <form [formGroup]="permForm" (ngSubmit)="createPermission()" class="d-flex flex-column gap-12">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Nom</mat-label>
+                      <input matInput formControlName="name" placeholder="ex: canEditProducts" />
+                      <mat-error *ngIf="permForm.get('name')?.hasError('required')">Nom requis</mat-error>
+                      <mat-error *ngIf="permForm.get('name')?.hasError('maxlength')">Max 100 caractères</mat-error>
+                      <mat-error *ngIf="permForm.get('name')?.hasError('server')">{{ permNameServerError }}</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Description</mat-label>
+                      <input matInput formControlName="description" />
+                    </mat-form-field>
+                    <button mat-flat-button color="primary" type="submit" [disabled]="permForm.invalid || saving">Ajouter</button>
+                  </form>
+
+                  <div class="m-t-16">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Rechercher une permission</mat-label>
+                      <input matInput [(ngModel)]="permissionSearch" placeholder="Nom de permission" />
+                      <button mat-icon-button matSuffix *ngIf="permissionSearch" (click)="permissionSearch = ''" aria-label="Clear">
+                        <mat-icon>clear</mat-icon>
+                      </button>
+                    </mat-form-field>
+                    <div class="m-t-8">
+                      <table mat-table [dataSource]="filteredPermissionsPaged()" class="mat-elevation-z1 w-100">
+                        <ng-container matColumnDef="name">
+                          <th mat-header-cell *matHeaderCellDef> Nom </th>
+                          <td mat-cell *matCellDef="let p">
+                            <span class="text-truncate" title="{{ p.name }}">{{ p.name }}</span>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="description">
+                          <th mat-header-cell *matHeaderCellDef> Description </th>
+                          <td mat-cell *matCellDef="let p">
+                            <span class="text-truncate" title="{{ p.description }}">{{ p.description }}</span>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="actions">
+                          <th mat-header-cell *matHeaderCellDef class="text-end"> Actions </th>
+                          <td mat-cell *matCellDef="let p" class="text-end">
+                            <button mat-icon-button [matMenuTriggerFor]="permMenu" [disabled]="saving" aria-label="Actions">
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #permMenu="matMenu">
+                              <button mat-menu-item (click)="editPermission(p)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Modifier</span>
+                              </button>
+                              <button mat-menu-item (click)="deletePermission(p)">
+                                <mat-icon>delete</mat-icon>
+                                <span>Supprimer</span>
+                              </button>
+                            </mat-menu>
+                          </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="['name','description','actions']"></tr>
+                        <tr mat-row *matRowDef="let row; columns: ['name','description','actions'];"></tr>
+                      </table>
+                      <mat-paginator class="m-t-8"
+                                     [length]="filteredPermissions().length"
+                                     [pageIndex]="pageIndex"
+                                     [pageSize]="pageSize"
+                                     [pageSizeOptions]="[5,10,25,50]"
+                                     (page)="onPage($event)">
+                      </mat-paginator>
+                    </div>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>Nouveau rôle</mat-panel-title>
+                  <mat-panel-description>Créer et gérer les rôles</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="p-2">
+                  <form [formGroup]="roleForm" (ngSubmit)="createRole()" class="d-flex flex-column gap-12">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Nom du rôle</mat-label>
+                      <input matInput formControlName="name" placeholder="ex: manager" />
+                      <mat-error *ngIf="roleForm.get('name')?.hasError('required')">Nom requis</mat-error>
+                      <mat-error *ngIf="roleForm.get('name')?.hasError('maxlength')">Max 100 caractères</mat-error>
+                      <mat-error *ngIf="roleForm.get('name')?.hasError('server')">{{ roleNameServerError }}</mat-error>
+                    </mat-form-field>
+                    <button mat-flat-button color="primary" type="submit" [disabled]="roleForm.invalid || saving">Créer</button>
+                  </form>
+
+                  <div class="m-t-12">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Rechercher un rôle</mat-label>
+                      <input matInput [(ngModel)]="roleSearch" placeholder="Nom du rôle" />
+                      <button mat-icon-button matSuffix *ngIf="roleSearch" (click)="roleSearch = ''" aria-label="Clear">
+                        <mat-icon>clear</mat-icon>
+                      </button>
+                    </mat-form-field>
+                    <div class="m-t-8">
+                      <table mat-table [dataSource]="filteredRolesPaged()" class="mat-elevation-z1 w-100">
+                        <ng-container matColumnDef="name">
+                          <th mat-header-cell *matHeaderCellDef> Rôle </th>
+                          <td mat-cell *matCellDef="let r">
+                            <span class="text-truncate" title="{{ r.name }}">{{ r.name }}</span>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="permCount">
+                          <th mat-header-cell *matHeaderCellDef> Permissions </th>
+                          <td mat-cell *matCellDef="let r">
+                            {{ (r.permissions || []).length }}
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="actions">
+                          <th mat-header-cell *matHeaderCellDef class="text-end"> Actions </th>
+                          <td mat-cell *matCellDef="let r" class="text-end">
+                            <button mat-icon-button [matMenuTriggerFor]="roleMenu" [disabled]="saving" aria-label="Actions">
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #roleMenu="matMenu">
+                              <button mat-menu-item (click)="editRole(r)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Modifier</span>
+                              </button>
+                              <button mat-menu-item (click)="deleteRole(r)">
+                                <mat-icon>delete</mat-icon>
+                                <span>Supprimer</span>
+                              </button>
+                            </mat-menu>
+                          </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="['name','actions']"></tr>
+                        <tr mat-row *matRowDef="let row; columns: ['name','actions'];"></tr>
+                      </table>
+                      <mat-paginator class="m-t-8"
+                                     [length]="filteredRoles().length"
+                                     [pageIndex]="rolePageIndex"
+                                     [pageSize]="rolePageSize"
+                                     [pageSizeOptions]="[5,10,25,50]"
+                                     (page)="onRolePage($event)">
+                      </mat-paginator>
+                    </div>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+          
+          <!-- Assignment -->
+          <div class="col-12">
+            <br>
+            <mat-card class="p-2">
+              <br>
+              <div class="d-flex align-items-center gap-12 m-b-12">
+                <h3 class="f-s-16 f-w-600 m-0">Affecter des permissions</h3>
+                <mat-form-field appearance="outline" style="min-width: 220px;">
+                  <mat-label>Rôle</mat-label>
+                  <mat-select [(value)]="selectedRoleId" (selectionChange)="onRoleSelectionChange($event.value)">
+                    <mat-option *ngFor="let r of roles" [value]="r.id">{{ r.name }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <button mat-stroked-button color="primary" (click)="openAssignDialog()" [disabled]="!selectedRoleId">
+                  <mat-icon>tune</mat-icon>
+                  <span class="ms-1">Affecter aux ressources</span>
+                </button>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-12 col-lg-7">
+                  <h4 class="f-s-14 f-w-600 m-b-8">Sélection des permissions</h4>
+                  <div class="d-flex align-items-center gap-8 m-b-8">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Permissions</mat-label>
+                      <mat-select multiple
+                                  [panelClass]="'permissions-select-panel'"
+                                  [(value)]="selectedPermissionIds"
+                                  (selectionChange)="onPermissionsMultiChange($event.value)">
+                        <mat-select-trigger>
+                          <ng-container *ngIf="getSelectedPermissionNames().length; else noneSel">
+                            <mat-chip-listbox class="trigger-chips">
+                              <mat-chip *ngFor="let n of (getSelectedPermissionNames() | slice:0:3)" selected>
+                                {{ n }}
+                              </mat-chip>
+                              <span *ngIf="getSelectedPermissionNames().length > 3">+{{ getSelectedPermissionNames().length - 3 }}</span>
+                            </mat-chip-listbox>
+                          </ng-container>
+                          <ng-template #noneSel>0 sélectionnée</ng-template>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let p of filteredPermissions()" [value]="p.id">
+                          {{ p.name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="d-flex gap-8 m-b-8">
+                    <button mat-stroked-button color="primary" (click)="selectAllFilteredPermissions()" [disabled]="saving || !filteredPermissions().length">
+                      Tout sélectionner
+                    </button>
+                    <button mat-stroked-button color="warn" (click)="clearAllPermissions()" [disabled]="saving || selectedPermissionIds.length === 0">
+                      Tout désélectionner
+                    </button>
+                  </div>
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Rechercher une permission</mat-label>
+                    <input matInput [(ngModel)]="permissionSearch" placeholder="Nom de permission" />
+                    <button mat-icon-button matSuffix *ngIf="permissionSearch" (click)="permissionSearch = ''" aria-label="Clear">
+                      <mat-icon>clear</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div class="col-12 col-lg-5">
+                  <h4 class="f-s-14 f-w-600 m-b-8">Permissions du rôle sélectionné</h4>
+                  <div class="scroll-card-body">
+                    <ul class="m-0 p-l-18">
+                      <li *ngFor="let p of selectedRolePermissions()">
+                        {{ p.name }}
+                      </li>
+                      <li *ngIf="selectedRolePermissions().length === 0">
+                        Aucune permission assignée
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

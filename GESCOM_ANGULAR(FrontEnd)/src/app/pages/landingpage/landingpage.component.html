@@ -1,0 +1,360 @@
+  <!-- Toolbar (header) -->
+  <mat-toolbar class="topbar topbar-xl m-auto">
+    <div class="container full-width p-xs-6 w-100 d-flex align-items-center">
+      <a [routerLink]="['/landingpage']">
+        <img
+        src="./assets/images/logos/SCS-Stock_White.png"
+        class="align-middle m-2 logo-light"
+        alt="logo"/>
+      </a>
+      <span class="flex-1-auto"></span>
+      <div class="d-none d-lg-flex">
+        <button mat-button class="f-s-16 f-w-500">Démonstrations</button>
+        <button mat-button class="f-s-16 f-w-500">Pages <i-tabler name="chevron-down" class="icon-16 m-l-4"></i-tabler></button>
+        <a mat-button href="https://wrappixel.github.io/premium-documentation-wp/angular/materialM/index.html">Documentation</a>
+        <a mat-button href="https://support.wrappixel.com/">Assistance</a>
+        <a mat-flat-button color="primary" routerLink="/authentication/login" class="m-l-10">Connexion</a>
+      </div>
+    </div>
+  </mat-toolbar>
+
+  <section class="banner-section bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 d-flex align-items-center">
+          <div>
+            <span class="f-s-16 f-w-600 d-flex align-items-center m-b-16">
+              <i-tabler name="rocket" class="text-accent m-r-8"></i-tabler>
+              Démarrez votre projet avec
+              <span class="mini-marquee m-l-10">
+                <span class="mini-track">
+                  <span class="chip">Angular</span>
+                  <span class="chip">Material</span>
+                  <span class="chip">Charts</span>
+                  <span class="chip">Tables</span>
+                  <span class="chip">i18n</span>
+                  <span class="chip">Authguard</span>
+                  <!-- duplicates for seamless loop -->
+                  <span class="chip">Angular</span>
+                  <span class="chip">Material</span>
+                  <span class="chip">Charts</span>
+                  <span class="chip">Tables</span>
+                  <span class="chip">i18n</span>
+                  <span class="chip">Authguard</span>
+                </span>
+              </span>
+            </span>
+            <h1 class="banner-title m-0">
+              Améliorez la <span class="text-primary">productivité des développeurs</span> avec Angular Material
+            </h1>
+            <p class="f-s-18 p-y-24 m-t-12 m-0 banner-subtitle">
+              MaterialM propose des thèmes clair et sombre, des tableaux de bord, applications et pages bien conçus.
+            </p>
+            <div class="m-t-24 hstack">
+              <a mat-flat-button color="primary" routerLink="/authentication/login">Connexion</a>
+              <a mat-stroked-button color="primary" class="m-l-10">Aperçu en direct</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-flex">
+          <div class="p-24 banner-slider">
+            <div class="d-flex">
+              <div #sliderCol1 class="slider-col">
+                <div class="slider-frame"><img src="https://images.pexels.com/photos/3861964/pexels-photo-3861964.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=360" alt="team working" /></div>
+                <div class="slider-frame"><img src="https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=360" alt="coding" /></div>
+                <!-- duplicate for seamless vertical loop -->
+                <div class="slider-frame"><img src="https://images.pexels.com/photos/3861964/pexels-photo-3861964.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=360" alt="team working" /></div>
+                <div class="slider-frame"><img src="https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=360" alt="coding" /></div>
+              </div>
+              <div #sliderCol2 class="slider-col">
+                <div class="slider-frame"><img src="https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=360" alt="laptop" /></div>
+                <div class="slider-frame"><img src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=360" alt="brainstorm" /></div>
+                <!-- duplicate for seamless vertical loop -->
+                <div class="slider-frame"><img src="https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=360" alt="laptop" /></div>
+                <div class="slider-frame"><img src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=360" alt="brainstorm" /></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="spacer" id="demos">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <div class="d-sm-flex align-items-center justify-content-center">
+            <div class="d-flex align-items-center justify-content-center social-chips-sm">
+              <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=60&h=60" width="30" alt="avatar" class="rounded-circle" />
+              <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=60&h=60" width="30" alt="avatar" class="rounded-circle" />
+              <img src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=60&h=60" width="30" alt="avatar" class="rounded-circle" />
+            </div>
+            <span class="f-s-16 f-w-500 m-l-10"><span class="f-w-600">52 589+</span> développeurs et agences utilisent nos modèles</span>
+          </div>
+          <h2 class="section-title m-t-16">Template d’administration Angular Material prêt pour la production et adapté aux développeurs</h2>
+        </div>
+      </div>
+
+      <div class="text-center m-t-30 m-b-32">
+        <span class="bg-primary p-8 rounded-pill text-white f-w-600 p-x-10">Démonstrations</span>
+      </div>
+
+      <div class="row m-t-24 justify-content-center reveal" data-reveal>
+        <div class="col-lg-4 col-sm-6 m-b-16">
+          <div>
+            <div class="img-overlay rounded">
+              <img alt="demos" class="rounded w-100" src="https://images.pexels.com/photos/777001/pexels-photo-777001.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=720" />
+              <div class="overlay-content">
+                <a target="_blank" mat-flat-button color="primary" href="https://materialm-angular-main.netlify.app//dashboards/dashboard1">Aperçu en direct</a>
+              </div>
+            </div>
+            <span class="f-s-14 d-block text-center f-w-500 m-t-8">Main</span>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 m-b-16">
+          <div>
+            <div class="img-overlay rounded">
+              <img alt="demos" class="rounded w-100" src="https://images.pexels.com/photos/5380649/pexels-photo-5380649.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=720" />
+              <div class="overlay-content">
+                <a target="_blank" mat-flat-button color="primary" href="https://materialm-angular-dark.netlify.app/dashboards/dashboard2">Aperçu en direct</a>
+              </div>
+            </div>
+            <span class="f-s-14 d-block text-center f-w-500 m-t-8">Dark</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="spacer reveal" data-reveal>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-sm-11">
+          <h2 class="section-title text-center">Ne vous contentez pas de notre parole</h2>
+        </div>
+      </div>
+      <div class="row m-t-24">
+        <div class="col-lg-4 col-sm-6">
+          <mat-card class="cardWithShadow">
+            <mat-card-content class="p-24">
+              <div class="d-flex align-items-center">
+                <img alt="profile" width="40" class="rounded-circle" src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=80&h=80" />
+                <div class="m-l-12">
+                  <h6 class="f-s-16 f-w-600 m-0">Jenny Wilson</h6>
+                  <span>Disponibilité des fonctionnalités</span>
+                </div>
+              </div>
+              <p class="m-t-24 f-s-14 m-b-0">Le modèle de tableau de bord m’a permis d’obtenir un rendu propre et élégant, exactement comme je le souhaitais.</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <mat-card class="cardWithShadow">
+            <mat-card-content class="p-24">
+              <div class="d-flex align-items-center">
+                <img alt="profile" width="40" class="rounded-circle" src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=80&h=80" />
+                <div class="m-l-12">
+                  <h6 class="f-s-16 f-w-600 m-0">Minshan Cui</h6>
+                  <span>Features availability</span>
+                </div>
+              </div>
+              <p class="m-t-24 f-s-14 m-b-0">Un design épuré et des composants solides ont accéléré nos livraisons.</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <mat-card class="cardWithShadow">
+            <mat-card-content class="p-24">
+              <div class="d-flex align-items-center">
+                <img alt="profile" width="40" class="rounded-circle" src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=80&h=80" />
+                <div class="m-l-12">
+                  <h6 class="f-s-16 f-w-600 m-0">Eminson Mendoza</h6>
+                  <span>Features availability</span>
+                </div>
+              </div>
+              <p class="m-t-24 f-s-14 m-b-0">Excellente structure et tokens de thème ; la personnalisation est simple.</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features grid -->
+  <section class="spacer reveal" data-reveal>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-sm-11">
+          <h2 class="section-title text-center">Autres fonctionnalités remarquables et flexibilité offertes</h2>
+        </div>
+      </div>
+      <div class="row m-t-24">
+        <div class="col-sm-4 col-lg-3 text-center m-b-24" *ngFor="let feature of features">
+          <i-tabler class="icon-40 text-primary m-t-16" [name]="feature.icon"></i-tabler>
+          <h6 class="m-0 f-s-18 f-w-600 m-b-8 m-t-24">{{ feature.title }}</h6>
+          <span class="f-s-14 m-b-24 d-block lh-base">{{ feature.subtitle }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <!-- Apps grid -->
+    <section class="spacer bg-extra-light reveal" data-reveal>
+      <div class="container">
+        <div class="text-center m-t-30 m-b-32">
+          <span class="bg-primary p-8 rounded-pill text-white f-w-600 p-x-10">Applications</span>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-3 col-sm-6 m-t-16" *ngFor="let app of apps">
+            <div>
+              <div class="img-overlay rounded">
+                <img alt="apps" class="rounded w-100" [src]="app.img" />
+                <div class="overlay-content">
+                  <a mat-flat-button color="primary" [href]="app.href" target="_blank">Aperçu en direct</a>
+                </div>
+              </div>
+              <span class="f-s-14 d-block text-center f-w-500 m-t-8">{{ app.title }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Horizontal demo slider -->
+    <section class="bg-extra-light p-y-24">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 col-sm-11">
+            <h2 class="section-title text-center">Accélérez votre vitesse et lancez rapidement</h2>
+          </div>
+        </div>
+      </div>
+      <div class="demo-slider d-flex">
+        <div class="demo-track">
+          <div class="demo-slide"><img src="https://images.pexels.com/photos/7130475/pexels-photo-7130475.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1200" alt="slide" /></div>
+          <div class="demo-slide"><img src="https://images.pexels.com/photos/3182833/pexels-photo-3182833.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1200" alt="slide" /></div>
+          <div class="demo-slide"><img src="https://images.pexels.com/photos/3862371/pexels-photo-3862371.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1200" alt="slide" /></div>
+          <!-- duplicate set for seamless marquee -->
+          <div class="demo-slide"><img src="https://images.pexels.com/photos/7130475/pexels-photo-7130475.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1200" alt="slide" /></div>
+          <div class="demo-slide"><img src="https://images.pexels.com/photos/3182833/pexels-photo-3182833.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1200" alt="slide" /></div>
+          <div class="demo-slide"><img src="https://images.pexels.com/photos/3862371/pexels-photo-3862371.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1200" alt="slide" /></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shape card CTA -->
+    <section class="container spacer-bottom reveal" data-reveal>
+      <div class="row justify-content-center">
+        <div class="col-sm-10 col-lg-6">
+          <mat-card class="cardWithShadow shape-card bg-size-cover"
+            [style.background-image]="'url(https://images.pexels.com/photos/7130468/pexels-photo-7130468.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=1200)'">
+            <mat-card-content class="p-32 text-center">
+              <h3 class="f-s-24 f-w-600 m-0 m-t-12">Vous n'avez pas trouvé la réponse à votre question ?</h3>
+              <span class="f-s-14 f-w-500 m-t-8 d-block">Contactez-nous sur Discord ou envoyez-nous un email</span>
+              <div class="m-t-30 m-b-16 hstack justify-content-center">
+                <a mat-flat-button href="https://discord.com/invite/eMzE8F6Wqs" color="primary" class="btn-custom">Demander sur Discord</a>
+                <a mat-stroked-button href="https://support.wrappixel.com/" color="accent" class="btn-custom border-accent m-l-10">Soumettre un ticket</a>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </section>
+    
+  <!-- Final CTA -->
+  <section class="spacer-sm bg-primary">
+    <div class="container">
+      <div class="row justify-content-between align-items-center">
+        <div class="col-lg-6 m-b-24">
+          <h3 class="section-title2 text-white m-b-24">Créez votre application avec notre tableau de bord Angular hautement personnalisable</h3>
+          <div class="hstack">
+            <a mat-flat-button class="text-primary btn-custom sm bg-white f-w-500" routerLink="/authentication/login">Connexion</a>
+            <a mat-stroked-button color="white" class="btn-custom sm text-white f-w-500 border-white m-l-10">Télécharger la version gratuite</a>
+          </div>
+        </div>
+        <div class="col-lg-5 text-right d-none d-lg-block">
+          <img src="https://materialm-angular-main.netlify.app/assets/images/landingpage/background/c2a.png" alt="illustration" width="330" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+      <div class="container">
+        <div class="row g-24">
+          <div class="col-lg-4 col-md-6 m-b-24">
+            <div class="brand f-w-700 m-b-12">ShopAppfiz</div>
+            <p class="footer-text">Un template Angular Material moderne, rapide et personnalisable pour accélerer vos projets et livrer plus vite.</p>
+            <div class="socials m-t-12">
+              <a href="#" aria-label="Twitter" class="social">
+                <i-tabler name="brand-x"></i-tabler>
+              </a>
+              <a href="#" aria-label="GitHub" class="social m-l-8">
+                <i-tabler name="brand-github"></i-tabler>
+              </a>
+              <a href="#" aria-label="LinkedIn" class="social m-l-8">
+                <i-tabler name="brand-linkedin"></i-tabler>
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 m-b-24">
+            <div class="footer-title">Ressources</div>
+            <ul class="footer-links">
+              <li><a routerLink="/landingpage#demos">Démonstrations</a></li>
+              <li><a href="https://wrappixel.github.io/premium-documentation-wp/angular/materialM/index.html" target="_blank">Documentation</a></li>
+              <li><a href="https://support.wrappixel.com/" target="_blank">Assistance</a></li>
+              <li><a routerLink="/authentication/login">Connexion</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-6 m-b-24">
+            <div class="footer-title">Produit</div>
+            <ul class="footer-links">
+              <li><a routerLink="/apps/chat">Discussion</a></li>
+              <li><a routerLink="/apps/calendar">Calendrier</a></li>
+              <li><a routerLink="/apps/contacts">Contacts</a></li>
+              <li><a routerLink="/apps/todo">Tâches</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-6 m-b-24">
+            <div class="footer-title">Légal</div>
+            <ul class="footer-links">
+              <li><a href="#">Conditions</a></li>
+              <li><a href="#">Confidentialité</a></li>
+              <li><a href="#">Cookies</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-6 m-b-24">
+            <div class="footer-title">Newsletter</div>
+            <p class="footer-text">Recevez des mises à jour, des tutoriels et des astuces UX/UI.</p>
+            <form class="newsletter-form" (submit)="$event.preventDefault()">
+              <mat-form-field appearance="fill" class="newsletter-field">
+                <mat-label>Votre email</mat-label>
+                <input matInput type="email" placeholder="name@email.com" required />
+              </mat-form-field>
+              <button mat-flat-button color="primary" class="newsletter-btn">S'abonner</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <div class="copyright">© {{ currentYear }} ShopAppfiz. Tous droits réservés.</div>
+          </div>
+          <div class="col-md-6 text-md-right m-t-12 m-t-md-0">
+            <a href="#" class="tiny-link">Statut</a>
+            <span class="tiny-sep">•</span>
+            <a href="#" class="tiny-link">Journal des modifications</a>
+            <span class="tiny-sep">•</span>
+            <a href="#" class="tiny-link">Sécurité</a>
+          </div>
+        </div>
+      </div>
+    </footer>

@@ -1,0 +1,223 @@
+  <!-- Toolbar (header) -->
+  <mat-toolbar class="topbar topbar-xl m-auto">
+    <div class="container full-width p-xs-6 w-100 d-flex align-items-center">
+      <a [routerLink]="['/landingpage']">
+        <img
+        src="./assets/images/logos/SCS-Stock_White.png"
+        class="align-middle m-2 logo-light"
+        alt="logo"/>
+      </a>
+      <span class="flex-1-auto"></span>
+      <div class="d-none d-lg-flex">
+        <button mat-button class="f-s-16 f-w-500">Démonstrations</button>
+        <button mat-button class="f-s-16 f-w-500">Pages <i-tabler name="chevron-down" class="icon-16 m-l-4"></i-tabler></button>
+        <a mat-button href="https://wrappixel.github.io/premium-documentation-wp/angular/materialM/index.html">Documentation</a>
+        <a mat-button href="https://support.wrappixel.com/">Assistance</a>
+        <a mat-flat-button color="primary" routerLink="/authentication/login" class="m-l-10">Connexion</a>
+      </div>
+    </div>
+  </mat-toolbar>
+<div class="container p-24">
+  <div class="row g-24">
+    <!-- Cart Summary -->
+    <div class="col-lg-6">
+      <mat-card class="cardWithShadow">
+        <mat-card-title>Votre panier</mat-card-title>
+        <mat-divider></mat-divider>
+        <div class="cart-list">
+          <div class="cart-row" *ngFor="let it of (items$ | async) ?? []">
+            <div class="thumb">
+              <img [src]="it.imagePath" [alt]="it.uname" />
+            </div>
+            <div class="info">
+              <div class="title">{{ it.uname }}</div>
+              <div class="price">{{ it.price | currency:'USD':'symbol' }}</div>
+              <div class="qty-controls">
+                <button mat-mini-fab color="primary" (click)="decQty(it.id)"><mat-icon>remove</mat-icon></button>
+                <input type="number" min="0" [value]="it.quantity" (change)="setQty(it.id, $any($event.target).value)" />
+                <button mat-mini-fab color="primary" (click)="incQty(it.id)"><mat-icon>add</mat-icon></button>
+              </div>
+            </div>
+            <button mat-icon-button color="warn" class="remove" (click)="removeItem(it.id)" matTooltip="Retirer">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+          <div class="empty" *ngIf="((items$ | async) ?? []).length === 0">Votre panier est vide.</div>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="totals">
+          <div class="line"><span>Sous-total</span><span>{{ subtotal$ | async | currency:'USD':'symbol' }}</span></div>
+          <div class="line"><span>Livraison</span><span>{{ deliveryFee | currency:'USD':'symbol' }}</span></div>
+          <div class="line total"><span>Total</span><span>{{ grandTotal$ | async | currency:'USD':'symbol' }}</span></div>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Payment Form -->
+    <div class="col-lg-6">
+      <mat-card class="cardWithShadow">
+        <mat-card-title>Paiement</mat-card-title>
+        <mat-divider></mat-divider>
+        <div class="form p-16">
+          <!-- Payer identity -->
+          <div class="row g-16">
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Nom complet</mat-label>
+                <input matInput [(ngModel)]="fullName" />
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" [(ngModel)]="email" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div class="row g-16">
+            <div class="col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Adresse</mat-label>
+                <input matInput [(ngModel)]="address" />
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Ville</mat-label>
+                <input matInput [(ngModel)]="city" />
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Pays</mat-label>
+                <mat-select>
+                  <mat-option value="CM">Cameroun</mat-option>
+                  <mat-option value="CI">Côte d'Ivoire</mat-option>
+                  <mat-option value="SN">Sénégal</mat-option>
+                  <mat-option value="FR">France</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Method -->
+          <div class="row g-16 m-t-8">
+            <div class="col-12">
+              <label class="f-w-600 m-b-8 d-block">Méthode de paiement</label>
+              <mat-radio-group [(ngModel)]="paymentMethod">
+                <mat-radio-button class="m-r-16" value="card">Carte</mat-radio-button>
+                <mat-radio-button class="m-r-16" value="momo">Mobile Money</mat-radio-button>
+                <mat-radio-button value="cash">Espèces</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+
+          <!-- Card fields -->
+          <div class="row g-16 m-t-8" *ngIf="paymentMethod === 'card'">
+            <div class="col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Numéro de carte</mat-label>
+                <input matInput [(ngModel)]="cardNumber" placeholder="1234 5678 9012 3456" />
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Expiration (MM/AA)</mat-label>
+                <input matInput [(ngModel)]="cardExp" placeholder="09/27" />
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>CVV</mat-label>
+                <input matInput [(ngModel)]="cardCvv" placeholder="123" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="m-t-16">
+            <button mat-flat-button color="primary" class="w-100" (click)="onSubmit()">Payer maintenant</button>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-24">
+        <div class="col-lg-4 col-md-6 m-b-24">
+          <div class="brand f-w-700 m-b-12">MParish</div>
+          <p class="footer-text">Un template Angular Material moderne, rapide et personnalisable pour accélerer vos projets et livrer plus vite.</p>
+          <div class="socials m-t-12">
+            <a href="#" aria-label="Twitter" class="social">
+              <i-tabler name="brand-x"></i-tabler>
+            </a>
+            <a href="#" aria-label="GitHub" class="social m-l-8">
+              <i-tabler name="brand-github"></i-tabler>
+            </a>
+            <a href="#" aria-label="LinkedIn" class="social m-l-8">
+              <i-tabler name="brand-linkedin"></i-tabler>
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6 m-b-24">
+          <div class="footer-title">Ressources</div>
+          <ul class="footer-links">
+            <li><a routerLink="/landingpage#demos">Démonstrations</a></li>
+            <li><a href="https://wrappixel.github.io/premium-documentation-wp/angular/materialM/index.html" target="_blank">Documentation</a></li>
+            <li><a href="https://support.wrappixel.com/" target="_blank">Assistance</a></li>
+            <li><a routerLink="/authentication/login">Connexion</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-6 m-b-24">
+          <div class="footer-title">Produit</div>
+          <ul class="footer-links">
+            <li><a routerLink="/apps/chat">Discussion</a></li>
+            <li><a routerLink="/apps/calendar">Calendrier</a></li>
+            <li><a routerLink="/apps/contacts">Contacts</a></li>
+            <li><a routerLink="/apps/todo">Tâches</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-6 m-b-24">
+          <div class="footer-title">Légal</div>
+          <ul class="footer-links">
+            <li><a href="#">Conditions</a></li>
+            <li><a href="#">Confidentialité</a></li>
+            <li><a href="#">Cookies</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-4 col-md-6 m-b-24">
+          <div class="footer-title">Newsletter</div>
+          <p class="footer-text">Recevez des mises à jour, des tutoriels et des astuces UX/UI.</p>
+          <form class="newsletter-form" (submit)="$event.preventDefault()">
+            <mat-form-field appearance="fill" class="newsletter-field">
+              <mat-label>Votre email</mat-label>
+              <input matInput type="email" placeholder="name@email.com" required />
+            </mat-form-field>
+            <button mat-flat-button color="primary" class="newsletter-btn">S'abonner</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <div class="copyright">© {{ currentYear }} MParish. Tous droits réservés.</div>
+        </div>
+        <div class="col-md-6 text-md-right m-t-12 m-t-md-0">
+          <a href="#" class="tiny-link">Statut</a>
+          <span class="tiny-sep">•</span>
+          <a href="#" class="tiny-link">Journal des modifications</a>
+          <span class="tiny-sep">•</span>
+          <a href="#" class="tiny-link">Sécurité</a>
+        </div>
+      </div>
+    </div>
+  </footer>

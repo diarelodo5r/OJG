@@ -1,0 +1,19 @@
+.cardWithShadow {
+  background: var(--mat-card-elevated-container-color);
+}
+
+/* Utility classes matching your design system */
+.p-24 { padding: 24px; }
+.p-t-0 { padding-top: 0; }
+.p-y-24 { padding-top: 24px; padding-bottom: 24px; }
+.m-r-8 { margin-right: 8px; }
+.m-t-24 { margin-top: 24px; }
+.f-s-14 { font-size: 14px; }
+.f-w-600 { font-weight: 600; }
+.w-100 { width: 100%; }
+.text-right { text-align: right; }
+.bg-error { background: var(--mat-sys-error); }
+.text-white { color: #fff; }
+.rounded-circle { border-radius: 50%; }
+
+/* Tabs primary color uses your CSS variables automatically via Material theming */

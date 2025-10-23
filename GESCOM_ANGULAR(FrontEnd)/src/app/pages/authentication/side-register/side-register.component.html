@@ -1,0 +1,69 @@
+<div class="landingpage-wrapper stylish-lp">
+  <!-- Toolbar (header) -->
+  <mat-toolbar class="topbar topbar-xl m-auto">
+    <div class="container full-width p-xs-6 w-100 d-flex align-items-center">
+      <a [routerLink]="['/landingpage']">
+        <img
+        src="./assets/images/logos/SCS-Stock_White.png"
+        class="align-middle m-2 logo-light"
+        alt="logo"/>
+      </a>
+      <span class="flex-1-auto"></span>
+      <!-- contenu de la toolbar -->
+    </div>
+  </mat-toolbar>
+  <!-- Sections de la page -->
+  <section class="banner-section bg-light">
+    <div class="login-container">
+      <div class="illustration">
+        <img src="./assets/images/logos/Side_Sign Up.png" alt="Illustration" />
+      </div>
+      <div class="form-wrap">
+        <mat-card class="login-form" appearance="outlined">
+            <mat-card-header>
+            <mat-card-title>Créer Votre Compte</mat-card-title>
+            <mat-card-subtitle>Inscrivez-vous pour commencer</mat-card-subtitle>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+            <mat-card-content>
+            <form class="form" novalidate aria-label="Register form">
+                <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nom</mat-label>
+                <input matInput type="text" required autocomplete="name" placeholder="John Doe" />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" required autocomplete="email" placeholder="you@example.com" />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Mot De Passe</mat-label>
+                <input matInput [type]="hidePassword ? 'password' : 'text'" required autocomplete="new-password" />
+                <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()" [attr.aria-label]="hidePassword ? 'Afficher le mot de passe' : 'Masquer le mot de passe'" [attr.aria-pressed]="!hidePassword">
+                  <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+                </button>
+                <mat-hint align="start">Utiliser au moins 8 caractères tout en mélangeant les chiffres et lettres</mat-hint>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Confirmer le Mot De Passe</mat-label>
+                <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" required autocomplete="new-password" />
+                <button mat-icon-button matSuffix type="button" (click)="toggleConfirmPasswordVisibility()" [attr.aria-label]="hideConfirmPassword ? 'Afficher le mot de passe' : 'Masquer le mot de passe'" [attr.aria-pressed]="!hideConfirmPassword">
+                  <mat-icon>{{ hideConfirmPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+                </button>
+                </mat-form-field>
+                <button mat-raised-button color="primary" class="submit" type="submit">
+                S'inscrire
+                </button>
+                <p>Déjà Utilisateur ? <a href="/authentication/side-login">Se connecter</a></p>
+              </form>
+              <div class="login-footer" style="margin-top: 16px; font-size: 12px; color: rgba(0,0,0,.54)">
+                En continuant, vous accepter nos
+                <a href="#" rel="noopener" style="text-decoration: none; color: #1976d2;">Conditions d'utilisation</a>
+                  et
+                  <a href="#" rel="noopener" style="text-decoration: none; color: #1976d2;">la Police confidentielle</a>.
+            </div>
+            </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+</div>

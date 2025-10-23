@@ -1,0 +1,37 @@
+<div class="p-16" style="width: 520px; max-width: 100vw;">
+  <div class="d-flex align-items-center justify-content-between m-b-8">
+    <h3 class="m-0">Recherche globale</h3>
+    <span class="text-muted f-s-12">Raccourcis: Ctrl+K ou Ctrl+Shift+F</span>
+  </div>
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Rechercher...</mat-label>
+    <input matInput [formControl]="query" placeholder="Produits, utilisateurs, catégories, navigation..." autofocus>
+  </mat-form-field>
+
+  <!-- Loading indicator -->
+  <div class="d-flex align-items-center m-t-8" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate" diameter="20"></mat-progress-spinner>
+    <span class="m-l-8 text-muted f-s-12">Recherche en cours...</span>
+  </div>
+
+  <!-- Grouped results -->
+  <ng-container *ngIf="(groupedResults$ | async) as groups">
+    <div *ngIf="!loading && groups.length === 0" class="text-muted m-t-8">Aucun résultat</div>
+    <div *ngFor="let g of groups" class="m-t-12">
+      <div class="d-flex align-items-center m-b-4">
+        <mat-icon class="m-r-6" *ngIf="g.group === 'Navigation'">menu</mat-icon>
+        <mat-icon class="m-r-6" *ngIf="g.group === 'Produits'">shopping_bag</mat-icon>
+        <mat-icon class="m-r-6" *ngIf="g.group === 'Utilisateurs'">person</mat-icon>
+        <mat-icon class="m-r-6" *ngIf="g.group === 'Catégories'">category</mat-icon>
+        <strong>{{ g.group }}</strong>
+      </div>
+      <mat-nav-list>
+        <a mat-list-item *ngFor="let r of g.items" (click)="go(r)">
+          <div matLine>{{ r.label }}</div>
+          <div matLine class="text-muted f-s-12">{{ r.route }}</div>
+        </a>
+      </mat-nav-list>
+      <mat-divider></mat-divider>
+    </div>
+  </ng-container>
+</div>

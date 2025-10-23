@@ -1,0 +1,175 @@
+<mat-card class="cardWithShadow theme-card">
+  <mat-card-header>
+    <mat-card-title>Utilisateurs</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="m-b-12">
+      <div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Rechercher</mat-label>
+          <input matInput placeholder="Tapez pour filtrer" (keyup)="applyFilter($event.target.value)" />
+        </mat-form-field>
+      </div>
+      <div class="section-gap d-flex gap-12">
+        <button mat-flat-button color="primary" (click)="openAddUserDialog()" class="btn-inline-center">
+          <mat-icon>person_add</mat-icon>
+          Nouvel utilisateur
+        </button>
+        <button *ngIf="selection.selected.length > 0" mat-stroked-button color="warn" class="btn-inline-center" (click)="deleteSelected()">
+          <mat-icon>delete</mat-icon>
+          Supprimer la sélection
+        </button>
+      </div>
+      <!-- Filtres avancés (rôle) -->
+      <div class="filters-bar d-flex flex-wrap gap-12 align-items-end m-t-8">
+        <mat-form-field appearance="outline">
+          <mat-label>Rôles</mat-label>
+          <mat-select multiple [(ngModel)]="selectedRoleIds" (selectionChange)="applyAdvancedFilters()">
+            <mat-option *ngFor="let r of roles" [value]="r.id">{{ r.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-button type="button" (click)="clearAdvancedFilters()">Réinitialiser</button>
+      </div>
+    </div>
+
+    <div class="table-responsive section-gap">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- Select Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox color="primary"
+                          (change)="toggleAllRows()"
+                          [checked]="isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()"
+                          [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox color="primary"
+                          (click)="$event.stopPropagation()"
+                          (change)="selection.toggle(row)"
+                          [checked]="selection.isSelected(row)"
+                          [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+          <td mat-cell *matCellDef="let row">
+            @if (editRowId === row.id) {
+              <div [formGroup]="editForm">
+                <mat-form-field class="w-100" appearance="outline">
+                  <input matInput formControlName="username" />
+                </mat-form-field>
+              </div>
+            } @else {
+              <div class="d-flex align-items-center" style="gap: 12px;">
+                <div class="avatar-thumbnail-container me-3" style="cursor: pointer;" (click)="onViewImage(row)">
+                  <img [src]="getUserAvatar(row)"
+                       [alt]="row.username || row.name"
+                       class="avatar-thumbnail"
+                       (error)="onAvatarError($event)"
+                       onerror="this.onerror=null; this.src='assets/images/profile/user-7.jpg'"
+                       style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display:block;" />
+                </div>
+                <div style="cursor: pointer;" (click)="onViewImageDetails(row)">
+                  <div class="user-name f-s-14 f-w-600">{{ row.username || row.name }}</div>
+                  <span class="f-s-12 text-muted">{{ row.email || 'N/A' }}</span>
+                </div>
+              </div>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let row">
+            @if (editRowId === row.id) {
+              <div [formGroup]="editForm">
+                <mat-form-field class="w-100" appearance="outline">
+                  <input matInput formControlName="email" />
+                </mat-form-field>
+              </div>
+            } @else {
+              {{ row.email }}
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="role_id">
+          <th mat-header-cell *matHeaderCellDef>Rôle</th>
+          <td mat-cell *matCellDef="let row">
+            @if (editRowId === row.id) {
+              <div [formGroup]="editForm">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Rôles</mat-label>
+                  <mat-select formControlName="role_ids" multiple required>
+                    <mat-option *ngFor="let r of roles" [value]="r.id">{{ r.name }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            } @else {
+              {{ (getUserRoleNames(row.id) || []).join(', ') || '—' }}
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="text-muted">{{ row.description || '—' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="created_at">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Créé le</th>
+          <td mat-cell *matCellDef="let row">{{ row.created_at | date:'short' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="updated_at">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Modifié le</th>
+          <td mat-cell *matCellDef="let row">{{ row.updated_at | date:'short' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let row" class="d-flex gap-8">
+            @if (editRowId === row.id) {
+              <button mat-stroked-button color="primary" (click)="saveEdit(row)">
+                <mat-icon>save</mat-icon>
+                Enregistrer
+              </button>
+              <button mat-button (click)="cancelEdit()">
+                <mat-icon>close</mat-icon>
+                Annuler
+              </button>
+            } @else {
+              <button mat-button color="primary" (click)="onViewImageDetails(row)" aria-label="Voir détails" [matTooltip]="'Voir détails'" matTooltipPosition="above" class="btn-inline-center">
+                <mat-icon>visibility</mat-icon>
+                Voir
+              </button>
+              <button mat-button color="primary" (click)="startEdit(row)" class="btn-inline-center">
+                <mat-icon>edit</mat-icon>
+                Modifier
+              </button>
+              <button mat-button color="warn" (click)="delete(row)">
+                <mat-icon>delete</mat-icon>
+                Supprimer
+              </button>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+  </mat-card-content>
+</mat-card>

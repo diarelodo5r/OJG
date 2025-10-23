@@ -1,0 +1,65 @@
+<app-generic-table
+  [title]="'Sélection d\'articles (à vendre)'"
+  [data]="stocks"
+  [columns]="stockColumns"
+  [filters]="stockFilters"
+  [defaultSort]="{ active: 'created_at', direction: 'desc' }"
+  [selectionEnabled]="false"
+  [displayedActions]="false"
+  [enableView]="false"
+  [enableEdit]="false"
+  [enableDelete]="false"
+  [enableArchive]="false"
+  [pageSize]="10"
+  [pageSizeOptions]="[5,10,25,50]"
+  [searchPlaceholder]="'Rechercher par article, lot, référence, famille...'"
+>
+
+  <!-- Column templates (copied from stock list) -->
+  <ng-template columnTemplate="produit" let-row>
+    <div class="d-flex align-items-center">
+      <div class="product-thumbnail-container me-3" style="cursor: pointer; margin: 2%;">
+        <img [src]="getArticleImageUrl(row)"
+             [alt]="row.article?.nom_article || 'Article'"
+             class="product-thumbnail stock-thumbnail"
+             style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"/>
+      </div>
+      <div>
+        <div class="f-s-14 f-w-600" style="margin: 3%">{{ row.article?.nom_article || 'N/A' }}</div>
+        <span class="f-s-12 text-muted">{{ row.article?.famille?.nom_famille || 'Famille indisponible' }}</span>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template columnTemplate="fournisseur" let-row>
+    <div>
+      <div class="f-w-600">{{ row.fournisseur?.nom || 'N/A' }}</div>
+      <span class="f-s-12 text-muted" *ngIf="row.fournisseur?.telephone">{{ row.fournisseur.telephone }}</span>
+    </div>
+  </ng-template>
+
+  <ng-template columnTemplate="prix_unitaire" let-row>
+    <span class="fw-semibold" [matTooltip]="formatPrice(row.article?.prixVente || 0)" matTooltipPosition="above">
+      {{ formatPriceShort(row.article?.prixVente || 0) }}
+    </span>
+  </ng-template>
+
+  <ng-template columnTemplate="etat" let-row>
+    <span class="badge {{ getBadgeClass(getCalculatedEtat(row)) }}">
+      {{ getCalculatedEtat(row) | number:'1.2-2' }}%
+    </span>
+  </ng-template>
+
+  <ng-template columnTemplate="date_peremption" let-row>
+    <span [class]="getPeremptionClass(row.date_peremption)">
+      {{ row.date_peremption | date:'yyyy/MM/dd' }}
+    </span>
+  </ng-template>
+
+  <ng-template columnTemplate="action" let-row>
+    <button mat-icon-button color="primary" (click)="onDestock(row)" matTooltip="Déstocker">
+      <mat-icon>point_of_sale</mat-icon>
+    </button>
+  </ng-template>
+</app-generic-table>
+

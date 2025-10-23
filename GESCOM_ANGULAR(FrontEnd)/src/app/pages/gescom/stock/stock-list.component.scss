@@ -1,0 +1,86 @@
+/* Styles for StockListComponent */
+:host {
+  display: block;
+}
+
+// Image thumbnail styling
+.stock-thumbnail {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+  }
+}
+
+// Badge styling pour l'état du stock
+.badge {
+  font-size: 0.875rem;
+  padding: 0.35em 0.65em;
+  font-weight: 600;
+  
+  &.bg-success {
+    background-color: #13deb9 !important;
+  }
+  
+  &.bg-primary {
+    background-color: #5d87ff !important;
+  }
+  
+  &.bg-warning {
+    background-color: #ffae1f !important;
+    color: #000 !important;
+  }
+  
+  &.bg-danger {
+    background-color: #fa896b !important;
+  }
+}
+
+// Styles pour les dates de péremption
+.text-danger {
+  color: #fa896b !important;
+  
+  &.fw-bold {
+    font-weight: 700 !important;
+  }
+}
+
+.text-warning {
+  color: #ffae1f !important;
+  
+  &.fw-bold {
+    font-weight: 700 !important;
+  }
+}
+
+// Styles pour la légende
+.legend-card {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 8px;
+  
+  h6 {
+    color: #2a3547;
+    font-weight: 600;
+  }
+  
+  .badge {
+    font-size: 0.8rem;
+  }
+}
+
+// Animation pour l'icône warning
+mat-icon.text-danger {
+  animation: pulse-warning 2s infinite;
+}
+
+@keyframes pulse-warning {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

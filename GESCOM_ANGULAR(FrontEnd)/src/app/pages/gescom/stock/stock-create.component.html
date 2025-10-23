@@ -1,0 +1,473 @@
+<div class="row mt-2">
+  <div class="col-12">
+    <mat-card class="cardWithShadow theme-card">
+      <mat-card-header>
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <mat-card-title class="m-b-0 page-title">Ajouter un Stock</mat-card-title>
+          <div class="m-t-4 d-flex align-items-center gap-2 header-actions">
+            <mat-slide-toggle class="w-150" [checked]="bulkMode" (change)="toggleBulkMode()">Saisie multiple</mat-slide-toggle>
+            <mat-form-field appearance="outline" class="w-180">
+              <mat-label>Devise d'origine</mat-label>
+              <mat-select [value]="form.get('devise_origine')?.value" (selectionChange)="form.patchValue({ devise_origine: $event.value })">
+                @for (code of currencyCodes; track code) {
+                  <mat-option [value]="code">{{ code }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-180">
+              <mat-label>Devise d'arrivée</mat-label>
+              <mat-select [value]="form.get('devise_arrivee')?.value" (selectionChange)="form.patchValue({ devise_arrivee: $event.value })">
+                @for (code of currencyCodes; track code) {
+                  <mat-option [value]="code">{{ code }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <div class="d-flex align-items-center gap-2 w-300">
+              <button mat-stroked-button type="button" (click)="applyPredefinedTauxChange()" color="primary" class="toggle-rate-btn w-180"
+                matTooltip="Charger les taux par défaut (tauxChange) et les appliquer dans Taux par défaut">
+                <mat-icon class="me-1">settings_backup_restore</mat-icon>
+                Charger par défaut
+              </button>
+              <button mat-stroked-button color="accent" type="button" (click)="toggleEditRates()" class="w-150">
+                <mat-icon class="me-1">tune</mat-icon>
+                Taux par défaut
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card-header>
+      @if (showEditRates) {
+        <div class="px-3 py-2">
+          <form [formGroup]="defaultRatesForm" class="row g-2">
+            @for (ctrl of (defaultRatesForm.controls | keyvalue); track ctrl.key) {
+              <div class="col-md-3 col-sm-4 col-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>{{ ctrl.key }}</mat-label>
+                  <input matInput type="number" min="0" step="0.000001" [formControlName]="ctrl.key" />
+                </mat-form-field>
+              </div>
+            }
+          </form>
+          <div class="px-1 pb-2 d-flex gap-2">
+            <button mat-flat-button color="primary" type="button" (click)="saveDefaultRates()" [disabled]="defaultRatesForm.invalid">Enregistrer</button>
+            <button mat-stroked-button type="button" (click)="cancelEditRates()">Annuler</button>
+          </div>
+          <div class="px-1 pb-2">
+            <small class="text-muted">Base pivot XOF: la valeur renseignée signifie 1 XOF = valeur dans la devise concernée.</small>
+          </div>
+        </div>
+      }
+      <mat-card-content class="b-t-1">
+        @if (bulkMode) {
+          <form [formGroup]="bulkForm" (ngSubmit)="onBulkSubmit()">
+            <div formArrayName="products">
+              @for (ctrl of productsArray.controls; track $index; let i = $index) {
+                <div class="p-12 rounded-2 m-t-8 b-a-1">
+                  <div [formGroupName]="i" class="row g-2">
+                    <div class="col-lg-3">
+                      <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Famille</mat-label>
+                        <mat-select formControlName="famille_id" placeholder="Famille">
+                          <mat-option [value]="null">Aucune</mat-option>
+                          @for (f of familles; track f.id) {
+                            <mat-option [value]="f.id">{{ f.nom_famille }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3">
+                      <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Article *</mat-label>
+                        <mat-select formControlName="article_id" placeholder="Article">
+                          @for (a of (bulkArticlesFilteredMap.get(i) || articles); track a.id) {
+                            <mat-option [value]="a.id">{{ a.nom_article }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-2">
+                      <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Prix d'origine</mat-label>
+                        <input matInput type="number" step="0.01" formControlName="prix_origine" placeholder="0.00" />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-2">
+                      <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Prix unitaire *</mat-label>
+                        <input matInput type="number" step="0.01" formControlName="prix_unitaire" placeholder="0.00" />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-2">
+                      <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Quantité *</mat-label>
+                        <input matInput type="number" formControlName="quantite" placeholder="0" />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3">
+                      <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Fournisseur</mat-label>
+                        <mat-select formControlName="fournisseur_id" placeholder="Fournisseur">
+                          <mat-option [value]="null">Aucun</mat-option>
+                          @for (f of fournisseurs; track f.id) {
+                            @let prix = getFournisseurPriceForArticle(f.id, ctrl.get('article_id')?.value);
+                            <mat-option [value]="f.id">{{ f.nom }}@if(prix) { - {{ prix }} XOF }</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-2">
+                      <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Lot</mat-label>
+                        <input matInput formControlName="lot" placeholder="Ex: LOT-2025-001" />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-2">
+                      <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Référence</mat-label>
+                        <input matInput formControlName="reference" placeholder="Ex: REF-ABC-001" />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3">
+                      <mat-form-field appearance="outline" class="w-100 calendar-form-field">
+                        <mat-label>Date de fabrication</mat-label>
+                        <input matInput [matDatepicker]="bulkFabPicker" placeholder="Sélectionner la date" formControlName="date_fabrication" class="calendar-input" />
+                        <mat-datepicker-toggle matSuffix [for]="bulkFabPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #bulkFabPicker startView="month"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3">
+                      <mat-form-field appearance="outline" class="w-100 calendar-form-field">
+                        <mat-label>Date de péremption</mat-label>
+                        <input matInput [matDatepicker]="bulkPerPicker" placeholder="Sélectionner la date" formControlName="date_peremption" class="calendar-input" />
+                        <mat-datepicker-toggle matSuffix [for]="bulkPerPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #bulkPerPicker startView="month"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="text-right m-t-4">
+                    <button mat-stroked-button color="primary" type="button" (click)="duplicateBulkRowRef(ctrl)" class="m-r-8" [disabled]="isSubmitting">
+                      <mat-icon>content_copy</mat-icon>
+                      Dupliquer
+                    </button>
+                    <button mat-stroked-button color="warn" type="button" (click)="removeBulkRowRef(ctrl)" [disabled]="isSubmitting || productsArray.length <= 1">
+                      <mat-icon>remove_circle</mat-icon>
+                      Retirer
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="m-t-12 d-flex align-items-center gap-8">
+              <button mat-stroked-button color="primary" type="button" (click)="addBulkRow()" [disabled]="isSubmitting">
+                <mat-icon>add</mat-icon>
+                Ajouter une ligne
+              </button>
+              <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting || bulkForm.invalid">
+                @if (isSubmitting) { <mat-icon matButtonIcon>refresh</mat-icon> }
+                @if (!isSubmitting) { <mat-icon matButtonIcon>save</mat-icon> }
+                @if (isSubmitting) { <span>Enregistrement...</span> }
+                @if (!isSubmitting) { <span>Enregistrer tous les produits</span> }
+              </button>
+            </div>
+          </form>
+        } @else {
+          <form [formGroup]="form" (ngSubmit)="submit()">
+          <div class="row g-3">
+            <!-- Famille (nouvelle ou existante) -->
+            <div class="col-lg-6">
+              <div class="d-flex align-items-center justify-content-between">
+                <mat-label class="f-w-600 m-b-8 d-block">Famille</mat-label>
+                <button mat-stroked-button color="primary" type="button" class="btn-center" (click)="toggleUseNewFamily()">
+                  <mat-icon>category</mat-icon>
+                  @if (!useNewFamily) { Nouvelle famille }
+                  @if (useNewFamily) { Utiliser existante }
+                </button>
+              </div>
+              @if (!useNewFamily) {
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-icon matPrefix>category</mat-icon>
+                  <mat-select formControlName="famille_id" placeholder="Sélectionner une famille">
+                    @for (f of familles; track f.id) {
+                      <mat-option [value]="f.id">{{ f.nom_famille }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+              @if (useNewFamily) {
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Nouvelle famille</mat-label>
+                  <mat-icon matPrefix>category</mat-icon>
+                  <input matInput formControlName="nouv_famille" placeholder="Entrez le nom de la nouvelle famille" />
+                </mat-form-field>
+              }
+            </div>
+            <!-- Article -->
+            <div class="col-lg-6">
+              <div class="d-flex align-items-center justify-content-between">
+                <mat-label class="f-w-600 m-b-8 d-block">Article *</mat-label>
+                <button mat-stroked-button color="primary" type="button" class="btn-center" (click)="toggleUseNewArticle()">
+                  <mat-icon>add_circle</mat-icon>
+                  @if (!useNewArticle) { Nouvel article }
+                  @if (useNewArticle) { Utiliser existant }
+                </button>
+              </div>
+              @if (!useNewArticle) {
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-icon matPrefix>inventory_2</mat-icon>
+                  <mat-select formControlName="article_id" placeholder="Sélectionner un article">
+                    @for (a of articlesFiltered; track a.id) {
+                      <mat-option [value]="a.id">{{ a.nom_article }}</mat-option>
+                    }
+                  </mat-select>
+                  @if (article_id?.invalid && (article_id?.dirty || article_id?.touched)) {
+                    <mat-error>
+                      @if (article_id?.errors?.['required']) { L'article est requis }
+                    </mat-error>
+                  }
+                </mat-form-field>
+              }
+              @if (useNewArticle) {
+                <div class="row g-2">
+                  <div class="col-12">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Nouvel article</mat-label>
+                      <mat-icon matPrefix>inventory_2</mat-icon>
+                      <input matInput formControlName="nouv_article" placeholder="Entrez le nom du nouvel article" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Quantité standard</mat-label>
+                      <mat-icon matPrefix>production_quantity_limits</mat-icon>
+                      <input matInput type="number" formControlName="quantite_standard" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Conditionnement</mat-label>
+                      <mat-icon matPrefix>inventory</mat-icon>
+                      <input matInput formControlName="conditionnement" placeholder="Ex: Carton, Paquet..." />
+                    </mat-form-field>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- Fournisseur (sélection + création sans validation) -->
+            <div class="col-lg-6">
+              <div class="d-flex align-items-center justify-content-between">
+                <mat-label class="f-w-600 m-b-8 d-block">Fournisseur</mat-label>
+                <button mat-stroked-button color="primary" type="button" class="btn-center" (click)="toggleCreateSupplier()">
+                  <mat-icon>add_business</mat-icon>
+                  @if (!creatingSupplier) { Nouveau fournisseur }
+                  @if (creatingSupplier) { Annuler }
+                </button>
+              </div>
+              @if (!creatingSupplier) {
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-icon matPrefix>business</mat-icon>
+                  <mat-select formControlName="fournisseur_id" placeholder="Sélectionner un fournisseur">
+                    <mat-option [value]="null">Aucun</mat-option>
+                    @for (f of fournisseursFiltered; track f.id) {
+                      <mat-option [value]="f.id">{{ f.nom }}@if(f.prixArticle) { - {{ f.prixArticle }} XOF }</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+
+              @if (creatingSupplier) {
+                <div class="row g-2">
+                  <div class="col-12">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Nom du fournisseur</mat-label>
+                      <mat-icon matPrefix>badge</mat-icon>
+                      <input matInput [formControl]="newSupplierForm.controls.nom" placeholder="Ex: ABC Distribution" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Téléphone (optionnel)</mat-label>
+                      <mat-icon matPrefix>call</mat-icon>
+                      <input matInput [formControl]="newSupplierForm.controls.telephone" placeholder="Ex: +225 01 23 45 67" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Adresse (optionnelle)</mat-label>
+                      <mat-icon matPrefix>location_on</mat-icon>
+                      <input matInput [formControl]="newSupplierForm.controls.adresse" placeholder="Ex: Abidjan, Plateau" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              }
+            </div>
+            <!-- Lot & Référence -->
+            <div class="col-lg-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Lot</mat-label>
+                <mat-icon matPrefix>qr_code_2</mat-icon>
+                <input matInput formControlName="lot" placeholder="Ex: LOT-2025-001" />
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Référence</mat-label>
+                <mat-icon matPrefix>sell</mat-icon>
+                <input matInput formControlName="reference" placeholder="Ex: REF-ABC-001" />
+              </mat-form-field>
+            </div>
+            <!-- Quantité & Convertisseur de devise/prix -->
+            <div class="col-lg-6">
+              <mat-label class="f-w-600 m-b-8 d-block">Quantité *</mat-label>
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-icon matPrefix>production_quantity_limits</mat-icon>
+                <input matInput type="number" formControlName="quantite" placeholder="0" />
+                @if (quantite?.invalid && (quantite?.dirty || quantite?.touched)) {
+                  <mat-error>
+                    @if (quantite?.errors?.['required']) { La quantité est requise }
+                    @if (quantite?.errors?.['min']) { La quantité doit être ≥ 1 }
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+              <div class="mb-1 d-flex align-items-center justify-content-between">
+                <span class="f-w-600">Prix Unitaire</span>
+              </div>
+              <div class="row g-2">
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Prix d'origine</mat-label>
+                    <mat-icon matPrefix>payments</mat-icon>
+                    <input matInput type="number" formControlName="prix_origine" placeholder="0.00" />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Prix d'arrivée</mat-label>
+                    <mat-icon matPrefix>attach_money</mat-icon>
+                    <input matInput type="number" formControlName="prix_unitaire" placeholder="Prix converti" />
+                  </mat-form-field>
+                </div>
+                <div class="col-12 d-flex align-items-center gap-2">
+                </div>
+                </div>
+            </div>
+
+            <!-- Montant (calculé) -->
+            <div class="col-lg-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Montant (Quantité x Prix)</mat-label>
+                <mat-icon matPrefix>calculate</mat-icon>
+                <input matInput type="number" formControlName="montant" placeholder="Calculé automatiquement" />
+              </mat-form-field>
+            </div>
+            <!-- Etat (aperçu) -->
+            <div class="col-lg-6">
+              <div class="mb-3">
+                <label class="form-label f-w-600 d-block">Etat (en fonction de la quantité standard)</label>
+                <div class="d-flex align-items-center gap-3">
+                  <mat-icon [ngClass]="etatLive == null ? 'text-muted' : (etatLive < 30 ? 'text-danger' : etatLive < 70 ? 'text-warning' : 'text-success')">
+                    {{ etatLive == null ? 'help' : (etatLive < 30 ? 'trending_down' : etatLive < 70 ? 'trending_flat' : 'trending_up') }}
+                  </mat-icon>
+                  <mat-progress-bar
+                    class="flex-grow-1 stock-etat-bar"
+                    mode="determinate"
+                    [value]="etatCapped"
+                    [color]="etatLive == null ? 'primary' : (etatLive < 30 ? 'warn' : etatLive < 70 ? 'accent' : 'primary')">
+                  </mat-progress-bar>
+                  <span class="stock-etat-chip"
+                        [ngClass]="etatLive == null ? 'chip-na' : (etatLive < 30 ? 'chip-low' : etatLive < 70 ? 'chip-mid' : 'chip-high')">
+                    {{ etatLive != null ? (etatLive | number:'1.2-2') + '%' : 'N/A' }}
+                  </span>
+                </div>
+                <small class="text-muted d-block mt-1">
+                  {{ etatLive == null ? 'Non disponible' : (etatLive < 30 ? 'Niveau faible' : etatLive < 70 ? 'Niveau moyen' : 'Niveau optimal') }}
+                </small>
+                <!-- Hidden alias for backend if needed -->
+                <input type="hidden" name="etat_precis" [value]="etatLive != null ? etatLive.toFixed(2) : ''">
+              </div>
+            </div>
+            <!-- Dates -->
+            <div class="col-lg-6">
+              <mat-form-field appearance="outline" class="w-100 calendar-form-field">
+                <mat-label>Date de fabrication</mat-label>
+                <mat-icon matPrefix>event</mat-icon>
+                <input matInput [matDatepicker]="fabPicker" placeholder="Sélectionner la date de fabrication" formControlName="date_fabrication" class="calendar-input" />
+                <mat-datepicker-toggle matSuffix [for]="fabPicker"></mat-datepicker-toggle>
+                <mat-datepicker #fabPicker startView="month"></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+              <mat-form-field appearance="outline" class="w-100 calendar-form-field">
+                <mat-label>Date de péremption</mat-label>
+                <mat-icon matPrefix>event_upcoming</mat-icon>
+                <input matInput [matDatepicker]="perPicker" placeholder="Sélectionner la date de péremption" formControlName="date_peremption" class="calendar-input" />
+                <mat-datepicker-toggle matSuffix [for]="perPicker"></mat-datepicker-toggle>
+                <mat-datepicker #perPicker startView="month"></mat-datepicker>
+                <mat-error *ngIf="form.hasError('dateRange')" class="calendar-error">La date de péremption doit être postérieure ou égale à la date de fabrication</mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Description -->
+            <div class="col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Description</mat-label>
+                <mat-icon matPrefix>notes</mat-icon>
+                <textarea matInput formControlName="description" rows="3" placeholder="Notes"></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="col-12">
+              <mat-divider></mat-divider>
+            </div>
+            <!-- Image -->
+            <div class="col-12">
+              <mat-label class="f-w-600 m-b-8 d-block">Image de l'article</mat-label>
+              <div class="upload-section">
+                <input type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;" #fileInput>
+                <button mat-stroked-button color="primary" type="button" (click)="fileInput.click()" class="m-b-8 btn-center">
+                  <mat-icon>cloud_upload</mat-icon>
+                  Choisir une image
+                </button>
+                @if (previewUrl) {
+                  <div class="image-preview">
+                    <img [src]="previewUrl" alt="Aperçu" style="max-width: 200px; max-height: 200px; border-radius: 8px;">
+                  </div>
+                }
+                @if (articleImageUrl && !previewUrl) {
+                  <div class="image-info">
+                    <mat-icon class="info-icon">check_circle</mat-icon>
+                    <span class="info-text">Image de l'article existe déjà</span>
+                  </div>
+                }
+                @if (previewUrl) {
+                  <div class="image-info warning">
+                    <mat-icon class="info-icon">info</mat-icon>
+                    <span class="info-text">Nouvelle image sélectionnée</span>
+                  </div>
+                }
+              </div>
+              <small class="text-muted">Formats supportés: JPG, PNG. Taille conseillée ≤ 2 Mo.</small>
+            </div>
+          </div>
+
+          <div class="m-t-12">
+            <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting || form.invalid" class="m-r-8 btn-center">
+              @if (isSubmitting) { <mat-icon matButtonIcon>refresh</mat-icon> }
+              @if (!isSubmitting) { <mat-icon matButtonIcon>save</mat-icon> }
+              @if (isSubmitting) { <span>Enregistrement...</span> }
+              @if (!isSubmitting) { <span>Enregistrer</span> }
+            </button>
+            <a mat-stroked-button color="warn" class="btn-center" routerLink="/gescom/stock">
+              <mat-icon>clear</mat-icon>
+              Annuler
+            </a>
+          </div>
+        </form>
+        }
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

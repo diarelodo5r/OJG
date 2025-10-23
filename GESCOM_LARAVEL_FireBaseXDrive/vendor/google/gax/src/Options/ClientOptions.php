@@ -59,7 +59,7 @@ use Psr\Log\LoggerInterface;
  * Note: It's possible to pass an associative array to the API clients as well,
  * as ClientOptions will still be used internally for validation.
  */
-class ClientOptions implements ArrayAccess, OptionsInterface
+class ClientOptions implements ArrayAccess
 {
     use OptionsTrait;
 
@@ -202,35 +202,25 @@ class ClientOptions implements ArrayAccess, OptionsInterface
 
     /**
      * @param ?string $apiEndpoint
-     *
-     * @return $this
      */
-    public function setApiEndpoint(?string $apiEndpoint): self
+    public function setApiEndpoint(?string $apiEndpoint): void
     {
         $this->apiEndpoint = $apiEndpoint;
-
-        return $this;
     }
 
     /**
      * @param bool $disableRetries
-     *
-     * @return $this
      */
-    public function setDisableRetries(bool $disableRetries): self
+    public function setDisableRetries(bool $disableRetries): void
     {
         $this->disableRetries = $disableRetries;
-
-        return $this;
     }
 
     /**
      * @param string|array $clientConfig
-     *
-     * @return $this
      * @throws InvalidArgumentException
      */
-    public function setClientConfig($clientConfig): self
+    public function setClientConfig($clientConfig): void
     {
         if (is_string($clientConfig)) {
             $this->clientConfig = json_decode(file_get_contents($clientConfig), true);
@@ -239,181 +229,123 @@ class ClientOptions implements ArrayAccess, OptionsInterface
         } else {
             throw new InvalidArgumentException('Invalid client config');
         }
-
-        return $this;
     }
 
     /**
      * @param string|array|FetchAuthTokenInterface|CredentialsWrapper|null $credentials
-     *
-     * @return $this
      */
-    public function setCredentials($credentials): self
+    public function setCredentials($credentials): void
     {
         $this->credentials = $credentials;
-
-        return $this;
     }
 
     /**
      * @param array $credentialsConfig
-     *
-     * @return $this
      */
-    public function setCredentialsConfig(array $credentialsConfig): self
+    public function setCredentialsConfig(array $credentialsConfig): void
     {
         $this->credentialsConfig = $credentialsConfig;
-
-        return $this;
     }
 
     /**
      * @param string|TransportInterface|null $transport
-     *
-     * @return $this
      */
-    public function setTransport($transport): self
+    public function setTransport($transport): void
     {
         $this->transport = $transport;
-
-        return $this;
     }
 
     /**
      * @param TransportOptions $transportConfig
-     *
-     * @return $this
      */
-    public function setTransportConfig(TransportOptions $transportConfig): self
+    public function setTransportConfig(TransportOptions $transportConfig): void
     {
         $this->transportConfig = $transportConfig;
-
-        return $this;
     }
 
     /**
      * @param ?string $versionFile
-     *
-     * @return $this
      */
-    public function setVersionFile(?string $versionFile): self
+    public function setVersionFile(?string $versionFile): void
     {
         $this->versionFile = $versionFile;
-
-        return $this;
     }
 
     /**
      * @param ?string $descriptorsConfigPath
-     *
-     * @return $this
      */
-    private function setDescriptorsConfigPath(?string $descriptorsConfigPath): self
+    private function setDescriptorsConfigPath(?string $descriptorsConfigPath)
     {
         if (!is_null($descriptorsConfigPath)) {
             self::validateFileExists($descriptorsConfigPath);
         }
         $this->descriptorsConfigPath = $descriptorsConfigPath;
-
-        return $this;
     }
 
     /**
      * @param ?string $serviceName
-     *
-     * @return $this
      */
-    public function setServiceName(?string $serviceName): self
+    public function setServiceName(?string $serviceName): void
     {
         $this->serviceName = $serviceName;
-
-        return $this;
     }
 
     /**
      * @param ?string $libName
-     *
-     * @return $this
      */
-    public function setLibName(?string $libName): self
+    public function setLibName(?string $libName): void
     {
         $this->libName = $libName;
-
-        return $this;
     }
 
     /**
      * @param ?string $libVersion
-     *
-     * @return $this
      */
-    public function setLibVersion(?string $libVersion): self
+    public function setLibVersion(?string $libVersion): void
     {
         $this->libVersion = $libVersion;
-
-        return $this;
     }
 
     /**
      * @param ?string $gapicVersion
-     *
-     * @return $this
      */
-    public function setGapicVersion(?string $gapicVersion): self
+    public function setGapicVersion(?string $gapicVersion): void
     {
         $this->gapicVersion = $gapicVersion;
-
-        return $this;
     }
 
     /**
      * @param ?callable $clientCertSource
-     *
-     * @return $this
      */
-    public function setClientCertSource(?callable $clientCertSource): self
+    public function setClientCertSource(?callable $clientCertSource)
     {
         if (!is_null($clientCertSource)) {
             $clientCertSource = Closure::fromCallable($clientCertSource);
         }
         $this->clientCertSource = $clientCertSource;
-
-        return $this;
     }
 
     /**
      * @param string $universeDomain
-     *
-     * @return $this
      */
-    public function setUniverseDomain(?string $universeDomain): self
+    public function setUniverseDomain(?string $universeDomain)
     {
         $this->universeDomain = $universeDomain;
-
-        return $this;
     }
 
     /**
      * @param string $apiKey
-     *
-     * @return $this
      */
-    public function setApiKey(?string $apiKey): self
+    public function setApiKey(?string $apiKey)
     {
         $this->apiKey = $apiKey;
-
-        return $this;
     }
 
     /**
      * @param null|false|LoggerInterface $logger
-     *
-     * @return $this
      */
-    public function setLogger(null|false|LoggerInterface $logger): self
+    public function setLogger(null|false|LoggerInterface $logger)
     {
         $this->logger = $logger;
-
-        return $this;
     }
 }

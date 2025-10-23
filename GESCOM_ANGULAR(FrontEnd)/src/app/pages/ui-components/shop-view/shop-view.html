@@ -1,0 +1,147 @@
+<main class="pageWrapper maxWidth">
+  <router-outlet></router-outlet>
+
+  <mat-card class="mat-mdc-card mdc-card cardWithShadow overflow-hidden position-relative">
+      <mat-sidenav-container class="mat-drawer-container mat-sidenav-container email-box mat-drawer-transition">
+        <mat-sidenav mode="side" opened class="mat-drawer mat-sidenav mail-sidebar">
+          <div cdkscrollable class="mat-drawer-inner-container">
+            <h5 class="m-0 p-t-16 p-x-32 f-s-14 f-w-600">Filter by Category</h5>
+            <div class="p-16">
+              <mat-nav-list>
+                <a mat-list-item class="m-b-2 gap-10 active-primary bg-primary">
+                  <mat-icon matListItemIcon>category</mat-icon>
+                  <span matListItemTitle class="f-w-400 f-s-14">All</span>
+                </a>
+                <a mat-list-item class="m-b-2 gap-10 active-primary">
+                  <mat-icon matListItemIcon>checkroom</mat-icon>
+                  <span matListItemTitle class="f-w-400 f-s-14">Fashion</span>
+                </a>
+                <a mat-list-item class="m-b-2 gap-10 active-primary">
+                  <mat-icon matListItemIcon>menu_book</mat-icon>
+                  <span matListItemTitle class="f-w-400 f-s-14">Books</span>
+                </a>
+                <a mat-list-item class="m-b-2 gap-10 active-primary">
+                  <mat-icon matListItemIcon>toys</mat-icon>
+                  <span matListItemTitle class="f-w-400 f-s-14">Toys</span>
+                </a>
+                <a mat-list-item class="m-b-2 gap-10 active-primary">
+                  <mat-icon matListItemIcon>devices</mat-icon>
+                  <span matListItemTitle class="f-w-400 f-s-14">Electronics</span>
+                </a>
+              </mat-nav-list>
+            </div>
+
+            <h5 class="m-0 p-t-16 p-x-32 f-s-14 f-w-600 b-t-1">Sort By</h5>
+            <div class="p-16">
+              <mat-nav-list>
+                <a mat-list-item class="m-b-2 gap-10 active-primary bg-primary">
+                  <mat-icon matListItemIcon>calendar_month</mat-icon>
+                  <span matListItemTitle class="f-w-400 f-s-14">Newest</span>
+                </a>
+                <a mat-list-item class="m-b-2 gap-10 active-primary">
+                  <mat-icon matListItemIcon>trending_down</mat-icon>
+                  <span matListItemTitle class="f-w-400 f-s-14">Price: High-low</span>
+                </a>
+                <a mat-list-item class="m-b-2 gap-10 active-primary">
+                  <mat-icon matListItemIcon>trending_up</mat-icon>
+                  <span matListItemTitle class="f-w-400 f-s-14">Price: Low-high</span>
+                </a>
+                <a mat-list-item class="m-b-2 gap-10 active-primary">
+                  <mat-icon matListItemIcon>sell</mat-icon>
+                  <span matListItemTitle class="f-w-400 f-s-14">Discounted</span>
+                </a>
+              </mat-nav-list>
+            </div>
+
+            <h5 class="m-0 p-t-16 p-x-32 f-s-14 f-w-600 b-t-1">By Gender</h5>
+            <div class="p-16 pricing-section">
+              <mat-radio-group class="m-b-20" aria-label="Select gender">
+                <mat-radio-button class="custom-radio" value="all" checked>All</mat-radio-button>
+                <mat-radio-button class="custom-radio" value="men">Men</mat-radio-button>
+                <mat-radio-button class="custom-radio" value="women">Women</mat-radio-button>
+                <mat-radio-button class="custom-radio" value="kids">Kids</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <h5 class="m-0 p-t-16 p-x-32 f-s-14 f-w-600 b-t-1">By Pricing</h5>
+            <div class="p-16 pricing-section">
+              <mat-radio-group class="m-b-20" aria-label="Select price range">
+                <mat-radio-button class="custom-radio" value="all" checked>All</mat-radio-button>
+                <mat-radio-button class="custom-radio" value="0-50">0 – 50</mat-radio-button>
+                <mat-radio-button class="custom-radio" value="50-100">50–100</mat-radio-button>
+                <mat-radio-button class="custom-radio" value="100-200">100–200</mat-radio-button>
+                <mat-radio-button class="custom-radio" value="over-200">Over 200</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <div class="b-t-1 p-20">
+              <button mat-flat-button class="w-100 m-y-20">Reset Filters</button>
+            </div>
+          </div>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+          <div class="content">
+            <div class="d-flex align-items-center justify-content-between m-b-24">
+              <h6 class="f-s-20 f-w-600">Produits</h6>
+              <div class="header-actions">
+                <mat-form-field appearance="outline" class="w-15">
+                  <mat-icon matPrefix>search</mat-icon>
+                  <input matInput placeholder="Search Product" [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange($event)" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="products-scroll">
+              <div class="sv-grid">
+                <div class="sv-item" *ngFor="let p of displayedProducts; trackBy: trackByTitle">
+                  <mat-card class="cardWithShadow productcard overflow-hidden b-1 cursor-pointer">
+                    <div class="img-wrapper position-relative">
+                      <img mat-card-image class="w-100" [src]="p.image" [alt]="p.title" />
+                      <div class="d-flex align-items-center icon-container">
+                        <button mat-mini-fab class="cart-btn-overlay bg-primary text-white" matTooltip="Détails" (click)="openDetail(p)">
+                          <mat-icon>visibility</mat-icon>
+                        </button>
+                        <button mat-mini-fab class="cart-btn-overlay bg-success text-white" matTooltip="Commander" (click)="openOrder(p)">
+                          <mat-icon>shopping_cart</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                    <mat-card-content class="p-b-24 p-t-12 position-relative">
+                      <mat-card-title class="f-s-16 m-b-4 text-ellipsis text-nowrap">{{ p.title }}</mat-card-title>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                          <h6 class="f-s-16 f-w-600">${{ p.price }}</h6>
+                          <span class="f-s-14 m-l-8 text-decoration-line-through" *ngIf="p.oldPrice">${{ p.oldPrice }}</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-1">
+                          <ng-container *ngFor="let i of [0,1,2,3,4]">
+                            <mat-icon [class.text-warning]="i < p.rating">star</mat-icon>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>
+            </div>
+
+            <mat-paginator
+              [length]="filteredCount"
+              [pageIndex]="pageIndex"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="[6, 9, 12]"
+              (page)="onPage($event)"
+              aria-label="Select page">
+            </mat-paginator>
+          </div>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+    </mat-card>
+
+  <div class="customizerBtn">
+    <button mat-fab class="bg-success text-white">
+      <mat-icon>settings</mat-icon>
+    </button>
+  </div>
+</main>

@@ -1,0 +1,83 @@
+<div class="chat-page">
+  <div class="chat-header">
+    <h2>Chat</h2>
+    <div class="breadcrumbs">Dashboard • <span>Chat</span></div>
+  </div>
+
+  <mat-card class="chat-card" appearance="outlined">
+    <div class="chat-grid">
+      <!-- Contacts column -->
+      <aside class="contacts">
+        <div class="contacts-header">
+          <div class="user">
+            <img [src]="contacts[0].avatar" alt="me" />
+            <div class="meta">
+              <div class="name">{{ contacts[0].name }}</div>
+              <div class="email">{{ contacts[0].email }}</div>
+            </div>
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="search">
+          <mat-label>Search Contacts</mat-label>
+          <input matInput [(ngModel)]="search" placeholder="Search Contacts" />
+          <button mat-icon-button matSuffix type="button" aria-label="search">
+            <i-tabler name="search"></i-tabler>
+          </button>
+        </mat-form-field>
+
+        <div class="list">
+          <button
+            class="contact"
+            *ngFor="let c of contacts | slice:0"
+            [class.active]="c.id === activeContact.id"
+            type="button"
+            (click)="selectContact(c)"
+          >
+            <img [src]="c.avatar" alt="avatar" />
+            <div class="meta">
+              <div class="name">{{ c.name }}</div>
+              <div class="last">{{ c.last }}</div>
+            </div>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Conversation column -->
+      <section class="conversation">
+        <header class="conv-header">
+          <div class="peer">
+            <img [src]="activeContact.avatar" alt="peer" />
+            <div>
+              <div class="name">{{ activeContact.name }}</div>
+            </div>
+          </div>
+          <button mat-icon-button aria-label="more">
+            <i-tabler name="dots-vertical"></i-tabler>
+          </button>
+        </header>
+
+        <div class="messages" cdkScrollable>
+          <div *ngFor="let m of messages" class="msg" [class.me]="m.me">
+            <img *ngIf="!m.me" [src]="m.avatar" alt="avatar" />
+            <div class="bubble">
+              <div class="text">{{ m.text }}</div>
+            </div>
+            <img *ngIf="m.me" [src]="m.avatar" alt="avatar" />
+          </div>
+          <div class="date" *ngFor="let m of messages">{{ m.date }}</div>
+        </div>
+
+        <footer class="composer">
+          <mat-form-field appearance="outline" class="composer-field">
+            <mat-label>Send message</mat-label>
+            <input matInput [(ngModel)]="inputMessage" (keyup.enter)="send()" />
+            <button mat-icon-button matSuffix color="primary" aria-label="send" (click)="send()">
+              <i-tabler name="send"></i-tabler>
+            </button>
+          </mat-form-field>
+        </footer>
+      </section>
+    </div>
+  </mat-card>
+</div>

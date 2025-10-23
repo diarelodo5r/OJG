@@ -1,0 +1,51 @@
+<app-generic-table
+  #ventesTable
+  [title]="'Table Ventes'"
+  [dataLoader]="dataLoader"
+  [columns]="venteColumns"
+  [filters]="venteFilters"
+  [defaultSort]="{ active: 'created_at', direction: 'desc' }"
+  [selectionEnabled]="true"
+  [displayedActions]="true"
+  [enableEdit]="true"
+  [enableDelete]="true"
+  [enableArchive]="true"
+  [pageSize]="10"
+  [pageSizeOptions]="[5,10,25,50]"
+  [searchPlaceholder]="'Rechercher par article, famille, client, fournisseur...'"
+  [exportFilename]="'GESCOM_Ventes'"
+  (view)="openView($event)"
+  (edit)="openEdit($event)"
+  (del)="delete($event)"
+  (archive)="archive($event)"
+  (rowsLoaded)="onRowsLoaded($event)"
+  (loadError)="onLoadError($event)"
+>
+  <!-- Template personnalisé pour le client -->
+  <ng-template columnTemplate="client" let-row>
+    <span class="fw-semibold">{{ row.client?.nom || 'N/A' }}</span>
+  </ng-template>
+
+  <ng-template columnTemplate="prix_vente_snapshot" let-row>
+    <span class="fw-semibold text"
+          [matTooltip]="formatPrice(row.prix_vente_snapshot)"
+          matTooltipPosition="above">
+      {{ formatPriceShort(row.prix_vente_snapshot) }}
+    </span>
+  </ng-template>
+  
+  <!-- Template personnalisé pour le montant total -->
+  <ng-template columnTemplate="montant" let-row>
+    <span class="fw-semibold text-success"
+          [matTooltip]="formatPrice(row.montant)"
+          matTooltipPosition="above">
+      {{ formatPriceShort(row.montant) }}
+    </span>
+  </ng-template>
+  <ng-container table-actions>
+    <button mat-raised-button color="primary" routerLink="/gescom/ventes/create">
+      <mat-icon class="me-1">add</mat-icon>
+      Enregistrer Vente
+    </button>
+  </ng-container>
+</app-generic-table>

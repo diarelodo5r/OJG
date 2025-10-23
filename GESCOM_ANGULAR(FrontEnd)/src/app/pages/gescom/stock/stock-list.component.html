@@ -1,0 +1,124 @@
+<app-generic-table
+  #stockTable
+  [title]="'Liste des Stocks'"
+  [columns]="stockColumns"
+  [filters]="stockFilters"
+  [defaultSort]="{ active: 'created_at', direction: 'desc' }"
+  [selectionEnabled]="true"
+  [displayedActions]="true"
+  [enableView]="true"
+  [enableEdit]="true"
+  [enableDelete]="true"
+  [enableArchive]="true"
+  [pageSize]="10"
+  [pageSizeOptions]="[5,10,25,50]"
+  [searchPlaceholder]="'Rechercher par article, lot, référence, famille...'"
+  [dataLoader]="dataLoader"
+  [exportEnabled]="true"
+  [exportFilename]="'GESCOM_Stock'"
+  [exportTitle]="'Liste des Stocks GESCOM'"
+  (view)="openView($event)"
+  (edit)="openEdit($event)"
+  (del)="onDelete($event)"
+  (archive)="archive($event)"
+  (rowsLoaded)="onRowsLoaded($event)"
+>
+  <!-- Action buttons -->
+  <ng-container table-actions>
+    <button mat-raised-button color="primary" routerLink="/gescom/stock/create">
+      <mat-icon class="me-1">add</mat-icon>
+      Ajouter Stock
+    </button>
+  </ng-container>
+
+  <!-- Template personnalisé pour la colonne Produit (Image + Nom Article + Famille) -->
+  <ng-template columnTemplate="produit" let-row>
+    <div class="d-flex align-items-center">
+      <div class="product-thumbnail-container me-3" 
+           style="cursor: pointer; margin: 2%;" 
+           (click)="onViewImage(row)">
+        <img 
+          [src]="getArticleImageUrl(row)" 
+          [alt]="row.article?.nom_article || 'Article'"
+          class="product-thumbnail stock-thumbnail"
+          (error)="onImgError($event)"
+          style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"
+        />
+      </div>
+      <div>
+        <div class="f-s-14 f-w-600" style="margin: 3%">
+          {{ row.article?.nom_article || 'N/A' }}
+        </div>
+        <span class="f-s-12 text-muted">
+          {{ row.article?.famille?.nom_famille || 'Famille indisponible' }}
+        </span>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Template personnalisé pour le fournisseur -->
+  <ng-template columnTemplate="fournisseur" let-row>
+    <div>
+      <div class="f-w-600">{{ row.fournisseur?.nom || 'N/A' }}</div>
+      <span class="f-s-12 text-muted" *ngIf="row.fournisseur?.telephone">
+        {{ row.fournisseur.telephone }}
+      </span>
+    </div>
+  </ng-template>
+
+  <!-- Template personnalisé pour le prix unitaire -->
+  <ng-template columnTemplate="prix_unitaire" let-row>
+    <span class="fw-semibold"
+          [matTooltip]="formatPrice(row.fournisseur?.prixArticle)"
+          matTooltipPosition="above">
+      {{ formatPriceShort(row.fournisseur?.prixArticle) }}
+    </span>
+  </ng-template>
+
+  <!-- Template personnalisé pour l'état avec badge coloré -->
+  <ng-template columnTemplate="etat" let-row>
+    <span class="badge {{ getBadgeClass(getCalculatedEtat(row)) }}">
+      {{ getCalculatedEtat(row) | number:'1.2-2' }}%
+    </span>
+  </ng-template>
+
+  <!-- Template personnalisé pour la date de péremption avec alertes -->
+  <ng-template columnTemplate="date_peremption" let-row>
+    <span [class]="getPeremptionClass(row.date_peremption)">
+      {{ row.date_peremption | date:'yyyy/MM/dd' }}
+    </span>
+    <mat-icon 
+      *ngIf="isExpired(row.date_peremption)" 
+      class="ms-1 text-danger" 
+      style="font-size: 18px; vertical-align: middle;"
+      matTooltip="Produit périmé"
+    >warning</mat-icon>
+  </ng-template>
+
+</app-generic-table>
+
+<!-- Légende des couleurs -->
+<mat-card class="mt-3">
+  <mat-card-content>
+    <h6 class="mb-3">Légende des couleurs</h6>
+    <div class="row">
+      <div class="col-md-6">
+        <p class="fw-bold mb-2">État du stock :</p>
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <span class="badge bg-success">≥ 75%</span>
+          <span class="badge bg-primary">50–74%</span>
+          <span class="badge bg-warning text-dark">25–49%</span>
+          <span class="badge bg-danger">&lt; 25%</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <p class="fw-bold mb-2">Date de péremption :</p>
+        <ul class="list-unstyled mb-0">
+          <li><span class="text-danger fw-bold">Rouge</span> = Produit périmé</li>
+          <li><span class="text-warning fw-bold">Jaune</span> = Bientôt périmé (≤ 6 mois)</li>
+          <li><span class="text-body">Normal</span> = Date valide</li>
+        </ul>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,315 @@
+<div class="library-wrapper">
+  <header class="library-header">
+    <div class="header-content">
+      <div class="title-block">
+        <h1>Bibliothèque multimédia</h1>
+        <p class="subtitle">Accédez rapidement à l'ensemble de vos fichiers numériques, filtrés par type.</p>
+      </div>
+      <div class="actions">
+        <input type="file" #fileInput multiple hidden (change)="onFilesSelected($event)" />
+        <ng-container *ngIf="(googleAuthService.isSignedIn$ | async); else connectGoogleTpl">
+          <button mat-raised-button color="primary" (click)="triggerFileSelection(fileInput)">
+            <span class="iconify" data-icon="solar:upload-line-duotone"></span>
+            Importer
+          </button>
+        </ng-container>
+        <ng-template #connectGoogleTpl>
+          <button mat-raised-button color="primary" (click)="connectGoogle()">
+            <span class="iconify" data-icon="logos:google-icon"></span>
+            Se connecter à Google
+          </button>
+        </ng-template>
+        <button mat-stroked-button [matMenuTriggerFor]="sortMenu">
+          <span class="iconify" data-icon="solar:filter-line-duotone"></span>
+          Gestion des filtres
+        </button>
+        <mat-menu #sortMenu="matMenu">
+          <button mat-menu-item *ngFor="let option of sortOptions" (click)="setSort(option.key)">
+            <span class="iconify" [attr.data-icon]="option.icon"></span>
+            <span>{{ option.label }}</span>
+            <mat-icon *ngIf="currentSort === option.key">check</mat-icon>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </header>
+
+  <section class="library-controls">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Rechercher</mat-label>
+      <input
+        matInput
+        placeholder="Rechercher un fichier..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange($event)"
+      />
+      <button mat-icon-button matSuffix *ngIf="searchTerm" (click)="clearSearch()" matTooltip="Effacer la recherche">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-button-toggle-group
+      [value]="viewMode"
+      (valueChange)="setViewMode($event)"
+      exclusive
+      class="view-toggle"
+    >
+      <mat-button-toggle value="grid">
+        <span class="iconify" data-icon="solar:widgets-bold-duotone"></span>
+        Grille
+      </mat-button-toggle>
+      <mat-button-toggle value="list">
+        <span class="iconify" data-icon="solar:menu-dots-square-bold-duotone"></span>
+        Liste
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </section>
+
+  <mat-tab-group color="primary" class="library-tabs">
+    <mat-tab *ngFor="let tab of mediaTabs" [label]="tab.label + ' (' + getCount(tab.type) + ')'">
+      <ng-template mat-tab-label>
+        <span class="tab-label">
+          <span class="iconify" [attr.data-icon]="tab.icon"></span>
+          <span>{{ tab.label }}</span>
+          <span class="badge">{{ getCount(tab.type) }}</span>
+        </span>
+      </ng-template>
+
+      <ng-container *ngIf="getFilteredItems(tab.type) as filtered">
+        <ng-container *ngIf="filtered.length > 0; else emptyState">
+          <section class="media-grid" [class.list-mode]="viewMode === 'list'">
+            <ng-container *ngIf="viewMode === 'grid'; else listTable">
+              <article
+                class="media-card"
+                *ngFor="let item of getPagedItems(tab.type, filtered)"
+              >
+                <figure class="media-thumbnail" [ngClass]="item.type">
+                  <ng-container [ngSwitch]="item.type">
+                    <ng-container *ngSwitchCase="'images'">
+                      <img *ngIf="item.thumbnailUrl" [src]="item.thumbnailUrl" [alt]="item.title" loading="lazy" />
+                      <img *ngIf="!item.thumbnailUrl && getPreviewLink(item)" [src]="getPreviewLink(item)" [alt]="item.title" loading="lazy" />
+                      <div *ngIf="!item.thumbnailUrl && !getPreviewLink(item)" class="thumbnail-placeholder">
+                        <span class="iconify" data-icon="solar:gallery-wide-line-duotone"></span>
+                      </div>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'videos'">
+                      <div class="thumbnail-overlay">
+                        <iframe
+                          *ngIf="getEmbeddedPreview(item)"
+                          class="video-frame"
+                          [src]="getEmbeddedPreview(item)"
+                          frameborder="0"
+                          allow="autoplay; fullscreen; encrypted-media"
+                          allowfullscreen
+                        ></iframe>
+                        <img *ngIf="!getEmbeddedPreview(item) && item.thumbnailUrl" [src]="item.thumbnailUrl" [alt]="item.title" loading="lazy" />
+                        <div *ngIf="!getEmbeddedPreview(item) && !item.thumbnailUrl" class="thumbnail-placeholder">
+                          <span class="iconify" data-icon="solar:clapperboard-play-line-duotone"></span>
+                        </div>
+                        <span class="iconify play-overlay" data-icon="solar:play-circle-bold-duotone"></span>
+                      </div>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'audio'">
+                      <div class="audio-preview">
+                        <audio *ngIf="getAudioSource(item)" [src]="getAudioSource(item)" controls preload="metadata"></audio>
+                        <div *ngIf="!getAudioSource(item)" class="thumbnail-placeholder">
+                          <span class="iconify" data-icon="solar:music-note-3-line-duotone"></span>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'documents'">
+                      <div class="thumbnail-overlay">
+                        <iframe
+                          *ngIf="getEmbeddedPreview(item)"
+                          class="doc-frame"
+                          [src]="getEmbeddedPreview(item)"
+                          frameborder="0"
+                          allow="autoplay; clipboard-write; encrypted-media"
+                        ></iframe>
+                        <img *ngIf="!getEmbeddedPreview(item) && item.thumbnailUrl" [src]="item.thumbnailUrl" [alt]="item.title" loading="lazy" />
+                        <div *ngIf="!getEmbeddedPreview(item) && !item.thumbnailUrl" class="thumbnail-placeholder">
+                          <span class="iconify" data-icon="solar:document-line-duotone"></span>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                    <ng-container *ngSwitchDefault>
+                      <div class="thumbnail-placeholder">
+                        <span class="iconify" data-icon="solar:folder-line-duotone"></span>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                  <div class="media-chip">
+                    <span class="iconify" [attr.data-icon]="getTypeIcon(item.type)"></span>
+                    {{ getTypeLabel(item.type) }}
+                  </div>
+                </figure>
+
+                <div class="media-content">
+                  <header>
+                    <h2>{{ item.title }}</h2>
+                    <span class="date">Ajouté le {{ item.uploadedAt | date: 'dd MMM yyyy à HH:mm' }}</span>
+                  </header>
+                  <p class="description">{{ item.description }}</p>
+                  <footer>
+                    <div class="meta">
+                      <span class="size" *ngIf="item.size">
+                        <span class="iconify" data-icon="solar:database-line-duotone"></span>
+                        {{ item.size }}
+                      </span>
+                      <span class="duration" *ngIf="item.duration">
+                        <span class="iconify" data-icon="solar:clock-circle-line-duotone"></span>
+                        {{ item.duration }}
+                      </span>
+                    </div>
+                    <div class="actions">
+                      <a *ngIf="getPreviewLink(item); else noPreview" mat-stroked-button color="primary" [href]="getPreviewLink(item)" target="_blank" rel="noopener">
+                        <span class="iconify" data-icon="solar:eye-line-duotone"></span>
+                        Prévisualiser
+                      </a>
+                      <ng-template #noPreview>
+                        <button mat-stroked-button color="primary" disabled>
+                          <span class="iconify" data-icon="solar:eye-line-duotone"></span>
+                          Prévisualiser
+                        </button>
+                      </ng-template>
+                      <a *ngIf="getDownloadLink(item)" mat-icon-button matTooltip="Télécharger" [href]="getDownloadLink(item)" target="_blank" rel="noopener">
+                        <span class="iconify" data-icon="solar:download-twice-square-line-duotone"></span>
+                      </a>
+                      <button *ngIf="!getDownloadLink(item)" mat-icon-button matTooltip="Téléchargement indisponible" disabled>
+                        <span class="iconify" data-icon="solar:download-twice-square-line-duotone"></span>
+                      </button>
+                      <button mat-icon-button matTooltip="Renommer" (click)="onRename(item)">
+                        <span class="iconify" data-icon="solar:pen-new-square-line-duotone"></span>
+                      </button>
+                      <button mat-icon-button matTooltip="Supprimer" color="warn" (click)="onDelete(item)">
+                        <span class="iconify" data-icon="solar:trash-bin-trash-line-duotone"></span>
+                      </button>
+                    </div>
+                  </footer>
+                </div>
+              </article>
+            </ng-container>
+
+            <ng-template #listTable>
+              <div class="list-table">
+                <header class="list-header">
+                  <button type="button" class="col name" (click)="onListHeaderClick('name')" [class.active]="isListSortActive('name')">
+                    <span>Nom</span>
+                    <span class="sort-indicateur">{{ getListSortIndicator('name') }}</span>
+                  </button>
+                  <button type="button" class="col modified" (click)="onListHeaderClick('modified')" [class.active]="isListSortActive('modified')">
+                    <span>Modifié le</span>
+                    <span class="sort-indicateur">{{ getListSortIndicator('modified') }}</span>
+                  </button>
+                  <button type="button" class="col type" (click)="onListHeaderClick('type')" [class.active]="isListSortActive('type')">
+                    <span>Type</span>
+                    <span class="sort-indicateur">{{ getListSortIndicator('type') }}</span>
+                  </button>
+                  <button type="button" class="col size" (click)="onListHeaderClick('size')" [class.active]="isListSortActive('size')">
+                    <span>Taille</span>
+                    <span class="sort-indicateur">{{ getListSortIndicator('size') }}</span>
+                  </button>
+                  <span class="col actions">Actions</span>
+                </header>
+                <div class="list-body">
+                  <div class="list-row" *ngFor="let item of getPagedItems(tab.type, filtered)">
+                    <div class="col name">
+                      <span class="file-icon" [ngClass]="item.type">
+                        <span class="iconify" [attr.data-icon]="getTypeIcon(item.type)"></span>
+                      </span>
+                      <span class="file-title" title="{{ item.title }}">{{ item.title }}</span>
+                    </div>
+                    <div class="col modified">
+                      <span>{{ item.modifiedAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+                    </div>
+                    <div class="col type">
+                      <span>{{ item.fileType }}</span>
+                    </div>
+                    <div class="col size">
+                      <span>{{ item.size || '—' }}</span>
+                    </div>
+                    <div class="col actions">
+                      <ng-container *ngIf="getPreviewLink(item); else previewDisabled">
+                        <a
+                          mat-icon-button
+                          matTooltip="Prévisualiser"
+                          [href]="getPreviewLink(item)"
+                          target="_blank"
+                          rel="noopener"
+                          (click)="$event.stopPropagation()"
+                        >
+                          <span class="iconify" data-icon="solar:eye-line-duotone"></span>
+                        </a>
+                      </ng-container>
+                      <ng-template #previewDisabled>
+                        <button mat-icon-button matTooltip="Prévisualiser" disabled>
+                          <span class="iconify" data-icon="solar:eye-line-duotone"></span>
+                        </button>
+                      </ng-template>
+
+                      <ng-container *ngIf="getDownloadLink(item); else downloadDisabled">
+                        <a
+                          mat-icon-button
+                          matTooltip="Télécharger"
+                          [href]="getDownloadLink(item)"
+                          target="_blank"
+                          rel="noopener"
+                          (click)="$event.stopPropagation()"
+                        >
+                          <span class="iconify" data-icon="solar:download-twice-square-line-duotone"></span>
+                        </a>
+                      </ng-container>
+                      <ng-template #downloadDisabled>
+                        <button mat-icon-button matTooltip="Télécharger" disabled>
+                          <span class="iconify" data-icon="solar:download-twice-square-line-duotone"></span>
+                        </button>
+                      </ng-template>
+
+                      <button mat-icon-button matTooltip="Renommer" (click)="onRename(item)">
+                        <span class="iconify" data-icon="solar:pen-new-square-line-duotone"></span>
+                      </button>
+                      <button mat-icon-button matTooltip="Supprimer" color="warn" (click)="onDelete(item)">
+                        <span class="iconify" data-icon="solar:trash-bin-trash-line-duotone"></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </section>
+
+          <div class="paginator-info">
+            <span>Page {{ getCurrentPage(tab.type) }} / {{ getTotalPages(filtered.length) }}</span>
+            <span>{{ filtered.length }} éléments</span>
+          </div>
+
+          <mat-paginator
+            [length]="filtered.length"
+            [pageIndex]="getPageIndex(tab.type)"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="onPageChange($event, tab.type)"
+          ></mat-paginator>
+        </ng-container>
+
+        <ng-template #emptyState>
+          <div class="empty-state">
+            <div class="empty-icon">
+              <span class="iconify" data-icon="solar:folder-with-files-line-duotone"></span>
+            </div>
+            <h3>Aucun fichier pour ce type</h3>
+            <p>Ajoutez ou importez de nouveaux éléments pour les voir apparaître ici.</p>
+            <button mat-raised-button color="primary">
+              <span class="iconify" data-icon="solar:upload-line-duotone"></span>
+              Ajouter un fichier
+            </button>
+          </div>
+        </ng-template>
+      </ng-container>
+    </mat-tab>
+  </mat-tab-group>
+</div>

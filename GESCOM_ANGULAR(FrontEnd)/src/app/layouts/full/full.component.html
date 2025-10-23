@@ -1,0 +1,185 @@
+<div>
+  <mat-sidenav-container class="mainWrapper" autosize autoFocus [hasBackdrop]="isOver">
+    <!-- ============================================================== -->
+    <!-- Vertical Sidebar -->
+    <!-- ============================================================== -->
+    <mat-sidenav #leftsidenav [mode]="isOver ? 'over' : 'side'" [opened]="options.sidenavOpened"
+      (openedChange)="onSidenavOpenedChange($event)" (closedStart)="onSidenavClosedStart()" class="sidebarNav">
+      <div class="flex-layout">
+        <app-sidebar (toggleMobileNav)="leftsidenav.toggle()" [showToggle]="isOver"></app-sidebar>
+        <ng-scrollbar class="position-relative" style="height: 100%">
+          <mat-nav-list class="sidebar-list">
+            @for(item of navItems; track item) {
+            <app-nav-item [item]="item" (notify)="leftsidenav.toggle()">
+            </app-nav-item>
+            }
+          </mat-nav-list>
+        </ng-scrollbar>
+        </div>
+    </mat-sidenav>
+
+    <mat-sidenav mode="over" position="end" #rightCustomizer class="customizerNav">
+      <div class="p-x-16 p-y-20 d-flex align-items-center justify-content-between b-b-1">
+        <h3 class="f-s-21 f-w-600 m-0">Paramètres</h3>
+        <div class="d-flex gap-8">
+          <button mat-stroked-button color="primary" class="m-r-8" (click)="onResetCustomizer()">Réinitialiser</button>
+          <button mat-icon-button (click)="rightCustomizer.close()" aria-label="Fermer le personnalisateur">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+      <ng-scrollbar class="customizer-scroll">
+        <div class="p-24">
+          <h6 class="f-s-16 f-w-600 m-b-16">Options de thème</h6>
+          <mat-button-toggle-group class="customizer-button-group gap-16" name="themeOption" [value]="theme" (change)="onThemeChange($event)">
+            <mat-button-toggle value="light">
+              <div class="d-flex align-items-center f-w-500">
+                <i-tabler name="sun-high" class="d-flex m-r-8"></i-tabler>
+                Clair
+              </div>
+            </mat-button-toggle>
+            <mat-button-toggle value="dark">
+              <div class="d-flex align-items-center f-w-500">
+                <i-tabler name="moon" class="d-flex m-r-8"></i-tabler>
+                Sombre
+              </div>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <h6 class="f-s-16 f-w-600 m-b-16 m-t-24 p-t-16">Couleurs du thème</h6>
+          <mat-button-toggle-group class="customizer-button-group gap-12" name="themeColor" [value]="color" (change)="onThemeColorChange($event)">
+            <mat-button-toggle value="blue"><span class="rounded-circle" style="display:inline-block;width:28px;height:28px;background:#00a1ff;"></span></mat-button-toggle>
+            <mat-button-toggle value="aqua"><span class="rounded-circle" style="display:inline-block;width:28px;height:28px;background:#00c2b8;"></span></mat-button-toggle>
+            <mat-button-toggle value="purple"><span class="rounded-circle" style="display:inline-block;width:28px;height:28px;background:#8965e5;"></span></mat-button-toggle>
+            <mat-button-toggle value="green"><span class="rounded-circle" style="display:inline-block;width:28px;height:28px;background:#27ae60;"></span></mat-button-toggle>
+            <mat-button-toggle value="orange"><span class="rounded-circle" style="display:inline-block;width:28px;height:28px;background:#f39c12;"></span></mat-button-toggle>
+            <mat-button-toggle value="custom">
+              <span class="rounded-circle" [style]="'display:inline-block;width:28px;height:28px;background:'+customColor"></span>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <div class="d-flex align-items-center gap-12 m-t-12" style="flex-wrap: wrap;">
+            <label for="themeCustomColor" class="f-w-500">Couleur personnalisée:</label>
+            <input id="themeCustomColor" type="color" [value]="customColor" (input)="onPickCustomColor($event)" style="width: 44px; height: 32px; padding: 0; border: none; background: transparent;" />
+            <span class="f-s-12 text-muted">{{ customColor }}</span>
+          </div>
+
+          <h6 class="f-s-16 f-w-600 m-b-16 m-t-24">Direction du thème</h6>
+          <mat-button-toggle-group class="customizer-button-group gap-16" name="dirOption" [value]="dir" (change)="onDirChange($event)">
+            <mat-button-toggle value="ltr">
+              <div class="d-flex align-items-center f-w-500">
+                <i-tabler name="text-direction-ltr" class="d-flex m-r-8"></i-tabler>
+                LTR
+              </div>
+            </mat-button-toggle>
+            <mat-button-toggle value="rtl">
+              <div class="d-flex align-items-center f-w-500">
+                <i-tabler name="text-direction-rtl" class="d-flex m-r-8"></i-tabler>
+                RTL
+              </div>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <h6 class="f-s-16 f-w-600 m-b-16 m-t-24 p-t-16">Type de barre latérale</h6>
+          <mat-button-toggle-group class="customizer-button-group gap-16" name="sidebarType" [value]="sidebarType" (change)="onSidebarTypeChange($event)">
+            <mat-button-toggle value="full">
+              <div class="d-flex align-items-center f-w-500">
+                <i-tabler name="layout-sidebar-right" class="d-flex m-r-8"></i-tabler>
+                Pleine
+              </div>
+            </mat-button-toggle>
+            <mat-button-toggle value="minisidebar">
+              <div class="d-flex align-items-center f-w-500">
+                <i-tabler name="layout-sidebar" class="d-flex m-r-8"></i-tabler>
+                Mini barre
+              </div>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <h6 class="f-s-16 f-w-600 m-b-16 m-t-24 p-t-16">Type de mise en page</h6>
+          <mat-button-toggle-group class="customizer-button-group gap-16" name="layoutType" [value]="layoutType" (change)="onLayoutTypeChange($event)">
+            <mat-button-toggle value="vertical">
+              <div class="d-flex align-items-center f-w-500">
+                <i-tabler name="layout-distribute-vertical" class="d-flex m-r-8"></i-tabler>
+                Verticale
+              </div>
+            </mat-button-toggle>
+            <mat-button-toggle value="horizontal">
+              <div class="d-flex align-items-center f-w-500">
+                <i-tabler name="layout-distribute-horizontal" class="d-flex m-r-8"></i-tabler>
+                Horizontale
+              </div>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <h6 class="f-s-16 f-w-600 m-b-16 m-t-24 p-t-16">Cartes avec</h6>
+          <mat-button-toggle-group class="customizer-button-group gap-16" name="cardWith" [value]="cardWith" (change)="onCardWithChange($event)">
+            <mat-button-toggle value="shadow">
+              <div class="d-flex align-items-center f-w-500">
+                <i-tabler name="shadow" class="d-flex m-r-8"></i-tabler>
+                Ombre
+              </div>
+            </mat-button-toggle>
+            <mat-button-toggle value="border">
+              <div class="d-flex align-items-center f-w-500">
+                <i-tabler name="shadow-off" class="d-flex m-r-8"></i-tabler>
+                Bordure
+              </div>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <h6 class="f-s-16 f-w-600 m-b-16 m-t-24 p-t-16">Option du conteneur</h6>
+          <mat-button-toggle-group class="customizer-button-group gap-16" name="containerOption" [value]="containerOption" (change)="onContainerChange($event)">
+            <mat-button-toggle value="full">
+              <div class="d-flex align-items-center f-w-500">
+                <i-tabler name="layout-navbar" class="d-flex m-r-8"></i-tabler>
+                Plein
+              </div>
+            </mat-button-toggle>
+            <mat-button-toggle value="boxed">
+              <div class="d-flex align-items-center f-w-500">
+                <i-tabler name="layout-sidebar" class="d-flex m-r-8"></i-tabler>
+                Encadré
+              </div>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </ng-scrollbar>
+    </mat-sidenav>
+
+    <!-- ============================================================== -->
+    <!-- Main Content -->
+    <!-- ============================================================== -->
+    <mat-sidenav-content class="contentWrapper" #content>
+      <!-- ============================================================== -->
+      <!-- VerticalHeader -->
+      <!-- ============================================================== -->
+      <app-header [showToggle]="true" [isOver]="isOver" (toggleCollapsed)="toggleCollapsed()"
+        (toggleMobileNav)="options.sidenavOpened = !options.sidenavOpened"></app-header>
+
+      <div class="body-wrapper">
+        <main class="pageWrapper maxWidth">
+          <!-- ============================================================== -->
+          <!-- Outlet -->
+          <!-- ============================================================== -->
+          <router-outlet></router-outlet>
+          <div class="customizerBtn" style="display: flex; gap: 12px;">
+            <button mat-fab color="accent" (click)="rightCustomizer.open()">
+              <mat-icon>settings</mat-icon>
+            </button>
+            <button *ngIf="(cartCount$ | async)! > 0" mat-fab color="primary" [routerLink]="['/ui-components/cart']">
+              <span matBadge="{{ (cartCount$ | async) || 0 }}" matBadgeColor="warn" matBadgeOverlap="false" matBadgeSize="small"></span>
+              <mat-icon>point_of_sale</mat-icon>
+            </button>
+          </div>
+        </main>
+      </div>
+
+      <div class="p-16 p-t-8 p-b-30 text-center"> 
+        Conception et développement par <a href="" target="_blank" class="text-decoration-none">EKLU Charly</a>
+      </div>
+
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+</div>

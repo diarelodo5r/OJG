@@ -1,0 +1,128 @@
+<mat-toolbar class="mat-toolbar topbar gap-5 mat-toolbar-single-row">
+  <div class="header-burger-wrapper" *ngIf="showToggle">
+    <div class="burger-loader" *ngIf="(loadingState$ | async)?.active">
+      <div class="burger-loader-ring"></div>
+    </div>
+    <button
+      mat-icon-button
+      color="inherit"
+      class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base d-flex justify-content-center mat-inherit"
+      (click)="onHamburgerClick()"
+      [matTooltip]="'Menu'" matTooltipPosition="below"
+    >
+      <span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple">
+      </span>
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--solar icon-24 d-flex" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" data-icon="solar:hamburger-menu-line-duotone">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+          <path d="M20 7H4">
+          </path>
+          <path d="M20 12H4" opacity=".5">
+          </path>
+          <path d="M20 17H4">
+          </path>
+        </g>
+      </svg>
+      <span class="mat-focus-indicator">
+      </span>
+      <span class="mat-mdc-button-touch-target">
+      </span>
+    </button>
+  </div>
+  <div class="d-none d-lg-flex" bis_skin_checked="1">
+    <mat-menu class=""></mat-menu>
+  </div>
+  <span class="flex-1-auto"></span>
+          <!-- Global Search Button -->
+          <button mat-icon-button
+                  class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base d-flex align-items-center justify-content-center mat-unthemed"
+                  (click)="openGlobalSearch()"
+                  [matTooltip]="'Rechercher'" matTooltipPosition="below">
+            <span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" class="iconify iconify--solar icon-20 d-flex" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+              <path fill="currentColor" fill-rule="evenodd" d="M11.5 2.75a8.75 8.75 0 1 0 0 17.5a8.75 8.75 0 0 0 0-17.5M1.25 11.5c0-5.66 4.59-10.25 10.25-10.25S21.75 5.84 21.75 11.5c0 2.56-.939 4.902-2.491 6.698l3.271 3.272a.75.75 0 1 1-1.06 1.06l-3.272-3.271A10.2 10.2 0 0 1 11.5 21.75c-5.66 0-10.25-4.59-10.25-10.25" clip-rule="evenodd"></path>
+            </svg>
+            <span class="mat-focus-indicator"></span>
+            <span class="mat-mdc-button-touch-target"></span>
+          </button>
+          <!-- Language Switcher -->
+          <button mat-icon-button class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base mat-mdc-menu-trigger mat-unthemed"
+                  [matMenuTriggerFor]="langMenu"
+                  [matTooltip]="'Langue'" matTooltipPosition="below">
+            <span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple"></span>
+            <img class="rounded-circle object-cover icon-20"
+                 [src]="currentLang === 'fr' ? 'assets/images/flag/icon-flag-fr.svg' : 'assets/images/flag/icon-flag-en.svg'"
+                 alt="Langue" width="20" height="20">
+            <span class="mat-focus-indicator"></span>
+            <span class="mat-mdc-button-touch-target"></span>
+            <span class="mat-ripple mat-mdc-button-ripple"></span>
+          </button>
+          <mat-menu #langMenu="matMenu">
+            <button mat-menu-item (click)="switchLanguage('fr')">
+              <img class="rounded-circle object-cover icon-16 m-r-8" src="assets/images/flag/icon-flag-fr.svg" alt="Français" width="16" height="16">
+              <span>Français</span>
+            </button>
+            <button mat-menu-item (click)="switchLanguage('en')">
+              <img class="rounded-circle object-cover icon-16 m-r-8" src="assets/images/flag/icon-flag-en.svg" alt="English" width="16" height="16">
+              <span>English</span>
+            </button>
+          </mat-menu>
+          <button mat-icon-button aria-label="Toggle light/dark" (click)="toggleTheme()" class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base d-flex justify-content-center mat-unthemed ng-star-inserted" mat-ripple-loader-class-name="mat-mdc-button-ripple" mat-ripple-loader-centered=""
+                  [matTooltip]="'Basculer thème'" matTooltipPosition="below">
+            <span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple"></span>
+            <ng-container *ngIf="theme.isDark$ | async; else moonIcon">
+              <!-- Sun icon when dark theme is active (tap to go light) -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-20 d-flex" width="1em" height="1em" aria-hidden="true" role="img">
+                <path fill="currentColor" d="M6.76 4.84l-1.8-1.79l-1.41 1.41l1.79 1.8l1.42-1.42m10.45-1.79l-1.8 1.79l1.42 1.42l1.79-1.8l-1.41-1.41M12 4h-1v3h1V4m0 13h-1v3h1v-3m8-5h-3v1h3v-1M7 12H4v1h3v-1m9.66 6.15l1.79 1.8l1.41-1.41l-1.8-1.79l-1.4 1.4M6.76 19.16l-1.42 1.42l-1.79-1.8l1.41-1.41l1.8 1.79M12 6a6 6 0 100 12A6 6 0 0012 6z"/>
+              </svg>
+            </ng-container>
+            <ng-template #moonIcon>
+              <!-- Moon icon when light theme is active (tap to go dark) -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-20 d-flex" width="1em" height="1em" aria-hidden="true" role="img">
+                <path fill="currentColor" d="M12.74 2a1 1 0 0 1 .93 1.36a8 8 0 0 0 9 10.64a1 1 0 0 1 1.14 1.33A10 10 0 1 1 11.4 1.6a1 1 0 0 1 1.34.4Z"/>
+              </svg>
+            </ng-template>
+            <span class="mat-focus-indicator"></span>
+            <span class="mat-mdc-button-touch-target"></span>
+            <span class="mat-ripple mat-mdc-button-ripple"></span>
+          </button>
+          <button mat-icon-button aria-label="Profil"
+                  [matMenuTriggerFor]="profileMenu"
+                  class="mdc-icon-button mat-mdc-icon-button mat-mdc-button-base mat-unthemed"
+                  [matTooltip]="'Profil utilisateur'" matTooltipPosition="below">
+            <span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple"></span>
+            <img [src]="headerPhotoUrl || '/assets/images/profile/user-1.jpg'" width="35" class="rounded-circle profile-img icon-35">
+            <span class="mat-focus-indicator"></span>
+            <span class="mat-mdc-button-touch-target"></span>
+          </button>
+          <mat-menu #profileMenu="matMenu" class="topbar-dd cardWithShadow" [overlapTrigger]="false">
+            <div class="p-x-32 p-y-16">
+              <div class="d-flex align-items-center p-b-24 b-b-1 m-t-16">
+                <img [src]="headerPhotoUrl || '/assets/images/profile/user-1.jpg'" width="56" class="rounded-circle">
+                <div class="m-l-16">
+                  <h6 class="f-s-14 f-w-600 m-0 d-flex align-items-center">
+                    {{ currentUser?.username || 'Utilisateur' }}
+                    <span class="f-s-14 d-block text-success m-l-4">{{ roleLabel }}</span>
+                  </h6>
+                  <span class="text-muted">{{ currentUser?.email }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-x-32 p-b-16 links">
+              <a class="p-8 text-decoration-none d-block text-hover-primary" (click)="openCompanySettings()" style="cursor: pointer;">
+                <div class="d-flex align-items-center">
+                  <h5 class="f-s-14 f-w-600 m-0 lh-md hover-text">Paramètres de l'entreprise</h5>
+                </div>
+              </a>
+              <a class="p-8 text-decoration-none d-block text-hover-primary" routerLink="/theme-pages/account-setting">
+                <div class="d-flex align-items-center">
+                  <h5 class="f-s-14 f-w-600 m-0 lh-md hover-text">Paramètres du compte</h5>
+                </div>
+              </a>
+              <a class="p-8 text-decoration-none d-block text-hover-primary" (click)="onLogout()">
+                <div class="d-flex align-items-center">
+                  <h5 class="f-s-14 f-w-600 m-0 lh-md hover-text" style="cursor: pointer;">Se déconnecter</h5>
+                </div>
+              </a>
+            </div>
+          </mat-menu>
+        </mat-toolbar>

@@ -1,0 +1,66 @@
+/* Conteneurs scrollables */
+.scroll-card-body {
+    max-height: 600px;
+    overflow: auto;
+    border: 1px solid var(--mat-sys-outline-variant, rgba(0,0,0,0.12));
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: var(--mat-sys-surface, #fff);
+  }
+  
+  /* Hauteur max du panneau du select multiple */
+  .permissions-select-panel {
+    max-height: 360px !important;
+  }
+  
+  /* Chips dans le trigger du mat-select */
+  .trigger-chips {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .trigger-chips .mat-mdc-chip {
+    max-width: 160px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  /* Utilitaires d’espacement */
+  .gap-8 { gap: 8px; }
+  .gap-12 { gap: 12px; }
+  .m-b-8 { margin-bottom: 8px; }
+  .m-b-12 { margin-bottom: 12px; }
+  .m-t-8 { margin-top: 8px; }
+  
+  /* Padding vertical bref pour lignes virtualisées */
+  .p-y-4 { padding-top: 4px; padding-bottom: 4px; }
+  
+  /* Troncature élégante des noms longs */
+  .text-truncate {
+    max-width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Responsive: listes un peu plus petites en mobile */
+  @media (max-width: 767px) {
+    .scroll-card-body {
+      max-height: 240px;
+    }
+    .text-truncate {
+      max-width: 60%;
+    }
+  }
+
+/* Hauteur explicite pour le viewport CDK: nécessaire pour lister correctement */
+.cdk-virtual-scroll-viewport.viewport-lg {
+  height: 52px; /* ajuster selon votre écran: 480-640px sont confortables */
+}
+
+@media (max-width: 767px) {
+  .cdk-virtual-scroll-viewport.viewport-lg {
+    height: 360px;
+  }
+}

@@ -1,0 +1,142 @@
+<div class="row">
+  <!-- Left: Checkout -->
+  <div class="col-md-7 col-12">
+    <mat-card class="cardWithShadow m-b-24">
+      <mat-card-content class="p-24">
+        <div class="m-b-16">
+          <h4 class="text-h4 m-b-8">Checkout</h4>
+          <div class="text-body-1">
+            All plans include 40+ advanced tools and features to boost your product. Choose the best plan to fit your needs.
+          </div>
+        </div>
+
+        <!-- Payment method -->
+        <div class="m-y-24">
+          <mat-radio-group aria-label="Select payment method" class="row g-16">
+            <div class="col-sm-6 col-12">
+              <mat-radio-button class="w-100 payment-option" value="credit-card" checked>
+                <div class="d-flex align-items-center gap-12">
+                  <img src="assets/images/credit-card.png" height="34" alt="Credit Card" />
+                  <h6 class="text-h6 m-0">Credit Card</h6>
+                </div>
+              </mat-radio-button>
+            </div>
+            <div class="col-sm-6 col-12">
+              <mat-radio-button class="w-100 payment-option" value="paypal">
+                <div class="d-flex align-items-center gap-12">
+                  <img src="assets/images/paypal.png" height="34" alt="PayPal" />
+                  <h6 class="text-h6 m-0">PayPal</h6>
+                </div>
+              </mat-radio-button>
+            </div>
+          </mat-radio-group>
+        </div>
+
+        <!-- Billing Details -->
+        <h4 class="text-h4 m-b-16">Billing Details</h4>
+        <div class="row g-16 m-b-8">
+          <div class="col-md-6 col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Email Address</mat-label>
+              <input matInput type="email" placeholder="johndoe@email.com" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-6 col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Password</mat-label>
+              <input matInput type="password" placeholder="············" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-6 col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Billing Country</mat-label>
+              <mat-select value="USA">
+                <mat-option value="USA">USA</mat-option>
+                <mat-option value="Canada">Canada</mat-option>
+                <mat-option value="UK">UK</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6 col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Billing Zip/Postal Code</mat-label>
+              <input matInput type="text" placeholder="129211" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Credit Card Info -->
+        <h4 class="text-h4 m-b-16">Credit Card Info</h4>
+        <div class="row g-16">
+          <div class="col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Card Number</mat-label>
+              <input matInput type="text" placeholder="8787 2345 3458" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Card Holder</mat-label>
+              <input matInput type="text" placeholder="John Doe" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Exp. date</mat-label>
+              <input matInput type="text" placeholder="05/2026" />
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>CVV</mat-label>
+              <input matInput type="text" placeholder="784" />
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Right: Order Summary -->
+  <div class="col-md-5 col-12">
+    <mat-card class="cardWithShadow m-b-24">
+      <mat-card-content class="p-24">
+        <div class="m-b-16">
+          <h4 class="text-h4 m-b-8">Order Summary</h4>
+          <div class="text-body-1">It can help you manage and service orders before, during, and after fulfillment.</div>
+        </div>
+
+        <mat-card class="m-b-16 tonal-surface">
+          <mat-card-content>
+            <div class="text-body-1">A simple start for everyone</div>
+            <h1 class="m-y-12">
+              $59.99 <span class="text-body-1 f-w-500">/month</span>
+            </h1>
+            <button mat-stroked-button color="primary" class="w-100">Change Plan</button>
+          </mat-card-content>
+        </mat-card>
+
+        <div class="d-flex justify-between m-b-8">
+          <span>Subscription</span>
+          <h6 class="text-h6 m-0">$85.99</h6>
+        </div>
+        <div class="d-flex justify-between">
+          <span>Tax</span>
+          <h6 class="text-h6 m-0">$4.99</h6>
+        </div>
+        <mat-divider class="m-y-16"></mat-divider>
+        <div class="d-flex justify-between m-b-16">
+          <span>Total</span>
+          <h6 class="text-h6 m-0">$90.98</h6>
+        </div>
+
+        <button mat-raised-button color="primary" class="w-100 m-b-16">
+          Proceed With Payment
+        </button>
+        <div class="text-body-1">
+          By continuing, you accept to our Terms of Services and Privacy Policy. Please note that payments are non-refundable.
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

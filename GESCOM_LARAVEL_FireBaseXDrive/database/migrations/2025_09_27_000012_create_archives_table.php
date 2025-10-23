@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        Schema::create('archives', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->foreignId('article_id')->nullable()->constrained('articles')->nullOnDelete();
+            $table->foreignId('fournisseur_id')->nullable()->constrained('fournisseurs')->nullOnDelete();
+            $table->enum('motif', ['vendu','périmé','retrait manuel','autre']);
+            $table->integer('quantite')->nullable();
+            $table->decimal('montant_vente', 10, 2)->nullable();
+            $table->timestamp('date_archivage')->useCurrent();
+            $table->text('commentaire')->nullable();
+            $table->foreignId('utilisateur_id')->nullable()->constrained('utilisateurs')->nullOnDelete();
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('archives');
+    }
+};

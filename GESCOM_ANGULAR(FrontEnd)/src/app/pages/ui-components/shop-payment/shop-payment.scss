@@ -1,0 +1,78 @@
+:host { display: block; color: var(--mat-sys-on-background); }
+
+/* Header */
+.topbar {
+  background: transparent;
+  backdrop-filter: saturate(1.4) blur(6px);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+/* Page container */
+.container.p-24 { padding: 24px; }
+@media (max-width: 767px) { .container.p-24 { padding: 16px; } }
+
+/* ------- Cards ------- */
+mat-card.cardWithShadow {
+  border-radius: var(--mat-sys-corner-medium, 20px);
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  box-shadow: 0 8px 28px rgba(0,0,0,.14);
+  overflow: hidden;
+}
+mat-card-title { padding: 16px 20px; font-size: 18px; font-weight: 700; }
+mat-divider { --mdc-theme-text-primary-on-background: var(--mat-sys-outline-variant); }
+
+/* ------- Cart List (compact and readable) ------- */
+.cart-list { display: flex; flex-direction: column; gap: 10px; padding: 10px 12px; }
+
+.cart-row {
+  display: grid;
+  grid-template-columns: 56px 1fr auto; /* compact image */
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 12px;
+  background: var(--mat-sys-surface);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.cart-row:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0,0,0,.12);
+  border-color: color-mix(in oklab, var(--mat-sys-primary) 28%, var(--mat-sys-outline-variant));
+}
+
+.cart-row .thumb img {
+  width: 56px; height: 56px; object-fit: cover; border-radius: 10px; display: block;
+}
+
+/* Info with clamped title for readability */
+.cart-row .info { min-width: 0; }
+.cart-row .info .title {
+  font-weight: 700; line-height: 1.25; margin-bottom: 4px; color: var(--mat-sys-on-surface);
+  overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.cart-row .info .price { color: var(--mat-sys-primary); font-weight: 600; margin-bottom: 6px; }
+
+/* Qty controls: compact and clear */
+.qty-controls { display: inline-flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
+.qty-controls input {
+  width: 56px; height: 32px; border: 1px solid var(--mat-sys-outline-variant); border-radius: 8px;
+  text-align: center; padding: 0 6px; background: var(--mat-sys-surface); color: var(--mat-sys-on-surface); font-size: 13px;
+}
+.qty-controls button[mat-mini-fab] { width: 34px; height: 34px; box-shadow: 0 4px 12px rgba(0,0,0,.14); }
+
+/* Remove button */
+.cart-row .remove { color: var(--mat-sys-error); }
+.cart-row .remove:hover { background: color-mix(in oklab, var(--mat-sys-error) 10%, transparent); }
+
+/* Totals */
+.totals { padding: 10px 12px 12px; }
+.totals .line { display: flex; justify-content: space-between; margin: 6px 0; }
+.totals .line.total { margin-top: 8px; font-weight: 800; color: var(--mat-sys-primary); }
+
+/* Responsive: stack on very small screens */
+@media (max-width: 420px) {
+  .cart-row { grid-template-columns: 48px 1fr; gap: 8px; }
+  .cart-row .thumb img { width: 48px; height: 48px; }
+}

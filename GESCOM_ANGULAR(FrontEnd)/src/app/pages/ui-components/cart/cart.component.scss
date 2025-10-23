@@ -1,0 +1,183 @@
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+  
+    .thumb {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+  
+    .title {
+      font-weight: 600;
+    }
+  
+    .meta {
+      font-size: 0.875rem;
+      color: #6c757d; /* More visible gray that works in both themes */
+    }
+  
+    .qty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+  
+      .qty-input {
+        width: 60px;
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 4px;
+        padding: 4px;
+      }
+    }
+  
+    .line-total {
+      font-weight: 600;
+    }
+  }
+
+  .line-total-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  
+    .line-total-input {
+      display: flex;
+      align-items: center;
+    }
+  
+    .line-total-summary {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 8px 12px;
+      background: rgba(25, 118, 210, 0.08);
+      border-radius: 6px;
+  
+      .line-total-discount {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        color: #d32f2f;
+        font-weight: 600;
+      }
+  
+      .line-total-net {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #1976d2;
+      }
+  
+      .label {
+        opacity: 0.8;
+      }
+    }
+  }
+  
+  // Discount controls
+  .discount-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .discount-select {
+      min-width: 140px;
+      font-size: 0.875rem;
+    }
+  }
+
+  // Summary section with improved styling
+  .summary-section {
+    margin-top: 24px;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 8px;
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 1rem;
+      
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      }
+      
+      &.total-row {
+        margin-top: 8px;
+        padding-top: 16px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1976d2;
+      }
+      
+      .label {
+        font-weight: 500;
+        
+        &.discount-label {
+          color: #f44336;
+        }
+      }
+      
+      .value {
+        font-weight: 600;
+        
+        &.discount-value {
+          color: #f44336;
+        }
+      }
+    }
+  }
+
+  // Discount actions
+  .discount-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    justify-content: flex-end;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  
+  .empty {
+    text-align: center;
+    padding: 24px;
+    color: rgba(0, 0, 0, 0.54);
+  }
+
+  // Custom badge styling for cart buttons
+  .mat-badge-small .mat-badge-content {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
+    line-height: 24px !important;
+    padding: 0 6px !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    background-color: #f44336 !important;
+    color: white !important;
+    border-radius: 12px !important;
+    position: absolute !important;
+    top: -8px !important;
+    right: -8px !important;
+    transform: none !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  // Ensure badge container is positioned relatively
+  .mat-badge {
+    position: relative !important;
+  }

@@ -1,0 +1,226 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <mat-card-title>Panier</mat-card-title>
+
+    <ng-container *ngIf="(items$ | async) as items; else empty">
+      <!-- Client selection section - MOVED TO TOP -->
+      <div class="client-section mb-4" [formGroup]="clientForm">
+        <h4 class="mb-3">Sélection du client</h4>
+
+        <!-- Toggle buttons for client selection mode -->
+        <div class="client-mode-toggle mb-3">
+          <button
+            mat-stroked-button
+            [color]="clientMode === 'existing' ? 'primary' : 'basic'"
+            (click)="setClientMode('existing')"
+            class="me-2">
+            Client existant
+          </button>
+          <button
+            mat-stroked-button
+            [color]="clientMode === 'new' ? 'primary' : 'basic'"
+            (click)="setClientMode('new')">
+            Nouveau client
+          </button>
+        </div>
+
+        <br>
+        <!-- Existing client selection -->
+        <div class="d-flex flex-column gap-2" *ngIf="clientMode === 'existing'">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Client existant</mat-label>
+            <mat-select formControlName="selectedClient">
+              <mat-option [value]="null">Sélectionner un client</mat-option>
+              <mat-option *ngFor="let client of clients" [value]="client.id">
+                {{ client.nom }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="d-flex flex-column gap-2" *ngIf="clientMode === 'new'">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Nouveau client</mat-label>
+            <input
+              matInput
+              formControlName="newClientName"
+              placeholder="Nom du nouveau client"
+            />
+            <mat-hint *ngIf="clientForm.get('newClientName')?.invalid && clientForm.get('newClientName')?.touched">
+              Le nom du client est requis
+            </mat-hint>
+          </mat-form-field>
+
+          <button
+            mat-flat-button
+            color="primary"
+            type="button"
+            (click)="createClient()"
+            [disabled]="clientForm.get('newClientName')?.invalid || !clientForm.get('newClientName')?.value?.trim()"
+            class="align-self-start"
+          >
+            <mat-icon>add</mat-icon> Créer le client
+          </button>
+        </div>        
+      </div>
+
+      <app-generic-table
+        #cartTable
+        [title]="'Articles du panier'"
+        [columns]="cartColumns"
+        [defaultSort]="{ active: 'produit', direction: 'asc' }"
+        [selectionEnabled]="false"
+        [displayedActions]="true"
+        [enableView]="false"
+        [enableEdit]="false"
+        [enableDelete]="true"
+        [pageSize]="10"
+        [pageSizeOptions]="[5,10,25,50]"
+        [searchPlaceholder]="'Rechercher un article...'"
+        [dataLoader]="dataLoader"
+        [exportEnabled]="false"
+        (del)="remove($event)"
+      >
+        <!-- Template personnalisé pour la colonne Produit (Image + Article + Famille) -->
+        <ng-template columnTemplate="produit" let-row>
+          <div class="d-flex align-items-center">
+            <div class="product-thumbnail-container me-3" style="cursor: pointer;">
+              <img 
+                [src]="getCartItemImageUrl(row)" 
+                [alt]="row.articleName || row.uname"
+                class="product-thumbnail"
+                (error)="$event.target.src = 'assets/images/products/Product.png'"
+                style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"
+              />
+            </div>
+            <div>
+              <div class="f-s-14 f-w-600">
+                {{ row.articleName || row.uname }}
+              </div>
+              <span class="f-s-12 text-muted">
+                {{ row.familleName || 'Famille indisponible' }}
+              </span>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- Template personnalisé pour le prix unitaire -->
+        <ng-template columnTemplate="price" let-row>
+          <mat-form-field appearance="outline" class="price-field" style="width: 120px;">
+            <mat-label>Prix (XOF)</mat-label>
+            <input matInput type="number" min="0" step="0.01" [value]="row.price" (input)="onUnitPriceInput(row, $any($event.target).value)" />
+          </mat-form-field>
+        </ng-template>
+
+        <!-- Template personnalisé pour la quantité -->
+        <ng-template columnTemplate="quantity" let-row>
+          <div class="d-flex align-items-center justify-content-center gap-2">
+            <button mat-mini-fab color="primary" (click)="dec(row)" style="width: 32px; height: 32px;">
+              <mat-icon style="font-size: 18px;">remove</mat-icon>
+            </button>
+            <input class="qty-input text-center" style="width: 60px;" [value]="row.quantity" (change)="onQtyInput(row, $any($event.target).value)" />
+            <button mat-mini-fab color="primary" (click)="inc(row)" style="width: 32px; height: 32px;">
+              <mat-icon style="font-size: 18px;">add</mat-icon>
+            </button>
+          </div>
+        </ng-template>
+
+        <!-- Template personnalisé pour la remise -->
+        <ng-template columnTemplate="discount" let-row>
+          <div class="d-flex align-items-center gap-2">
+            <mat-form-field appearance="outline" class="discount-select" style="width: 100px;">
+              <mat-label>Remise</mat-label>
+              <mat-select [value]="row.discount || 0" (selectionChange)="onLineDiscountChange(row, $event.value, 'percent')">
+                <mat-option *ngFor="let d of cart.defaultDiscounts" [value]="d.value">
+                  {{ d.label }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-icon-button color="accent" (click)="setCustomLineDiscount(row)" matTooltip="Remise personnalisée">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </ng-template>
+
+        <!-- Template personnalisé pour le total -->
+        <ng-template columnTemplate="total" let-row>
+          <div class="line-total-cell">
+            <div class="line-total-input">
+              <mat-form-field appearance="outline" class="total-field" style="width: 140px;">
+                <mat-label>Total (XOF)</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  [value]="getLineTotal(row)"
+                  (input)="onLineTotalInput(row, $any($event.target).value)"
+                />
+              </mat-form-field>
+            </div>
+            <div class="line-total-summary" *ngIf="getLineDiscountAmount(row) > 0">
+              <div class="line-total-discount">
+                <span class="amount">-{{ formatPrice(getLineDiscountAmount(row)) }}</span>
+                <span class="label">Remise appliquée</span>
+              </div>
+              <div class="line-total-net">
+                <span class="label">Total après remise</span>
+                <span class="amount">{{ formatPrice(getLineTotalAfterDiscount(row)) }}</span>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </app-generic-table>
+
+      <!-- Summary Section -->
+      <div class="summary-section">
+        <div class="summary-row">
+          <div class="label">Sous-total (avec remises lignes)</div>
+          <div class="value">{{ formatPrice(subtotalBeforeDiscount$ | async) }}</div>
+        </div>
+        
+        <div class="summary-row" *ngIf="(globalDiscount$ | async) as globalDiscount">
+          <div class="label discount-label" *ngIf="globalDiscount.value > 0">
+            Remise globale 
+            <span *ngIf="globalDiscount.type === 'percent'">({{ globalDiscount.value }}%)</span>
+            <span *ngIf="globalDiscount.type === 'fixed'">({{ formatPrice(globalDiscount.value) }})</span>
+          </div>
+          <div class="value discount-value" *ngIf="globalDiscount.value > 0">
+            <span *ngIf="globalDiscount.type === 'percent'">-{{ formatPrice((subtotalBeforeDiscount$ | async)! * globalDiscount.value / 100) }}</span>
+            <span *ngIf="globalDiscount.type === 'fixed'">-{{ formatPrice(globalDiscount.value) }}</span>
+          </div>
+        </div>
+
+        <div class="summary-row total-row">
+          <div class="label">Total final</div>
+          <div class="value">{{ formatPrice(total$ | async) }}</div>
+        </div>
+      </div>
+
+      <!-- Discount Actions -->
+      <div class="discount-actions mb-3">
+        <button mat-stroked-button color="accent" (click)="setGlobalDiscount()">
+          <mat-icon>percent</mat-icon>
+          Remise globale
+        </button>
+        <button mat-stroked-button (click)="clearAllDiscounts()">
+          <mat-icon>clear</mat-icon>
+          Réinitialiser remises
+        </button>
+      </div>
+
+      <div class="actions">
+        <button mat-stroked-button color="warn" (click)="clear()">Vider</button>
+        <button mat-flat-button color="primary" (click)="validateSale()" [disabled]="loading">
+          <mat-icon *ngIf="!loading">check_circle</mat-icon>
+          <span *ngIf="!loading">Valider la vente</span>
+          <span *ngIf="loading">Validation...</span>
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-template #empty>
+      <div class="empty">Votre panier est vide.</div>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

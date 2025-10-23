@@ -1,0 +1,139 @@
+<div class="calendar-page">
+  <!-- Header card -->
+  <mat-card appearance="outlined" class="cardWithShadow">
+    <mat-card-content>
+      <div class="header-row">
+        <mat-card-title class="m-b-0">Angular Calendar</mat-card-title>
+        <div class="spacer"></div>
+        <button mat-flat-button color="primary" (click)="openAddEvent()">Add Event</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Main calendar card -->
+  <mat-card appearance="outlined" class="cardWithShadow overflow-hidden">
+    <mat-toolbar class="bg-primary text-white no-shadow" multiple>
+      <mat-toolbar-row>
+        <div class="toolbar-row">
+          <span aria-live="polite" aria-atomic="true">{{ currentLabel }}</span>
+          <div class="spacer"></div>
+
+          <div class="view-buttons">
+            <button mat-button [class.active]="view==='month'" [attr.aria-pressed]="view==='month'" aria-label="Month view" (click)="setView('month')">Month</button>
+            <span class="today-indicator" *ngIf="view==='month'" aria-live="polite">Today: {{ todayLabel }}</span>
+            <button mat-button [class.active]="view==='week'" [attr.aria-pressed]="view==='week'" aria-label="Week view" (click)="setView('week')">Week</button>
+            <button mat-button class="day-button" [class.active]="view==='day'" [class.with-image]="view==='day'" [attr.aria-pressed]="view==='day'" aria-label="Day view" (click)="setView('day')">Day</button>
+            <button mat-icon-button class="active" aria-label="Month grid"><mat-icon>view_module</mat-icon></button>
+            <button mat-icon-button aria-label="Week grid"><mat-icon>view_week</mat-icon></button>
+            <button mat-icon-button aria-label="Day grid"><mat-icon>view_day</mat-icon></button>
+            <button mat-icon-button aria-label="Previous" (click)="prev()"><mat-icon>chevron_left</mat-icon></button>
+            <button mat-icon-button aria-label="Today" (click)="today()"><mat-icon>today</mat-icon></button>
+            <button mat-icon-button aria-label="Next" (click)="next()"><mat-icon>chevron_right</mat-icon></button>
+          </div>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+    <mat-card-content>
+      <!-- Placeholder grid to be replaced with real calendar view library -->
+      <div class="cal-grid" role="grid" aria-readonly="true" [class.week]="view==='week'" [class.day]="view==='day'">
+        <!-- Month view placeholder -->
+        <ng-container *ngIf="view==='month'">
+          <div class="cal-header" role="row">
+            <div class="cell" role="columnheader" *ngFor="let d of ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']">{{ d }}</div>
+          </div>
+          <div class="cal-body">
+            <div class="row" role="row" *ngFor="let r of monthRows; let ri = index">
+              <div class="cell" role="gridcell" tabindex="0" *ngFor="let c of weekCols; let ci = index" [attr.data-idx]="ri*7+ci" [attr.aria-label]="monthCells[ri*7+ci].toDateString()">
+                <div class="cell-inner">
+                  <div class="day-number f-w-600">
+                    {{ monthCells[ri*7+ci].getDate() }}
+                    <span class="today-badge" *ngIf="isToday(monthCells[ri*7+ci])">Today</span>
+                  </div>
+                  <div class="events d-flex gap-4"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Day view placeholder -->
+        <ng-container *ngIf="view==='day'">
+          <div class="cal-day-view" role="grid">
+            <div class="cal-day-headers" role="row">
+              <div class="time-spacer" aria-hidden="true"></div>
+              <div class="cal-header" role="columnheader" tabindex="0">
+                <b>{{ current.toLocaleString(undefined, { weekday: 'long' }) }}</b><br />
+                <span>{{ current.toLocaleString(undefined, { month: 'short', day: 'numeric' }) }}</span>
+              </div>
+            </div>
+
+            <div class="cal-time-events">
+              <div class="cal-time-label-column">
+                <div class="cal-hour" *ngFor="let h of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]">
+                  <div class="cal-hour-segment cal-hour-start" aria-hidden="true">
+                    <div class="cal-time">{{ h === 0 ? '12 AM' : h < 12 ? h + ' AM' : (h === 12 ? '12 PM' : (h-12) + ' PM') }}</div>
+                  </div>
+                  <div class="cal-hour-segment cal-after-hour-start" aria-hidden="true">
+                    <div class="cal-time">{{ h === 0 ? '12 AM' : h < 12 ? h + ' AM' : (h === 12 ? '12 PM' : (h-12) + ' PM') }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="cal-day-columns">
+                <div class="cal-day-column" [attr.aria-label]="current.toDateString()">
+                  <div class="cal-events-container"></div>
+                  <div class="cal-hour" *ngFor="let h of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]">
+                    <div class="cal-hour-segment cal-hour-start" aria-hidden="true"></div>
+                    <div class="cal-hour-segment cal-after-hour-start" aria-hidden="true"></div>
+                  </div>
+                </div>
+                <div class="cal-current-time-marker" [style.top.%]="nowTopPercent" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Week view placeholder -->
+        <ng-container *ngIf="view==='week'">
+          <div class="cal-week-view" role="grid">
+            <!-- Headers -->
+            <div class="cal-day-headers" role="row">
+              <div class="time-spacer" aria-hidden="true"></div>
+              <div class="cal-header" role="columnheader" tabindex="0" *ngFor="let d of weekDays" [class.today]="d.isToday" [attr.aria-label]="d.name + ' ' + d.dateLabel">
+                <b>{{ d.name }}</b><br/>
+                <span>{{ d.dateLabel }}</span>
+              </div>
+            </div>
+
+            <!-- Time grid -->
+            <div class="cal-time-events">
+              <!-- Time labels column -->
+              <div class="cal-time-label-column">
+                <div class="cal-hour" *ngFor="let h of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]">
+                  <div class="cal-hour-segment cal-hour-start" aria-hidden="true">
+                    <div class="cal-time">{{ h === 0 ? '12 AM' : h < 12 ? h + ' AM' : (h === 12 ? '12 PM' : (h-12) + ' PM') }}</div>
+                  </div>
+                  <div class="cal-hour-segment cal-after-hour-start" aria-hidden="true">
+                    <div class="cal-time">{{ h === 0 ? '12 AM' : h < 12 ? h + ' AM' : (h === 12 ? '12 PM' : (h-12) + ' PM') }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Day columns -->
+              <div class="cal-day-columns">
+                <div class="cal-day-column" *ngFor="let d of weekDays" [class.today]="d.isToday" [attr.aria-label]="d.name + ' ' + d.dateLabel">
+                  <div class="cal-events-container"></div>
+                  <div class="cal-hour" *ngFor="let h of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]">
+                    <div class="cal-hour-segment cal-hour-start" aria-hidden="true"></div>
+                    <div class="cal-hour-segment cal-after-hour-start" aria-hidden="true"></div>
+                  </div>
+                </div>
+                <div class="cal-current-time-marker" [style.top.%]="nowTopPercent" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

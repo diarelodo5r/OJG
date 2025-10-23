@@ -1,0 +1,62 @@
+/* Styles for VentesCreateComponent */
+:host {
+  display: block;
+  position: relative;
+}
+
+/* Floating cart button - styled like sidenav customizer */
+.floating-cart-btn {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 1000 !important;
+  background: var(--primary-color, #1976d2) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.3s ease !important;
+  min-width: 56px !important;
+  height: 56px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  &:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  mat-icon {
+    color: white !important;
+    font-size: 24px !important;
+  }
+
+  .badge-count {
+    position: absolute !important;
+    top: -8px !important;
+    right: -8px !important;
+    background: #dc3545 !important;
+    color: white !important;
+    border-radius: 50% !important;
+    min-width: 20px !important;
+    height: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+    padding: 0 6px !important;
+    border: 2px solid white !important;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

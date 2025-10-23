@@ -1,0 +1,66 @@
+<div class="landingpage-wrapper stylish-lp">
+  <!-- Toolbar (header) -->
+  <mat-toolbar class="topbar topbar-xl m-auto">
+    <div class="container full-width p-xs-6 w-100 d-flex align-items-center">
+      <a [routerLink]="['/landingpage']">
+        <img
+        src="./assets/images/logos/SCS-Stock_White.png"
+        class="align-middle m-2 logo-light"
+        alt="logo"/>
+      </a>
+      <span class="flex-1-auto"></span>
+      <!-- contenu de la toolbar -->
+    </div>
+  </mat-toolbar>
+
+  <!-- Sections de la page -->
+  <section class="banner-section bg-light">
+    <div class="blank-layout-container justify-content-center align-items-center bg-light">
+      <div class="position-relative row w-100 h-100 bg-gredient justify-content-center">
+        <div class="col-lg-4 d-flex align-items-center">
+          <mat-card class="cardWithShadow boxed-auth">
+            <mat-card-content class="p-32">
+              <div class="text-center">
+                <a [routerLink]="['/dashboard']">
+                  <img
+                    [src]="(isDark$ | async) ? './assets/images/logos/SCS-Stock_Black.png' : './assets/images/logos/SCS-Stock_White.png'"
+                    class="align-middle m-2 auth-logo"
+                    alt="logo"
+                  />
+                </a>
+              </div>
+
+              <div class="or-border m-t-30">Connecte-toi avec </div>
+
+              <form class="m-t-30" [formGroup]="form">
+                <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Nom d'utilisateur</mat-label>
+                <mat-form-field appearance="outline" class="w-100" color="primary">
+                  <input matInput formControlName="uname" />
+                </mat-form-field>
+                <!-- password -->
+                <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Mot de passe</mat-label>
+                <mat-form-field appearance="outline" class="w-100" color="primary">
+                  <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+                  <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()" [attr.aria-label]="hidePassword ? 'Afficher le mot de passe' : 'Masquer le mot de passe'" [attr.aria-pressed]="!hidePassword">
+                    <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+                  </button>
+                </mat-form-field>
+
+                <div *ngIf="error" class="m-b-12 bg-error text-white p-8 rounded-2">{{ error }}</div>
+                <button type="button" mat-flat-button color="primary" class="w-100" (click)="submit()" [disabled]="form.invalid || loading">
+                  {{ loading ? 'Etablissement de la connexion...' : 'Se connecter' }}
+                </button>
+                <!-- input -->
+              </form>
+
+              <span class="d-block f-w-500 text-center m-t-24">Nouveau sur ShopAppfiz?
+                <a [routerLink]="['/authentication/register']" class="text-decoration-none text-primary f-w-500 f-s-14">
+                  Créer un compte</a>
+              </span>
+            </mat-card-content>
+          </mat-card>
+        </div> 
+      </div>
+    </div>
+  </section>
+</div>

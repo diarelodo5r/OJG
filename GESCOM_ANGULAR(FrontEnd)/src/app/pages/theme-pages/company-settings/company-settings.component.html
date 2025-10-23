@@ -1,0 +1,158 @@
+<div class="container-fluid">
+  <mat-card class="cardWithShadow">
+    <mat-card-header>
+      <mat-card-title class="m-b-0">
+        <h4 class="mat-subtitle-1 f-s-20 f-w-600">Paramètres de l'entreprise</h4>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()">
+        <!-- Logo Section -->
+        <div class="row m-b-20">
+          <div class="col-12">
+            <h5 class="f-s-16 f-w-600 m-b-12">Logo de l'entreprise</h5>
+            <div class="d-flex align-items-center">
+              <div class="logo-container me-3">
+                <img 
+                  *ngIf="logoPreview" 
+                  [src]="logoPreview" 
+                  alt="Logo" 
+                  class="logo-preview"
+                />
+                <div *ngIf="!logoPreview" class="logo-placeholder">
+                  <mat-icon>add_photo_alternate</mat-icon>
+                  <span class="f-s-12">Aucun logo</span>
+                </div>
+              </div>
+              <div class="flex-grow-1">
+                <input 
+                  #logoInput
+                  type="file" 
+                  accept="image/*" 
+                  (change)="onFileSelected($event)"
+                  style="display: none;"
+                />
+                <button 
+                  mat-stroked-button 
+                  type="button"
+                  (click)="logoInput.click()"
+                  [disabled]="saving || loading"
+                  class="me-2"
+                >
+                  <mat-icon>upload</mat-icon>
+                  Choisir un logo
+                </button>
+                <button 
+                  mat-stroked-button 
+                  type="button"
+                  color="warn"
+                  *ngIf="logoPreview"
+                  (click)="removeLogo()"
+                  [disabled]="saving || loading"
+                >
+                  <mat-icon>delete</mat-icon>
+                  Supprimer
+                </button>
+                <p class="f-s-12 text-muted m-t-8 m-b-0">
+                  Formats acceptés: PNG, JPG, GIF (max 2 MB)
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Nom de l'entreprise -->
+          <div class="col-md-6 m-b-16">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Nom de l'entreprise *</mat-label>
+              <input matInput formControlName="name" placeholder="Ex: GESCOM SARL">
+              <mat-icon matPrefix>business</mat-icon>
+              <mat-error *ngIf="settingsForm.get('name')?.hasError('required')">
+                Le nom est requis
+              </mat-error>
+              <mat-error *ngIf="settingsForm.get('name')?.hasError('minlength')">
+                Minimum 2 caractères
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Description -->
+          <div class="col-md-6 m-b-16">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Description</mat-label>
+              <input matInput formControlName="description" placeholder="Ex: Gestion Commerciale">
+              <mat-icon matPrefix>description</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <!-- Adresse -->
+          <div class="col-md-6 m-b-16">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Adresse</mat-label>
+              <input matInput formControlName="address" placeholder="Ex: 123 Rue Principale, Ville">
+              <mat-icon matPrefix>location_on</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <!-- Téléphone -->
+          <div class="col-md-6 m-b-16">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Téléphone</mat-label>
+              <input matInput formControlName="phone" placeholder="Ex: +225 01 02 03 04 05">
+              <mat-icon matPrefix>phone</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <!-- Email -->
+          <div class="col-md-6 m-b-16">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Email</mat-label>
+              <input matInput type="email" formControlName="email" placeholder="Ex: contact@entreprise.com">
+              <mat-icon matPrefix>email</mat-icon>
+              <mat-error *ngIf="settingsForm.get('email')?.hasError('email')">
+                Email invalide
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Site web -->
+          <div class="col-md-6 m-b-16">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Site web</mat-label>
+              <input matInput formControlName="website" placeholder="Ex: https://www.entreprise.com">
+              <mat-icon matPrefix>language</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="row m-t-24">
+          <div class="col-12 d-flex justify-content-between">
+            <button 
+              mat-stroked-button 
+              type="button"
+              color="warn"
+              (click)="resetSettings()"
+              [disabled]="saving || loading"
+            >
+              <mat-icon *ngIf="!loading">restore</mat-icon>
+              <mat-icon *ngIf="loading" class="spinner">refresh</mat-icon>
+              {{ loading ? 'Réinitialisation...' : 'Réinitialiser' }}
+            </button>
+            <button 
+              mat-raised-button 
+              color="primary"
+              type="submit"
+              [disabled]="settingsForm.invalid || saving || loading"
+            >
+              <mat-icon *ngIf="!saving">save</mat-icon>
+              <mat-icon *ngIf="saving" class="spinner">refresh</mat-icon>
+              {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

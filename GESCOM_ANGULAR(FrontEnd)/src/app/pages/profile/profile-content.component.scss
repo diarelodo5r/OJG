@@ -1,0 +1,49 @@
+.profileContent {
+  color: var(--mat-sys-on-background);
+}
+
+.profile-img-container {
+  .profile-border-bg {
+    width: 132px;
+    height: 132px;
+    background: var(--mat-sys-surface);
+    border: 1px solid var(--mat-sys-outline-variant);
+  }
+  .profile-border {
+    width: 120px;
+    height: 120px;
+    background: var(--mat-sys-surface);
+    border: 4px solid var(--mat-sys-background);
+  }
+  .profile-pic {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+/* Utilities (lightweight local copies for this component) */
+.m-24 { margin: 24px; }
+.m-t--48 { margin-top: -48px; }
+.m-t-2 { margin-top: 8px; }
+.m-t-16 { margin-top: 16px; }
+.m-t-24 { margin-top: 24px; }
+.m-b-16 { margin-bottom: 16px; }
+.m-b-24 { margin-bottom: 24px; }
+.m-x-auto { margin-left: auto; margin-right: auto; }
+.p-16 { padding: 16px; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+.icon-18 { width: 18px; height: 18px; }
+.icon-20 { width: 20px; height: 20px; }
+.icon-30 { width: 30px; height: 30px; }
+.icon-32 { width: 32px; height: 32px; }
+.w-100 { width: 100%; }
+.h-100 { height: 100%; }
+.rounded { border-radius: var(--mat-sys-corner-medium, 24px); }
+.rounded-8 { border-radius: 8px; }
+.rounded-circle { border-radius: 50%; }
+.overflow-hidden { overflow: hidden; }
+.cardWithShadow { box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+
+/* Tabs alignment and tone rely on Material variables by default */

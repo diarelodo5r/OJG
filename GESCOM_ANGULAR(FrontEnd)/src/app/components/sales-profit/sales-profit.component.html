@@ -1,0 +1,85 @@
+<div class="card my-4">
+    <div class="card-body">
+      <div class="row">
+        <!-- Titre + plage -->
+        <div class="col-sm-5">
+          <h4 class="card-title mb-0">Graphique d'évolution des données Apexchart</h4>
+          <div class="small text-body-secondary">{{ getMainChartSubtitle() || 'Période sélectionnée' }}</div>
+        </div>
+  
+        <!-- Filtres -->
+        <div class="col-sm-7">
+          <form [formGroup]="dateRange" (ngSubmit)="updateChartData()" class="filters-toolbar">
+  
+            <!-- Sélecteur Material -->
+            <mat-form-field appearance="outline">
+              <mat-label>Plage de dates</mat-label>
+              <mat-date-range-input [rangePicker]="picker" (dateChange)="onDateRangeChange()">
+                <input matStartDate placeholder="Date début" formControlName="start">
+                <input matEndDate placeholder="Date fin" formControlName="end">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+            <!-- Tri Asc / Desc -->
+            <mat-button-toggle-group
+              name="sortDirection"
+              [value]="sortDirection"
+              (change)="setSortDirection($event.value)"
+              appearance="legacy"
+              color="primary"
+              class="m-l-8">
+              <mat-button-toggle value="asc">
+                <mat-icon class="m-r-4">arrow_upward</mat-icon>
+                Asc
+              </mat-button-toggle>
+              <mat-button-toggle value="desc">
+                <mat-icon class="m-r-4">arrow_downward</mat-icon>
+                Desc
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+            <!-- Radios Jour / Mois / Année -->
+            <div class="btn-group" role="group" aria-label="Période">
+              <input type="radio" class="btn-check" id="dayRadio" value="Day" formControlName="timeRange" (change)="onTimeRangeChange()">
+              <label class="btn btn-outline-secondary" [class.active]="dateRange.value.timeRange==='Day'" for="dayRadio" (click)="setTrafficPeriod('Day')">Jour</label>
+
+              <input type="radio" class="btn-check" id="radioMonth" value="Month" formControlName="timeRange" (change)="onTimeRangeChange()">
+              <label class="btn btn-outline-secondary" [class.active]="dateRange.value.timeRange==='Month'" for="radioMonth" (click)="setTrafficPeriod('Month')">Mois</label>
+
+              <input type="radio" class="btn-check" id="radioYear" value="Year" formControlName="timeRange" (change)="onTimeRangeChange()">
+              <label class="btn btn-outline-secondary" [class.active]="dateRange.value.timeRange==='Year'" for="radioYear" (click)="setTrafficPeriod('Year')">Année</label>
+            </div>
+            <!-- Bouton Appliquer -->
+            <button type="submit" mat-raised-button color="primary">
+              Appliquer
+            </button>
+          </form>
+        </div>
+      </div> <!-- fin .row -->
+  
+      <!-- Chart -->
+      <div class="chart-wrapper" style="margin-top: 40px; height: 300px;">
+        <apx-chart
+          [series]="salesprofitChart.series"
+          [chart]="salesprofitChart.chart"
+          [dataLabels]="salesprofitChart.dataLabels"
+          [legend]="salesprofitChart.legend"
+          [colors]="salesprofitChart.colors"
+          [grid]="salesprofitChart.grid"
+          [fill]="salesprofitChart.fill"
+          [stroke]="salesprofitChart.stroke"
+          [tooltip]="salesprofitChart.tooltip"
+          [markers]="salesprofitChart.markers"
+          [xaxis]="salesprofitChart.xaxis"
+          [yaxis]="salesprofitChart.yaxis"
+          [responsive]="salesprofitChart.responsive">
+        </apx-chart>
+      </div>
+    </div> <!-- fin .card-body -->
+  
+    <!-- Footer Stats -->
+    <div class="card-footer">
+      <div class="row text-center mb-2 row-cols-1 row-cols-lg-3 row-cols-sm-2 row-cols-xl-3 g-4">
+      </div>
+    </div>
+  </div>

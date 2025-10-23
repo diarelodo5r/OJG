@@ -1,0 +1,48 @@
+<div class="row">
+  <!-- Featured -->
+  <div class="col-12 col-lg-8">
+    <mat-card class="cardWithShadow position-relative card-hover featured-card overflow-hidden cursor-pointer"
+              [routerLink]="['/blogs', 1]">
+      <img mat-card-image src="/assets/images/blog/blog-img1.jpg" alt="Featured" />
+      <div class="featured-overlay p-24 d-flex flex-col align-items-end justify-content-start">
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <img width="40" class="rounded-circle" src="/assets/images/profile/user-1.jpg" />
+          <span class="f-s-12 f-w-600 bg-primary text-white rounded p-x-8 p-y-4">Gadget</span>
+        </div>
+        <div class="m-t-auto w-100">
+          <mat-card-title class="f-s-24 text-white">Early Black Friday Amazon deals: cheap TVs, headphones, laptops</mat-card-title>
+          <div class="d-flex align-items-center justify-content-center m-t-24 text-white">
+            <div class="d-flex align-items-center gap-12">
+              <span class="f-s-14 d-flex align-items-center gap-4"><i-tabler name="eye" class="icon-18"></i-tabler>9,125</span>
+              <span class="f-s-14 d-flex align-items-center gap-4"><i-tabler name="message-2" class="icon-18"></i-tabler>3</span>
+            </div>
+            <span class="m-l-auto f-s-14 d-flex align-items-center gap-4"><i-tabler name="point" class="icon-14"></i-tabler> Mon, Dec 25 </span>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Grid cards -->
+  <div class="col-sm-6 col-lg-4" *ngFor="let card of cards">
+    <mat-card class="cardWithShadow position-relative card-hover cursor-pointer"
+              [routerLink]="['/blogs', card.id]">
+      <img mat-card-image [alt]="card.title" [src]="card.image" />
+      <div class="card-overlay h-100 d-flex p-16 p-y-0 align-items-end justify-content-between">
+        <span class="f-s-12 m-y-16 f-w-600 bg-white rounded-pill p-x-8">{{ card.category }}</span>
+        <span class="f-s-12 f-w-600 m-y-16 bg-white rounded-pill p-x-8">2 mins Read</span>
+      </div>
+      <mat-card-content>
+        <div class="user-category"><img width="40" class="rounded-circle" [src]="card.user" /></div>
+        <mat-card-title class="mat-headline-6 m-t-15">{{ card.title }}</mat-card-title>
+        <div class="d-flex align-items-center justify-content-center m-t-24">
+          <div class="d-flex align-items-center gap-12">
+            <span class="f-s-14 d-flex align-items-center gap-4"><i-tabler name="eye" class="icon-18"></i-tabler>9,125</span>
+            <span class="f-s-14 d-flex align-items-center gap-4"><i-tabler name="message-2" class="icon-18"></i-tabler>{{ card.comments }}</span>
+          </div>
+          <span class="m-l-auto f-s-14 d-flex align-items-center gap-4"><i-tabler name="point" class="icon-14"></i-tabler> {{ card.date }} </span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

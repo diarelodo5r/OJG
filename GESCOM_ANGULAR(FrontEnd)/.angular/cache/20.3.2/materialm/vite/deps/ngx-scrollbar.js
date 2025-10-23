@@ -88,12 +88,12 @@ import {
   ɵɵstyleProp,
   ɵɵviewQuerySignal
 } from "./chunk-CTO7UN32.js";
+import "./chunk-JRFR6BLO.js";
 import {
   animationFrameScheduler,
   fromEvent,
   merge
 } from "./chunk-HWYXSU2G.js";
-import "./chunk-JRFR6BLO.js";
 import {
   EMPTY,
   Observable,

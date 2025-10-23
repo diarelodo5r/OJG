@@ -1,0 +1,206 @@
+/* Component-scoped defaults (no global grid dependency) */
+:host {
+  --mail-sidebar-width: 240px;
+}
+.content { 
+  padding-left: 16px; 
+  max-width: 100%; 
+  display: flex;
+  flex-direction: column;
+  bottom: -20px;
+  position: relative;
+  min-height: calc(100vh - var(--header-height, 64px));
+}
+.header-actions { display: flex; align-items: center; gap: 8px; }
+/* Scrollable products area */
+.products-scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 260px); /* viewport minus header, paddings, paginator */
+  padding-right: 4px; /* keep content away from scrollbar */
+  flex: 1 1 auto; /* allow grid area to expand and push paginator to bottom */
+}
+
+/* Custom scrollbars */
+.products-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
+.products-scroll::-webkit-scrollbar-track { background: var(--mat-sys-surface-container); border-radius: 10px; }
+.products-scroll::-webkit-scrollbar-thumb { background: var(--mat-sys-outline-variant); border-radius: 10px; }
+.products-scroll::-webkit-scrollbar-thumb:hover { background: var(--mat-sys-outline); }
+
+/* Firefox */
+.products-scroll { 
+    scrollbar-width: thin; 
+    scrollbar-color: var(--mat-sys-outline-variant) var(--mat-sys-surface-container);
+    min-height: 900px;
+ }
+/* Page wrapper */
+.pageWrapper {
+    padding: 24px 15px;
+    min-height: calc(100vh - 100px);
+    margin: 0 auto;
+    color: var(--mat-sys-on-background);
+    background: var(--mat-sys-background);
+    /* Let Angular Material manage layout; no manual offset here */
+  }
+  .pageWrapper.maxWidth { max-width: 100%; }
+  
+  /* Utility helpers used in the template (minimal set) */
+  .w-100 { width: 100%; }
+  .btn-block { display: block; }
+  .p-24 { padding: 24px; }
+  .p-20 { padding: 20px; }
+  .p-16 { padding: 16px; }
+  .p-t-12 { padding-top: 12px; }
+  .p-t-16 { padding-top: 16px; }
+  .p-x-32 { padding-inline: 32px; }
+  .p-x-12 { padding-inline: 12px; }
+  
+  .m-b-2 { margin-bottom: 2px; }
+  .m-b-4 { margin-bottom: 4px; }
+  .m-b-24 { margin-bottom: 24px; }
+  .m-y-20 { margin-block: 20px; }
+  .m-l-8 { margin-left: 8px; }
+  
+  .f-s-12 { font-size: 12px; }
+  .f-s-14 { font-size: 14px; }
+  .f-s-16 { font-size: 16px; }
+  .f-s-20 { font-size: 20px; }
+  
+  .f-w-400 { font-weight: 400; }
+  .f-w-500 { font-weight: 500; }
+  .f-w-600 { font-weight: 600; }
+  
+  .d-flex { display: flex; }
+  .align-items-center { align-items: center; }
+  .justify-content-between { justify-content: space-between; }
+  .justify-content-end { justify-content: flex-end; }
+  .flex-grow-1 { flex: 1 1 auto; }
+  .gap-1 { gap: 4px; }
+  
+  .text-ellipsis { overflow: hidden; text-overflow: ellipsis; }
+  .text-nowrap { white-space: nowrap; }
+  .text-decoration-line-through { text-decoration: line-through; }
+  
+  /* Borders and separators (use theme outline) */
+  .b-1 { border: 1px solid var(--mat-sys-outline-variant); }
+  .b-t-1 { border-top: 1px solid var(--mat-sys-outline-variant); }
+
+  /* Component-scoped responsive product grid */
+  .sv-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .sv-grid.horizontal {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(280px, 1fr);
+    grid-template-columns: unset;
+  }
+  @media (min-width: 576px) {
+    .sv-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 992px) {
+    .sv-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 1200px) {
+    .sv-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .sv-item {
+    /* Flatten wrappers so card becomes grid item; helps keep DOM clean */
+    display: contents;
+  }
+  
+  /* Theme-aware colors */
+  .bg-primary { background-color: var(--mat-sys-primary) !important; }
+  .bg-error { background-color: var(--mat-sys-error) !important; }
+  .bg-success { background-color: var(--mat-sys-tertiary) !important; }
+  .text-white { color: #fff !important; }
+  .text-warning { color: #f59e0b !important; } /* accent/star */
+  .text-body-color { color: var(--mat-sys-on-background); }
+  
+  /* Product card specifics */
+  .productcard {
+    background: var(--mat-card-elevated-container-color, var(--mat-sys-surface));
+    border-radius: var(--mat-card-elevated-container-shape, var(--mat-sys-corner-medium));
+  }
+  
+  .productcard .img-wrapper {
+    position: relative;
+  }
+  
+  .productcard .icon-container {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity .2s ease-in-out;
+  }
+  
+  .productcard:hover .icon-container,
+  .productcard:focus-within .icon-container {
+    opacity: 1;
+  }
+  
+  .cart-btn-overlay {
+    box-shadow: none;
+  }
+  
+  /* Customizer floating button */
+  .customizerBtn {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 5;
+  }
+  
+  /* Side menu width controlled via CSS variable */
+  .mail-sidebar { width: var(--mail-sidebar-width); }
+  
+  /* Form field width utilities for search box */
+  .w-30 { width: 30%; min-width: 240px; }
+  .w-20 { width: 20%; min-width: 180px; }
+  .w-15 { width: 15%; min-width: 160px; }
+  @media (max-width: 767.98px) {
+    .w-20 { width: 50%; min-width: 160px; }
+    .w-15 { width: 50%; min-width: 160px; }
+  }
+  
+  /* Card shadow approximation using Material elevation variable if available */
+  .cardWithShadow {
+    box-shadow: var(--mat-card-elevated-container-elevation, 0 1px 2px rgba(0,0,0,.08));
+    border-radius: var(--mat-card-elevated-container-shape, 24px);
+  }
+  
+  /* Keep mat containers theme-aligned */
+  .mat-drawer-container {
+    position: relative;
+    background-color: var(--mat-sidenav-content-background-color, var(--mat-sys-background));
+    color: var(--mat-sys-on-background);
+    min-height: calc(100vh - var(--header-height, 64px));
+  }
+  .mat-sidenav-content {
+    min-height: 1200px;
+    top: 0px;
+  }
+  /* Keep paginator at the bottom and visible */
+  .mat-sidenav-content .mat-mdc-paginator,
+  .mat-sidenav-content .mat-paginator,
+  .content > mat-paginator {
+    margin-top: 12px;
+    position: sticky;
+    bottom: 0;
+    background: var(--mat-sys-surface);
+    z-index: 2;
+    border-top: 1px solid var(--mat-sys-outline-variant);
+  }
+  .mat-mdc-form-field-flex {
+    display: inline-flex;
+    align-items: baseline;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    right: 0;
+    .w-20 { width: 20%; min-width: 200px; }
+}
