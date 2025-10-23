@@ -3,7 +3,7 @@ services:
     name: gescom-angular-frontend
     env: static
     buildCommand: npm ci && npm run build
-    staticPublishPath: dist/materialm
+    staticPublishPath: dist/materialm/browser
     routes:
       - type: rewrite
         source: /*
