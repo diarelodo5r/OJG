@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: gescom-angular-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist/materialm
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
