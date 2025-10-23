@@ -1,6 +1,6 @@
 export const environment = {
-  apiBaseUrl: 'http://localhost:8000/api',
-  webBaseUrl: 'http://localhost:8000',
+  apiBaseUrl: 'http://localhost:1000/api',
+  webBaseUrl: 'http://localhost:1000',
   google: {
     apiKey: '',
     clientId: '',
