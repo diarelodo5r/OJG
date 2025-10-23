@@ -38,11 +38,8 @@ RUN composer install --no-dev --no-scripts --no-autoloader
 # Copy application files
 COPY . .
 
-# Create .env if it doesn't exist (for build-time)
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
-
-# Generate optimized autoloader and run post-install scripts
-RUN composer dump-autoload --optimize --no-dev
+# Generate optimized autoloader without running scripts
+RUN composer dump-autoload --optimize --no-dev --no-scripts
 
 # Set permissions
 RUN chmod -R 775 storage bootstrap/cache
