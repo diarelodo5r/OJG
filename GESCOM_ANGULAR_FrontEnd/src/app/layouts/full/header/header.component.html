@@ -71,11 +71,11 @@
             <span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple"></span>
             <ng-container *ngIf="theme.isDark$ | async; else moonIcon">
               <!-- Sun icon when dark theme is active (tap to go light) -->
-              <ng-icon name="tabler-sun-high" class="icon-20 d-flex"></ng-icon>
+              <ng-icon name="tablerSunHigh" class="icon-20 d-flex"></ng-icon>
             </ng-container>
             <ng-template #moonIcon>
               <!-- Moon icon when light theme is active (tap to go dark) -->
-              <ng-icon name="tabler-moon" class="icon-20 d-flex"></ng-icon>
+              <ng-icon name="tablerMoon" class="icon-20 d-flex"></ng-icon>
             </ng-template>
             <span class="mat-focus-indicator"></span>
             <span class="mat-mdc-button-touch-target"></span>

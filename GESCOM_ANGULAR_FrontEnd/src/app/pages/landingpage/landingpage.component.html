@@ -10,7 +10,7 @@
       <span class="flex-1-auto"></span>
       <div class="d-none d-lg-flex">
         <button mat-button class="f-s-16 f-w-500">Démonstrations</button>
-        <button mat-button class="f-s-16 f-w-500">Pages <i-tabler name="chevron-down" class="icon-16 m-l-4"></i-tabler></button>
+        <button mat-button class="f-s-16 f-w-500">Pages <ng-icon name="tablerChevronDown" class="icon-16 m-l-4"></ng-icon></button>
         <a mat-button href="https://wrappixel.github.io/premium-documentation-wp/angular/materialM/index.html">Documentation</a>
         <a mat-button href="https://support.wrappixel.com/">Assistance</a>
         <a mat-flat-button color="primary" routerLink="/authentication/login" class="m-l-10">Connexion</a>
@@ -24,7 +24,7 @@
         <div class="col-lg-6 d-flex align-items-center">
           <div>
             <span class="f-s-16 f-w-600 d-flex align-items-center m-b-16">
-              <i-tabler name="rocket" class="text-accent m-r-8"></i-tabler>
+              <ng-icon name="tablerRocket" class="text-accent m-r-8"></ng-icon>
               Démarrez votre projet avec
               <span class="mini-marquee m-l-10">
                 <span class="mini-track">
@@ -192,7 +192,7 @@
       </div>
       <div class="row m-t-24">
         <div class="col-sm-4 col-lg-3 text-center m-b-24" *ngFor="let feature of features">
-          <i-tabler class="icon-40 text-primary m-t-16" [name]="feature.icon"></i-tabler>
+          <ng-icon class="icon-40 text-primary m-t-16" [name]="feature.icon"></ng-icon>
           <h6 class="m-0 f-s-18 f-w-600 m-b-8 m-t-24">{{ feature.title }}</h6>
           <span class="f-s-14 m-b-24 d-block lh-base">{{ feature.subtitle }}</span>
         </div>
@@ -290,13 +290,13 @@
             <p class="footer-text">Un template Angular Material moderne, rapide et personnalisable pour accélerer vos projets et livrer plus vite.</p>
             <div class="socials m-t-12">
               <a href="#" aria-label="Twitter" class="social">
-                <i-tabler name="brand-x"></i-tabler>
+                <ng-icon name="tablerBrandX"></ng-icon>
               </a>
               <a href="#" aria-label="GitHub" class="social m-l-8">
-                <i-tabler name="brand-github"></i-tabler>
+                <ng-icon name="tablerBrandGithub"></ng-icon>
               </a>
               <a href="#" aria-label="LinkedIn" class="social m-l-8">
-                <i-tabler name="brand-linkedin"></i-tabler>
+                <ng-icon name="tablerBrandLinkedin"></ng-icon>
               </a>
             </div>
           </div>

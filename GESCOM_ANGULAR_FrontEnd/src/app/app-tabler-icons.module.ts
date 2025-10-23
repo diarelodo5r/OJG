@@ -14,7 +14,7 @@ import { NgModule } from '@angular/core';
     //   IconSend,
     // }),
   ],
-  // Export the component module so consumers can use <i-tabler> in their templates
-  exports: [/* TablerIconsModule */],
+  // DEPRECATED: This module is no longer used. Icons are now provided via @ng-icons/core with <ng-icon> components.
+  exports: [],
 })
 export class AppTablerIconsModule {}

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../../material.module';
-import { AppTablerIconsModule } from '../../../app-tabler-icons.module';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -11,8 +10,6 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     MaterialModule,
     RouterModule,
-    // Icons configured via NgModule wrapper
-    AppTablerIconsModule,
   ],
   templateUrl: './side-register.component.html',
   styleUrl: './side-register.component.scss'

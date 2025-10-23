@@ -22,7 +22,7 @@
           <mat-label>Search Contacts</mat-label>
           <input matInput [(ngModel)]="search" placeholder="Search Contacts" />
           <button mat-icon-button matSuffix type="button" aria-label="search">
-            <i-tabler name="search"></i-tabler>
+            <ng-icon name="tablerSearch"></ng-icon>
           </button>
         </mat-form-field>
 
@@ -53,7 +53,7 @@
             </div>
           </div>
           <button mat-icon-button aria-label="more">
-            <i-tabler name="dots-vertical"></i-tabler>
+            <ng-icon name="tablerDotsVertical"></ng-icon>
           </button>
         </header>
 
@@ -73,7 +73,7 @@
             <mat-label>Send message</mat-label>
             <input matInput [(ngModel)]="inputMessage" (keyup.enter)="send()" />
             <button mat-icon-button matSuffix color="primary" aria-label="send" (click)="send()">
-              <i-tabler name="send"></i-tabler>
+              <ng-icon name="tablerSend"></ng-icon>
             </button>
           </mat-form-field>
         </footer>

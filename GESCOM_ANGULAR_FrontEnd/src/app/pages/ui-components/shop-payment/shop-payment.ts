@@ -15,7 +15,7 @@ import { CartService, CartItem } from '../../../services/cart.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'app-shop-payment',
@@ -34,7 +34,7 @@ import { TablerIconsModule } from 'angular-tabler-icons';
     FormsModule,
     MatIconModule,
     MatSnackBarModule,
-    TablerIconsModule
+    NgIcon
   ],
   templateUrl: './shop-payment.html',
   styleUrls: ['./shop-payment.scss']

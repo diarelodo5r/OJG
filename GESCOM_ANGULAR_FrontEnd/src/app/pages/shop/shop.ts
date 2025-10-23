@@ -9,14 +9,14 @@ import { AddCartModalDialog } from '../ui-components/tables/tables.component';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../material.module';
 import { RouterModule } from '@angular/router';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { NgIcon } from '@ng-icons/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule, RouterModule, MaterialModule, TablerIconsModule, FormsModule],
+  imports: [CommonModule, RouterModule, MaterialModule, NgIcon, FormsModule],
   templateUrl: './shop.html',
   styleUrls: ['./shop.scss']
 })

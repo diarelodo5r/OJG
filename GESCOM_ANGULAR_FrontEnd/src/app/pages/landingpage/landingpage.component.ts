@@ -16,14 +16,14 @@ export class LandingpageComponent implements AfterViewInit, OnDestroy {
   currentYear: number = new Date().getFullYear();
 
   features = [
-    { icon: 'checklist', title: 'Authguard', subtitle: 'AuthGuard prevents unauthorized access to routes.' },
-    { icon: 'calendar', title: 'Calendar Design', subtitle: 'A well-designed calendar is included.' },
-    { icon: 'bug', title: 'Regular Updates', subtitle: 'We continuously enhance with new features.' },
-    { icon: 'book', title: 'Detailed Documentation', subtitle: 'Comprehensive docs ensure ease of use.' },
-    { icon: 'layout-grid', title: '80+ Page Templates', subtitle: 'Multiple demos with extensive pages.' },
-    { icon: 'components', title: '50+ UI Components', subtitle: 'A wide set of reusable components.' },
-    { icon: 'world', title: 'i18n', subtitle: 'Internationalization support for global apps.' },
-    { icon: 'chart-bar', title: 'Charts & Tables', subtitle: 'Lots of chart and table variations.' },
+    { icon: 'tablerChecklist', title: 'Authguard', subtitle: 'AuthGuard prevents unauthorized access to routes.' },
+    { icon: 'tablerCalendar', title: 'Calendar Design', subtitle: 'A well-designed calendar is included.' },
+    { icon: 'tablerBug', title: 'Regular Updates', subtitle: 'We continuously enhance with new features.' },
+    { icon: 'tablerBook', title: 'Detailed Documentation', subtitle: 'Comprehensive docs ensure ease of use.' },
+    { icon: 'tablerLayoutGrid', title: '80+ Page Templates', subtitle: 'Multiple demos with extensive pages.' },
+    { icon: 'tablerComponents', title: '50+ UI Components', subtitle: 'A wide set of reusable components.' },
+    { icon: 'tablerWorld', title: 'i18n', subtitle: 'Internationalization support for global apps.' },
+    { icon: 'tablerChartBar', title: 'Charts & Tables', subtitle: 'Lots of chart and table variations.' },
   ];
 
   apps = [
