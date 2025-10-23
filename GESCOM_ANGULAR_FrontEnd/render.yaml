@@ -2,7 +2,7 @@ services:
   - type: web
     name: gescom-angular-frontend
     env: static
-    buildCommand: npm install && npm run build
+    buildCommand: npm ci && npx ng build --configuration=production
     staticPublishPath: dist/materialm
     routes:
       - type: rewrite
