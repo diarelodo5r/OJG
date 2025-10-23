@@ -14,12 +14,10 @@ return [
     |
     */
 
-    'credentials' => [
-        'file' => env(
-            'FIREBASE_CREDENTIALS_PATH',
-            env('FIREBASE_CREDENTIALS_JSON', '/etc/secrets/firebase_credentials.json') ?: base_path('firebase_credentials.json')
-        ),
-    ],
+    'credentials' => env(
+        'FIREBASE_CREDENTIALS_PATH',
+        env('FIREBASE_CREDENTIALS_JSON', '/etc/secrets/firebase_credentials.json') ?: base_path('firebase_credentials.json')
+    ),
 
     /*
     |--------------------------------------------------------------------------

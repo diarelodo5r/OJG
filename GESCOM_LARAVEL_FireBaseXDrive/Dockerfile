@@ -28,9 +28,23 @@ RUN pecl install grpc protobuf \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
+
+# Copy composer files first for better layer caching
+COPY composer.json composer.lock ./
+
+# Install dependencies without scripts to avoid errors
+RUN composer install --no-dev --no-scripts --no-autoloader
+
+# Copy application files
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+# Create .env if it doesn't exist (for build-time)
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
+
+# Generate optimized autoloader and run post-install scripts
+RUN composer dump-autoload --optimize --no-dev
+
+# Set permissions
 RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 1000
