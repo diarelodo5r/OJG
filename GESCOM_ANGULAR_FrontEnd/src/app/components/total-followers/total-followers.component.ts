@@ -16,7 +16,7 @@ import {
     NgApexchartsModule,
 } from 'ng-apexcharts';
 import { MatButtonModule } from '@angular/material/button';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { NgIcon } from '@ng-icons/core';
 
 export interface totalfollowersChart {
     series: ApexAxisChartSeries;
@@ -35,7 +35,7 @@ export interface totalfollowersChart {
 
 @Component({
     selector: 'app-total-followers',
-    imports: [MaterialModule, NgApexchartsModule, MatButtonModule, TablerIconsModule],
+    imports: [MaterialModule, NgApexchartsModule, MatButtonModule, NgIcon],
     templateUrl: './total-followers.component.html',
 })
 export class AppTotalFollowersComponent {

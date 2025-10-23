@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { MaterialModule } from '../../../material.module';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { NgIcon } from '@ng-icons/core';
 import { UserService, UserDto } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
 import { NotifyService } from '../../../services/notify.service';
@@ -12,7 +12,7 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-account-setting',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule, TablerIconsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule, NgIcon],
   templateUrl: './account-setting.component.html',
   styleUrl: './account-setting.component.scss'
 })

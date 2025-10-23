@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { NgIcon } from '@ng-icons/core';
 
 // card 2
 interface cardimgs {
@@ -20,7 +20,7 @@ interface cardimgs {
 @Component({
   selector: 'app-blog-card',
   standalone: true,
-  imports: [MatCardModule, MatChipsModule, TablerIconsModule, MatButtonModule],
+  imports: [MatCardModule, MatChipsModule, NgIcon, MatButtonModule],
   templateUrl: './blog-card.component.html',
 })
 export class AppBlogCardsComponent {

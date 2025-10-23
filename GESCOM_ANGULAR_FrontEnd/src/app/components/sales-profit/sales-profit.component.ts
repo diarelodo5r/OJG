@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { MaterialModule } from '../../material.module';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { NgIcon } from '@ng-icons/core';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DatePipe, CommonModule } from '@angular/common';
 import {
@@ -58,7 +58,7 @@ interface MonthOption {
     standalone: true,
     imports: [
         MaterialModule, 
-        TablerIconsModule, 
+        NgIcon, 
         NgApexchartsModule, 
         CommonModule, 
         ReactiveFormsModule,

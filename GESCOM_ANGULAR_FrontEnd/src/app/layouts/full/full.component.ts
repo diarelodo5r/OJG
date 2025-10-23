@@ -19,7 +19,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { NgIcon } from '@ng-icons/core';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { AppNavItemComponent } from './sidebar/nav-item/nav-item.component';
@@ -37,7 +37,7 @@ const TABLET_VIEW = 'screen and (min-width: 769px) and (max-width: 1024px)';
     CommonModule,
     SidebarComponent,
     NgScrollbarModule,
-    TablerIconsModule,
+    NgIcon,
     HeaderComponent,
     MatDialogModule,
     MatButtonModule,

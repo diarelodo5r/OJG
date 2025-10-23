@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../material.module';
-import { TablerIconsModule } from 'angular-tabler-icons';
 import { RouterModule } from '@angular/router';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'app-blogs',
   standalone: true,
-  imports: [CommonModule, RouterModule, MaterialModule, TablerIconsModule],
+  imports: [CommonModule, RouterModule, MaterialModule, NgIcon],
   templateUrl: './blogs.component.html',
   styleUrl: './blogs.component.scss',
 })

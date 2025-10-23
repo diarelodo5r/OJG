@@ -3,7 +3,7 @@ import { MaterialModule } from '../../material.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { NgIcon } from '@ng-icons/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
@@ -63,7 +63,7 @@ const ELEMENT_DATA: productsData[] = [
         MatMenuModule,
         MatButtonModule,
         CommonModule,
-        TablerIconsModule,
+        NgIcon,
         MatProgressBarModule,
         NgScrollbarModule
     ],

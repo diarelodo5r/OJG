@@ -9,7 +9,7 @@ import {
   HostListener,
 } from '@angular/core';
 import { ThemeService } from '../../../services/theme.service';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { NgIcon } from '@ng-icons/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgScrollbarModule } from 'ngx-scrollbar';
@@ -33,7 +33,7 @@ import { LoadingService } from '../../../shared/services/loading.service';
     RouterModule,
     CommonModule,
     NgScrollbarModule,
-    TablerIconsModule,
+    NgIcon,
     MatBadgeModule,
     MatToolbarModule,
     MatMenuModule,

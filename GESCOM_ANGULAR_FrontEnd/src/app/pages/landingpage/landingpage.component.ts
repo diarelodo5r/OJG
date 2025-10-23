@@ -2,12 +2,12 @@ import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../material.module';
 import { RouterModule } from '@angular/router';
-import { TablerIconsModule } from 'angular-tabler-icons';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'app-landingpage',
   standalone: true,
-  imports: [CommonModule, RouterModule, MaterialModule, TablerIconsModule],
+  imports: [CommonModule, RouterModule, MaterialModule, NgIcon],
   templateUrl: './landingpage.component.html',
   styleUrl: './landingpage.component.scss',
 })

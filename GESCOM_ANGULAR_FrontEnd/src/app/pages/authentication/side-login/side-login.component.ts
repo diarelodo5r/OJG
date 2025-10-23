@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../../material.module';
-import { AppTablerIconsModule } from '../../../app-tabler-icons.module';
+import { NgIcon } from '@ng-icons/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -11,8 +11,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     MaterialModule,
     RouterModule,
-    // Icons configured via NgModule wrapper
-    AppTablerIconsModule,
+    NgIcon,
   ],
   templateUrl: './side-login.component.html',
   styleUrls: ['./side-login.component.scss']

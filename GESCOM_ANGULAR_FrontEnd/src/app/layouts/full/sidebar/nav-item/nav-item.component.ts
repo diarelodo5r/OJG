@@ -11,13 +11,13 @@ import { Router } from '@angular/router';
 import { NavService } from '../../../../services/nav.service';
 
 import { TranslateModule } from '@ngx-translate/core';
-import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from '../../../../material.module';
 import { CommonModule } from '@angular/common';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'app-nav-item',
-  imports: [TranslateModule, TablerIconsModule, MaterialModule, CommonModule],
+  imports: [TranslateModule, MaterialModule, CommonModule, NgIcon],
   templateUrl: './nav-item.component.html',
   styleUrls: [],
 })
