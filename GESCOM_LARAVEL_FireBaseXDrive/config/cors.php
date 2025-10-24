@@ -24,6 +24,8 @@ return [
 
     'allowed_origins' => [
         'http://localhost:4200',
+        'https://gescom-frontend-r4do.onrender.com',
+        'https://gescom-backend.onrender.com',
     ],
 
     'allowed_origin_patterns' => [],

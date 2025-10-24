@@ -1,5 +1,5 @@
 {
-  "name": "prod-shopappfiz",
+  "name": "gescom-frontend",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

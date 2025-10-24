@@ -1,6 +1,7 @@
 export const environment = {
-  apiBaseUrl: 'http://localhost:1000/api',
-  webBaseUrl: 'http://localhost:1000',
+  production: true,
+  apiBaseUrl: 'https://gescom-backend.onrender.com/api',
+  webBaseUrl: 'https://gescom-backend.onrender.com',
   google: {
     apiKey: '',
     clientId: '',

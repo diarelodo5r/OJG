@@ -47,5 +47,5 @@ RUN composer dump-autoload --optimize --no-dev --no-scripts
 # Set permissions
 RUN chmod -R 775 storage bootstrap/cache
 
-EXPOSE 1000
-CMD php artisan serve --host=0.0.0.0 --port=1000
+EXPOSE 10000
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-10000}

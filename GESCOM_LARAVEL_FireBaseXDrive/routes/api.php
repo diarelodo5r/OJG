@@ -3,6 +3,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{StockController, VentesController, ArticlesController, ClientsController, FournisseursController};
 use App\Http\Controllers\Api\{AuthController, FamilleController as ApiFamilleController, ArticleController as ApiArticleController, ClientController as ApiClientController, FournisseurController as ApiFournisseurController, StockController as ApiStockController, VenteController as ApiVenteController, HistoriqueController as ApiHistoriqueController, ArchiveController as ApiArchiveController, UtilisateurController as ApiUtilisateurController, PhotoController, CompanySettingController, DossierController, ContenuController};
 
+// Health check endpoint for Render
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toIso8601String(),
+        'service' => 'GESCOM Backend API'
+    ]);
+});
+
 // Public auth endpoints
 Route::post('/auth/register', [AuthController::class, 'register'])->name('api.auth.register');
 Route::post('/auth/login', [AuthController::class, 'login'])->name('api.auth.login');

@@ -1,0 +1,50 @@
+services:
+  - type: web
+    name: gescom-backend-laravel
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: frankfurt
+    healthCheckPath: /api/health
+    envVars:
+      - key: APP_NAME
+        value: Gescom
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        value: https://gescom-backend-laravel.onrender.com
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: error
+      # Firebase & Google Drive credentials
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CREDENTIALS_PATH
+        value: /var/www/html/firebase-credentials.json
+      - key: FIREBASE_STORAGE_BUCKET
+        sync: false
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: DRIVE_FOLDER_IMAGES
+        sync: false
+      - key: DRIVE_FOLDER_VIDEOS
+        sync: false
+      - key: DRIVE_FOLDER_AUDIO
+        sync: false
+      - key: DRIVE_FOLDER_DOCUMENTS
+        sync: false
