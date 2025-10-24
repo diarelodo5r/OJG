@@ -38,6 +38,9 @@ RUN composer install --no-dev --no-scripts --no-autoloader
 # Copy application files
 COPY . .
 
+# Ensure no stale cached manifests/config remain (can reference dev providers like Pail)
+RUN rm -f bootstrap/cache/*.php || true
+
 # Generate optimized autoloader without running scripts
 RUN composer dump-autoload --optimize --no-dev --no-scripts
 
